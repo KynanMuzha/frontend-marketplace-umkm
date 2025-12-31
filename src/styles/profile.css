@@ -1,0 +1,133 @@
+.profile-page {
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 24px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  font-family: 'Arial', sans-serif;
+}
+
+.title {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: #16a34a;
+  margin-bottom: 24px;
+}
+
+.profile-avatar-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.profile-avatar, .profile-initial {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 3px solid #16a34a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  font-weight: 700;
+  color: white;
+  background-color: #16a34a;
+  object-fit: cover;
+}
+
+.avatar-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.avatar-buttons button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  background: #16a34a;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.avatar-buttons .delete-btn {
+  background: #dc2626;
+}
+
+.forms-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.card {
+  background: #f9fafb;
+  padding: 20px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.card h3 {
+  color: #16a34a;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.card label {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+input[type="text"], input[type="email"], input[type="password"], input[type="file"] {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  width: 100%;
+  font-size: 14px;
+}
+
+.card button {
+  background: #16a34a;
+  color: white;
+  padding: 10px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 8px;
+  font-size: 14px;
+  border: none;
+  transition: all 0.2s;
+}
+
+.card button:hover {
+  background: #15803d;
+}
+
+@media (max-width: 640px) {
+  .profile-page {
+    padding: 20px;
+  }
+
+  .profile-avatar, .profile-initial {
+    width: 80px;
+    height: 80px;
+    font-size: 28px;
+  }
+
+  input[type="text"], input[type="email"], input[type="password"] {
+    font-size: 13px;
+    padding: 8px;
+  }
+
+  .card button {
+    font-size: 13px;
+    padding: 8px;
+  }
+}
