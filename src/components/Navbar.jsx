@@ -8,28 +8,19 @@ export default function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const loadUser = () => {
-    const storedUser = localStorage.getItem("user");
-    if (!storedUser) {
-      setUser(null);
-      return;
-    }
-
-    const parsedUser = JSON.parse(storedUser);
-
-    if (parsedUser.avatar && !parsedUser.avatar.startsWith("http")) {
-      parsedUser.avatar = `http://localhost:8000/storage/avatars/${parsedUser.avatar}`;
-    }
-
-    setUser(parsedUser);
-  };
-
+  // ======================
+  // LOAD USER DARI STORAGE
+  // ======================
   useEffect(() => {
-    loadUser();
+    const storedUser = localStorage.getItem("user");
+    setUser(storedUser ? JSON.parse(storedUser) : null);
   }, [location]);
 
   const getInitial = (name) => (name ? name.charAt(0).toUpperCase() : "");
 
+  // ======================
+  // LOGOUT
+  // ======================
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
@@ -37,34 +28,36 @@ export default function Navbar() {
     navigate("/");
   };
 
+  // ======================
+  // CART HANDLER
+  // ======================
   const handleCartClick = () => {
-    if (!user) {
-      navigate("/login"); // ⬅️ ini kuncinya
-    } else {
-      navigate("/cart");
-    }
+    if (!user) navigate("/login");
+    else navigate("/cart");
   };
 
   return (
     <nav className="navbar">
       <div className="navbar-container">
-
+        {/* LOGO */}
         <Link to="/" className="logo">
           <img src={logo} alt="Logo" className="logo-img" />
           <span className="logo-text">PasarDesa</span>
         </Link>
 
+        {/* SEARCH */}
         <div className="search-box">
           <input type="text" placeholder="Cari di PasarDesa" />
         </div>
 
+        {/* CART */}
         {user?.role !== "penjual" && (
           <div className="cart" onClick={handleCartClick}>
-            🛒
-            <span>{0}</span>
+            🛒 <span>{0}</span>
           </div>
         )}
 
+        {/* AUTH / PROFILE */}
         <div className="auth">
           {!user ? (
             <>
@@ -72,13 +65,17 @@ export default function Navbar() {
               <Link to="/register" className="btn-register">Daftar</Link>
             </>
           ) : (
-            <div className="profile-wrapper">
+            <div className="navbar-profile">
               <div
                 className="profile-circle"
                 onClick={() => navigate("/profile")}
               >
                 {user.avatar ? (
-                  <img src={user.avatar} alt="Avatar" className="profile-avatar-circle" />
+                  <img
+                    src={user.avatar}
+                    alt="Avatar"
+                    className="profile-avatar-circle"
+                  />
                 ) : (
                   getInitial(user.name)
                 )}

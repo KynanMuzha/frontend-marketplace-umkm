@@ -1,133 +1,199 @@
+/* ================================
+   PROFILE PAGE
+================================ */
 .profile-page {
-  max-width: 700px;
+  max-width: 1100px;
   margin: 40px auto;
-  padding: 24px;
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-  font-family: 'Arial', sans-serif;
+  padding: 32px;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
 }
 
-.title {
-  text-align: center;
+/* ================================
+   TITLE
+================================ */
+.profile-page-title {
   font-size: 28px;
   font-weight: 700;
-  color: #16a34a;
-  margin-bottom: 24px;
+  margin-bottom: 6px;
 }
 
-.profile-avatar-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
+.profile-page-desc {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 32px;
 }
 
-.profile-avatar, .profile-initial {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  border: 3px solid #16a34a;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 36px;
-  font-weight: 700;
-  color: white;
-  background-color: #16a34a;
-  object-fit: cover;
+/* ================================
+   LAYOUT
+================================ */
+.profile-container {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 40px;
 }
 
-.avatar-buttons {
-  display: flex;
-  gap: 8px;
-}
-
-.avatar-buttons button {
-  padding: 8px 12px;
-  border: none;
-  border-radius: 8px;
-  background: #16a34a;
-  color: white;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.avatar-buttons .delete-btn {
-  background: #dc2626;
-}
-
-.forms-container {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.card {
-  background: #f9fafb;
-  padding: 20px;
-  border-radius: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-}
-
-.card h3 {
-  color: #16a34a;
+/* ================================
+   FORM
+================================ */
+.profile-form h3 {
   font-size: 18px;
   font-weight: 700;
+  margin-bottom: 16px;
 }
 
-.card label {
+.section-divider {
+  margin-top: 32px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 14px;
+}
+
+.form-group label {
   font-size: 14px;
   font-weight: 600;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 
-input[type="text"], input[type="email"], input[type="password"], input[type="file"] {
-  padding: 10px 12px;
-  border-radius: 8px;
+.form-group input {
+  padding: 12px 14px;
+  border-radius: 10px;
   border: 1px solid #d1d5db;
-  width: 100%;
   font-size: 14px;
+  transition: border 0.2s ease;
 }
 
-.card button {
+.form-group input:focus {
+  outline: none;
+  border-color: #16a34a;
+}
+
+/* ================================
+   BUTTON
+================================ */
+.btn-primary {
+  margin-top: 12px;
   background: #16a34a;
-  color: white;
-  padding: 10px;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  margin-top: 8px;
-  font-size: 14px;
+  color: #ffffff;
+  padding: 12px 18px;
+  border-radius: 10px;
   border: none;
-  transition: all 0.2s;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s ease;
 }
 
-.card button:hover {
+.btn-primary:hover {
   background: #15803d;
 }
 
-@media (max-width: 640px) {
+.btn-outline {
+  background: #ffffff;
+  color: #16a34a;
+  border: 1px solid #16a34a;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-outline:hover {
+  background: #16a34a;
+  color: #ffffff;
+}
+
+.btn-danger {
+  background: #dc2626;
+  color: #ffffff;
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.btn-danger:hover {
+  background: #b91c1c;
+}
+
+/* ================================
+   AVATAR
+================================ */
+.profile-avatar-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding-left: 40px;
+  border-left: 1px solid #e5e7eb;
+}
+
+.avatar-image {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #16a34a;
+}
+
+.avatar-placeholder {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: #16a34a;
+  color: #ffffff;
+  font-size: 48px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.avatar-note {
+  font-size: 12px;
+  color: #6b7280;
+  text-align: center;
+}
+
+/* ================================
+   LOADING
+================================ */
+.profile-loading {
+  padding: 40px;
+  text-align: center;
+  font-size: 16px;
+}
+
+/* ================================
+   RESPONSIVE
+================================ */
+@media (max-width: 768px) {
   .profile-page {
-    padding: 20px;
+    margin: 20px;
+    padding: 24px;
   }
 
-  .profile-avatar, .profile-initial {
-    width: 80px;
-    height: 80px;
-    font-size: 28px;
+  .profile-container {
+    grid-template-columns: 1fr;
   }
 
-  input[type="text"], input[type="email"], input[type="password"] {
-    font-size: 13px;
-    padding: 8px;
-  }
-
-  .card button {
-    font-size: 13px;
-    padding: 8px;
+  .profile-avatar-box {
+    border-left: none;
+    padding-left: 0;
+    margin-top: 32px;
   }
 }

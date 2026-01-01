@@ -3,6 +3,8 @@ import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import "../../styles/auth.css";
 
+const API_URL = "http://localhost:8000";
+
 export default function Login() {
   const navigate = useNavigate();
 
@@ -11,49 +13,75 @@ export default function Login() {
     password: "",
   });
 
+  const [loading, setLoading] = useState(false);
+
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
-      const res = await axios.post(
-        "http://localhost:8000/api/login",
+      // 1️⃣ LOGIN → DAPAT TOKEN
+      const loginRes = await axios.post(
+        `${API_URL}/api/login`,
         form,
-        { headers: { Accept: "application/json" } }
+        {
+          headers: {
+            Accept: "application/json",
+          },
+        }
       );
 
-      let user = res.data.user;
+      const token = loginRes.data.token;
+      localStorage.setItem("token", token);
 
-      // Jika ada avatar, ubah menjadi URL lengkap
-      if (user.avatar) {
-        user.avatar = user.avatar.startsWith("http")
-          ? user.avatar
-          : `http://localhost:8000/storage/avatars/${user.avatar}`;
+      // 2️⃣ AMBIL PROFILE TERBARU
+      const profileRes = await axios.get(
+        `${API_URL}/api/profile`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+          },
+        }
+      );
+
+      let user = profileRes.data;
+
+      // 3️⃣ NORMALISASI AVATAR (PASTI URL VALID)
+      if (user.avatar && !user.avatar.startsWith("http")) {
+        user.avatar = `${API_URL}/storage/${user.avatar}`;
       }
 
-      // Simpan token & user di localStorage
-      localStorage.setItem("token", res.data.token);
+      // 4️⃣ SIMPAN USER FINAL
       localStorage.setItem("user", JSON.stringify(user));
 
+      // 5️⃣ REDIRECT KE HOME
       navigate("/");
     } catch (err) {
-      alert(err?.response?.data?.message || "Email atau password salah");
+      alert(
+        err?.response?.data?.message ||
+        "Email atau password salah"
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="auth-page">
       <div className="auth-card">
-        {/* HEADER */}
         <h2>Masuk</h2>
         <p className="subtitle">
           Masuk untuk mulai berbelanja di PasarDesa
         </p>
 
-        {/* FORM */}
         <form onSubmit={handleSubmit}>
           <input
             type="email"
@@ -73,17 +101,19 @@ export default function Login() {
             required
           />
 
-          <button type="submit" className="btn-primary">
-            Masuk
+          <button
+            type="submit"
+            className="btn-primary"
+            disabled={loading}
+          >
+            {loading ? "Memproses..." : "Masuk"}
           </button>
 
-          {/* LUPA PASSWORD */}
           <div className="forgot-password">
             <Link to="/forgot-password">Lupa password?</Link>
           </div>
         </form>
 
-        {/* FOOTER */}
         <div className="auth-footer">
           Belum punya akun? <Link to="/register">Daftar</Link>
         </div>

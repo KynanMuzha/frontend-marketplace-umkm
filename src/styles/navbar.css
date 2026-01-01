@@ -100,7 +100,7 @@
 }
 
 /* PROFILE */
-.profile-wrapper {
+.navbar-profile {
   display: flex;
   align-items: center;
   gap: 12px;
