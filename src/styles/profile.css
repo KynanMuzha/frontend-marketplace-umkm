@@ -197,3 +197,96 @@
     margin-top: 32px;
   }
 }
+
+.crop-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.crop-box {
+  width: 360px;
+  height: 420px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.crop-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.crop-box .reactEasyCrop_Container {
+  border-radius: 50%;
+}
+
+/* ===============================
+   MODAL CROP AVATAR
+================================ */
+.crop-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.crop-box {
+  background: #ffffff;
+  width: 360px;
+  max-width: 90%;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* AREA CROP */
+.crop-box > div:first-child {
+  position: relative;
+  width: 100%;
+  height: 280px;
+  background: #000;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* ZOOM SLIDER */
+.crop-box .crop-zoom {
+  width: 100%;
+  margin: 14px 0;
+}
+
+/* BUTTON */
+.crop-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.crop-actions button {
+  flex: 1;
+}
+
+.profile-input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+  margin-bottom: 14px;
+}
+
+.profile-input:focus {
+  outline: none;
+  border-color: #16a34a;
+}
