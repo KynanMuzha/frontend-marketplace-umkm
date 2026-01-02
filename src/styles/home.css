@@ -61,6 +61,8 @@
     overflow: hidden;
     border: 1px solid #e5e7eb;
     transition: box-shadow 0.2s;
+    align-items: center;
+    padding-bottom: 10px;
     }
 
     .produk-card:hover {
@@ -68,8 +70,19 @@
     }
 
     .produk-img {
-    height: 160px;
-    background: #e5e7eb;
+    width: 100%;
+    height: 200px; /* tinggi card tetap */
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    }
+
+    .produk-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* <--- ini penting */
+    object-position: center;
     }
 
     .produk-body {
@@ -81,17 +94,25 @@
     color: #16a34a;
     }
 
+    .btn-wrapper {
+    display: flex;
+    justify-content: center;  /* BENAR-BENAR TENGAH */
+    margin-top: 6px;
+    margin-bottom: 6px;
+    }
+
     .btn-cart {
-    margin-top: 10px;
-    width: 100%;
-    padding: 8px;
-    background: #16a34a;
+    display: block;
+    margin: 8px auto 0 auto; /* bikin tombol ke tengah */
+    padding: 7px 16px;
+    background-color: #16a34a;
     color: white;
     border: none;
     border-radius: 8px;
     font-weight: 600;
+    cursor: pointer;
     }
 
     .btn-cart:hover {
-    background: #15803d;
+    background-color: #15803d;
     }

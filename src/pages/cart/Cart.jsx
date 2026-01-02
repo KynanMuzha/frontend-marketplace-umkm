@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import Navbar from "../../components/Navbar";
 import "../../styles/cart.css";
 
+const API_URL = "http://localhost:8000";
+
 export default function Cart() {
-  const navigate = useNavigate();
   const [cart, setCart] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -14,49 +17,54 @@ export default function Cart() {
       navigate("/login");
       return;
     }
-
     fetchCart();
   }, []);
 
   const fetchCart = async () => {
     try {
-      const res = await axios.get("http://localhost:8000/api/cart", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+      const res = await axios.get(`${API_URL}/api/cart`, {
+        headers: { Authorization: `Bearer ${token}` },
       });
-      setCart(res.data.data || res.data);
+      console.log(res.data); // cek struktur API
+      setCart(res.data || []);
     } catch (err) {
-      console.error(err);
+      console.error("Gagal mengambil cart:", err);
+      setCart([]);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const updateQty = async (id, qty) => {
+  const updateQty = async (productId, qty) => {
     if (qty < 1) return;
 
-    await axios.put(
-      `http://localhost:8000/api/cart/${id}`,
-      { qty },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    fetchCart();
+    try {
+      await axios.patch(
+        `${API_URL}/api/cart/update`,
+        { product_id: productId, quantity: qty },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      fetchCart();
+    } catch (err) {
+      console.error("Gagal update qty", err);
+    }
   };
 
-  const removeItem = async (id) => {
-    await axios.delete(`http://localhost:8000/api/cart/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    fetchCart();
+  const removeItem = async (productId) => {
+    try {
+      await axios.patch(
+        `${API_URL}/api/cart/update`,
+        { product_id: productId, quantity: 0 },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      fetchCart();
+    } catch (err) {
+      console.error("Gagal hapus item", err);
+    }
   };
 
-  const totalHarga = cart.reduce(
-    (total, item) => total + item.price * item.qty,
+  const total = cart.reduce(
+    (sum, item) => sum + item.product.price * item.quantity,
     0
   );
 
@@ -67,29 +75,31 @@ export default function Cart() {
       <div className="cart-page">
         <h2>Keranjang Belanja</h2>
 
-        {cart.length === 0 ? (
+        {loading ? (
+          <p>Memuat...</p>
+        ) : cart.length === 0 ? (
           <p className="empty">Keranjang masih kosong</p>
         ) : (
           <>
             <div className="cart-list">
               {cart.map((item) => (
-                <div className="cart-item" key={item.id}>
+                <div className="cart-item" key={item.product.id}>
                   <img
-                    src={item.image}
-                    alt={item.name}
+                    src={item.product.image ? `${API_URL}/storage/${item.product.image}` : "/no-image.png"}
+                    alt={item.product.name}
                     className="cart-img"
                   />
 
                   <div className="cart-info">
-                    <h4>{item.name}</h4>
-                    <p>Rp {item.price.toLocaleString()}</p>
+                    <h4>{item.product.name}</h4>
+                    <p>Rp {item.product.price.toLocaleString("id-ID")}</p>
 
                     <div className="qty-control">
-                      <button onClick={() => updateQty(item.id, item.qty - 1)}>
+                      <button onClick={() => updateQty(item.product.id, item.quantity - 1)}>
                         -
                       </button>
-                      <span>{item.qty}</span>
-                      <button onClick={() => updateQty(item.id, item.qty + 1)}>
+                      <span>{item.quantity}</span>
+                      <button onClick={() => updateQty(item.product.id, item.quantity + 1)}>
                         +
                       </button>
                     </div>
@@ -97,7 +107,7 @@ export default function Cart() {
 
                   <button
                     className="remove-btn"
-                    onClick={() => removeItem(item.id)}
+                    onClick={() => removeItem(item.product.id)}
                   >
                     Hapus
                   </button>
@@ -106,7 +116,7 @@ export default function Cart() {
             </div>
 
             <div className="cart-summary">
-              <h3>Total: Rp {totalHarga.toLocaleString()}</h3>
+              <h3>Total: Rp {total.toLocaleString("id-ID")}</h3>
               <button className="checkout-btn">Checkout</button>
             </div>
           </>

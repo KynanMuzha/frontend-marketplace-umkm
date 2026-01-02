@@ -3,7 +3,8 @@ import { Routes, Route } from "react-router-dom";
 // BUYER
 import Home from "../pages/buyer/Home";
 import Cart from "../pages/cart/Cart";
-import Profile from "../pages/buyer/Profile"; // ← import halaman profil
+import Profile from "../pages/buyer/Profile";
+import ProductDetail from "../pages/buyer/ProductDetail"; // ← import halaman detail
 
 // AUTH
 import Login from "../pages/auth/Login";
@@ -17,11 +18,14 @@ export default function AppRoutes() {
       {/* HOME */}
       <Route path="/" element={<Home />} />
 
+      {/* PRODUCT DETAIL */}
+      <Route path="/product/:id" element={<ProductDetail />} /> {/* ← route baru */}
+
       {/* CART */}
       <Route path="/cart" element={<Cart />} />
 
       {/* PROFILE */}
-      <Route path="/profile" element={<Profile />} />  {/* ← tambah route ini */}
+      <Route path="/profile" element={<Profile />} />
 
       {/* AUTH */}
       <Route path="/login" element={<Login />} />

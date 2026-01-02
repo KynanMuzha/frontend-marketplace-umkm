@@ -1,8 +1,50 @@
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import "../../styles/home.css";
 
+const API_URL = "http://localhost:8000";
+
 export default function Home() {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    // Ambil produk dari route publik
+    axios
+      .get(`${API_URL}/api/products`)
+      .then((res) => setProducts(res.data))
+      .catch((err) => {
+        console.error(err.response || err);
+        alert("Gagal memuat produk");
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
+  const handleAddToCart = (productId) => {
+    if (!token) {
+      alert("Silakan login dulu untuk menambahkan ke keranjang");
+      navigate("/login");
+      return;
+    }
+
+    axios
+      .post(
+        `${API_URL}/api/cart/add`,
+        { product_id: productId, quantity: 1 },
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
+      .then(() => alert("Produk berhasil ditambahkan ke keranjang"))
+      .catch((err) => {
+        console.error(err.response || err);
+        alert("Gagal menambahkan produk ke keranjang");
+      });
+  };
+
   return (
     <>
       <Navbar />
@@ -33,18 +75,49 @@ export default function Home() {
         {/* PRODUK */}
         <section className="section">
           <h2 className="section-title">Produk UMKM Pilihan</h2>
-          <div className="produk-grid">
-            {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
-              <div className="produk-card" key={item}>
-                <div className="produk-img"></div>
-                <div className="produk-body">
-                  <h3>Produk UMKM Desa</h3>
-                  <p className="harga">Rp 25.000</p>
-                  <button className="btn-cart">+ Keranjang</button>
+
+          {loading ? (
+            <p>Memuat produk...</p>
+          ) : products.length === 0 ? (
+            <p>Belum ada produk</p>
+          ) : (
+            <div className="produk-grid">
+              {products.map((product) => (
+                <div className="produk-card" key={product.id}>
+                  <Link
+                    to={`/product/${product.id}`}
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    <div className="produk-img">
+                      <img
+                        src={
+                          product.image
+                            ? `${API_URL}/storage/${product.image}`
+                            : "/no-image.png"
+                        }
+                        alt={product.name}
+                        style={{ objectFit: "cover", width: "100%", height: "200px" }}
+                      />
+                    </div>
+
+                    <div className="produk-body">
+                      <h3>{product.name}</h3>
+                      <p className="harga">
+                        Rp {Number(product.price).toLocaleString("id-ID")}
+                      </p>
+                    </div>
+                  </Link>
+
+                  <button
+                    className="btn-cart"
+                    onClick={() => handleAddToCart(product.id)}
+                  >
+                    + Keranjang
+                  </button>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </section>
       </main>
 
