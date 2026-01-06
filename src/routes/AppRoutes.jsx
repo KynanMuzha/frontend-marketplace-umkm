@@ -4,7 +4,7 @@ import { Routes, Route } from "react-router-dom";
 import Home from "../pages/buyer/Home";
 import Cart from "../pages/cart/Cart";
 import Profile from "../pages/buyer/Profile";
-import ProductDetail from "../pages/buyer/ProductDetail"; // ← import halaman detail
+import ProductDetail from "../pages/buyer/ProductDetail";
 
 // AUTH
 import Login from "../pages/auth/Login";
@@ -23,16 +23,10 @@ import ProtectedSellerRoute from "./ProtectedSellerRoute";
 export default function AppRoutes() {
   return (
     <Routes>
-      {/* HOME */}
+      {/* BUYER */}
       <Route path="/" element={<Home />} />
-
-      {/* PRODUCT DETAIL */}
-      <Route path="/product/:id" element={<ProductDetail />} /> {/* ← route baru */}
-
-      {/* CART */}
+      <Route path="/product/:id" element={<ProductDetail />} />
       <Route path="/cart" element={<Cart />} />
-
-      {/* PROFILE */}
       <Route path="/profile" element={<Profile />} />
 
       {/* AUTH */}
@@ -42,16 +36,32 @@ export default function AppRoutes() {
       <Route path="/reset-password" element={<ResetPassword />} />
 
       {/* SELLER (PROTECTED) */}
-      <Route path="/seller" element={ <ProtectedSellerRoute> <HomeSeller /> </ProtectedSellerRoute>}/>
-      <Route path="/seller/products/create" element={ <ProtectedSellerRoute> <CreateProduct /> </ProtectedSellerRoute> }/>
+      <Route
+        path="/seller"
+        element={
+          <ProtectedSellerRoute>
+            <HomeSeller />
+          </ProtectedSellerRoute>
+        }
+      />
 
-<Route
-  path="/seller/products/edit/:id"
-  element={
-    <ProtectedSellerRoute>
-      <EditProduct />
-    </ProtectedSellerRoute>
-  }
-/>
+      <Route
+        path="/seller/products/create"
+        element={
+          <ProtectedSellerRoute>
+            <CreateProduct />
+          </ProtectedSellerRoute>
+        }
+      />
+
+      <Route
+        path="/seller/products/edit/:id"
+        element={
+          <ProtectedSellerRoute>
+            <EditProduct />
+          </ProtectedSellerRoute>
+        }
+      />
     </Routes>
-  );}
+  );
+}

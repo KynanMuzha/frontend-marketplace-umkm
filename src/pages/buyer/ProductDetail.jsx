@@ -1,8 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Navbar from "../../components/Navbar";
-import Footer from "../../components/Footer";
 import "../../styles/product.css";
 
 const API_URL = "http://localhost:8000";
@@ -52,7 +50,6 @@ export default function ProductDetail() {
 
   return (
     <>
-      <Navbar />
 
       <main className="container" style={{ padding: "2rem 0" }}>
         <div className="product-detail-grid">
@@ -87,7 +84,6 @@ export default function ProductDetail() {
         </div>
       </main>
 
-      <Footer />
     </>
   );
 }
