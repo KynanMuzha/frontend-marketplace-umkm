@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../../components/Navbar";
 import "../../styles/cart.css";
 
 const API_URL = "http://localhost:8000";
@@ -119,7 +118,6 @@ export default function Cart() {
 
   return (
     <>
-      <Navbar />
 
       <div className="cart-page">
         <h2>Keranjang Belanja</h2>

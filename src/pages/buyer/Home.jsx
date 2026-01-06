@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import Navbar from "../../components/Navbar";
-import Footer from "../../components/Footer";
 import "../../styles/home.css";
 
 const API_URL = "http://localhost:8000";
@@ -14,14 +12,10 @@ export default function Home() {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    // Ambil produk dari route publik
     axios
       .get(`${API_URL}/api/products`)
       .then((res) => setProducts(res.data))
-      .catch((err) => {
-        console.error(err.response || err);
-        alert("Gagal memuat produk");
-      })
+      .catch(() => alert("Gagal memuat produk"))
       .finally(() => setLoading(false));
   }, []);
 
@@ -39,16 +33,11 @@ export default function Home() {
         { headers: { Authorization: `Bearer ${token}` } }
       )
       .then(() => alert("Produk berhasil ditambahkan ke keranjang"))
-      .catch((err) => {
-        console.error(err.response || err);
-        alert("Gagal menambahkan produk ke keranjang");
-      });
+      .catch(() => alert("Gagal menambahkan produk ke keranjang"));
   };
 
   return (
     <>
-      <Navbar />
-
       {/* HERO */}
       <section className="hero">
         <div className="container hero-content">
@@ -96,7 +85,6 @@ export default function Home() {
                             : "/no-image.png"
                         }
                         alt={product.name}
-                        style={{ objectFit: "cover", width: "100%", height: "200px" }}
                       />
                     </div>
 
@@ -121,7 +109,6 @@ export default function Home() {
         </section>
       </main>
 
-      <Footer />
     </>
   );
 }
