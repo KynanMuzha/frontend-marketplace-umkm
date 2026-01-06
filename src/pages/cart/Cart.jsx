@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import "../../styles/cart.css";
 
@@ -8,6 +8,7 @@ const API_URL = "http://localhost:8000";
 
 export default function Cart() {
   const [cart, setCart] = useState([]);
+  const [selected, setSelected] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
@@ -18,55 +19,112 @@ export default function Cart() {
       return;
     }
     fetchCart();
-  }, []);
+  }, [token]);
 
   const fetchCart = async () => {
     try {
       const res = await axios.get(`${API_URL}/api/cart`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      console.log(res.data); // cek struktur API
-      setCart(res.data || []);
+
+      const items = res.data ?? [];
+      setCart(items);
+
+      // ❌ jangan auto-check semua (lebih aman)
+      setSelected([]);
     } catch (err) {
-      console.error("Gagal mengambil cart:", err);
-      setCart([]);
+      console.error("Gagal ambil cart", err);
     } finally {
       setLoading(false);
     }
   };
 
-  const updateQty = async (productId, qty) => {
-    if (qty < 1) return;
+  const updateQty = async (cartId, type) => {
+    let finalQty = 0;
 
+    // 1️⃣ optimistic UI
+    setCart((prev) =>
+      prev.map((item) => {
+        if (item.id !== cartId) return item;
+
+        finalQty =
+          type === "inc"
+            ? item.quantity + 1
+            : item.quantity - 1;
+
+        if (finalQty < 1) return item;
+
+        return { ...item, quantity: finalQty };
+      })
+    );
+
+    if (finalQty < 1) return;
+
+    // 2️⃣ backend sync (TransactionController)
     try {
       await axios.patch(
-        `${API_URL}/api/cart/update`,
-        { product_id: productId, quantity: qty },
-        { headers: { Authorization: `Bearer ${token}` } }
+        `${API_URL}/api/transactions/${cartId}`,
+        { quantity: finalQty },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
       );
-      fetchCart();
     } catch (err) {
-      console.error("Gagal update qty", err);
+      console.error("Update qty gagal", err);
+      fetchCart(); // rollback
     }
   };
 
-  const removeItem = async (productId) => {
-    try {
-      await axios.patch(
-        `${API_URL}/api/cart/update`,
-        { product_id: productId, quantity: 0 },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      fetchCart();
-    } catch (err) {
-      console.error("Gagal hapus item", err);
-    }
+  /* =====================
+     CHECKBOX LOGIC
+  ===================== */
+
+  const toggleProduct = (id) => {
+    setSelected((prev) =>
+      prev.includes(id)
+        ? prev.filter((x) => x !== id)
+        : [...prev, id]
+    );
   };
 
-  const total = cart.reduce(
-    (sum, item) => sum + item.product.price * item.quantity,
-    0
-  );
+  const toggleShop = (items) => {
+    const ids = items.map((item) => item.id);
+    const allChecked = ids.every((id) => selected.includes(id));
+
+    setSelected((prev) =>
+      allChecked
+        ? prev.filter((id) => !ids.includes(id))
+        : [...new Set([...prev, ...ids])]
+    );
+  };
+
+  /* =====================
+     GROUP BY TOKO (BENAR)
+  ===================== */
+
+  const groupedCart = cart.reduce((acc, item) => {
+    if (!item.product || !item.product.user) return acc;
+
+    const tokoId = item.product.user.id;
+    const tokoName = item.product.user.name;
+
+    if (!acc[tokoId]) {
+      acc[tokoId] = {
+        tokoName,
+        items: [],
+      };
+    }
+
+    acc[tokoId].items.push(item);
+    return acc;
+  }, {});
+
+  const total = cart
+    .filter((item) => selected.includes(item.id))
+    .reduce(
+      (sum, item) => sum + item.product.price * item.quantity,
+      0
+    );
 
   return (
     <>
@@ -82,42 +140,84 @@ export default function Cart() {
         ) : (
           <>
             <div className="cart-list">
-              {cart.map((item) => (
-                <div className="cart-item" key={item.product.id}>
-                  <img
-                    src={item.product.image ? `${API_URL}/storage/${item.product.image}` : "/no-image.png"}
-                    alt={item.product.name}
-                    className="cart-img"
-                  />
+              {Object.entries(groupedCart).map(([tokoId, toko]) => {
+                const allChecked = toko.items.every((item) =>
+                  selected.includes(item.id)
+                );
 
-                  <div className="cart-info">
-                    <h4>{item.product.name}</h4>
-                    <p>Rp {item.product.price.toLocaleString("id-ID")}</p>
-
-                    <div className="qty-control">
-                      <button onClick={() => updateQty(item.product.id, item.quantity - 1)}>
-                        -
-                      </button>
-                      <span>{item.quantity}</span>
-                      <button onClick={() => updateQty(item.product.id, item.quantity + 1)}>
-                        +
-                      </button>
+                return (
+                  <div key={tokoId} className="cart-wrapper">
+                    {/* HEADER TOKO */}
+                    <div className="cart-shop">
+                      <input
+                        type="checkbox"
+                        checked={allChecked}
+                        onChange={() => toggleShop(toko.items)}
+                      />
+                      <span className="shop-name">{toko.tokoName}</span>
                     </div>
-                  </div>
 
-                  <button
-                    className="remove-btn"
-                    onClick={() => removeItem(item.product.id)}
-                  >
-                    Hapus
-                  </button>
-                </div>
-              ))}
+                    {/* PRODUK */}
+                    {toko.items.map((item) => (
+                      <div className="cart-item" key={item.id}>
+                        <input
+                          type="checkbox"
+                          checked={selected.includes(item.id)}
+                          onChange={() => toggleProduct(item.id)}
+                        />
+
+                        <img
+                          src={`${API_URL}/storage/${item.product.image}`}
+                          alt={item.product.name}
+                          className="cart-img"
+                          onError={(e) =>
+                            (e.target.src = "/no-image.png")
+                          }
+                        />
+
+                        <div className="cart-info">
+                          <h4>{item.product.name}</h4>
+                          <p>
+                            Rp{" "}
+                            {item.product.price.toLocaleString("id-ID")}
+                          </p>
+
+                          <div className="qty-control">
+                            <button onClick={() => updateQty(item.id, "dec")}>
+                              −
+                            </button>
+
+                            <span className="qty">
+                              {item.quantity}
+                            </span>
+
+                            <button onClick={() => updateQty(item.id, "inc")}>
+                              +
+                            </button>
+                          </div>
+                        </div>
+
+                        <div className="cart-price">
+                          Rp{" "}
+                          {(
+                            item.product.price * item.quantity
+                          ).toLocaleString("id-ID")}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                );
+              })}
             </div>
 
             <div className="cart-summary">
               <h3>Total: Rp {total.toLocaleString("id-ID")}</h3>
-              <button className="checkout-btn">Checkout</button>
+              <button
+                className="checkout-btn"
+                disabled={selected.length === 0}
+              >
+                Checkout
+              </button>
             </div>
           </>
         )}
