@@ -53,6 +53,7 @@ export default function Login() {
       );
 
       let user = profileRes.data;
+      localStorage.setItem("role", user.role);
 
       // 3️⃣ NORMALISASI AVATAR (PASTI URL VALID)
       if (user.avatar && !user.avatar.startsWith("http")) {
@@ -63,7 +64,11 @@ export default function Login() {
       localStorage.setItem("user", JSON.stringify(user));
 
       // 5️⃣ REDIRECT KE HOME
-      navigate("/");
+      if (user.role === "seller") {
+        navigate("/seller");
+      } else {
+        navigate("/");
+      }
     } catch (err) {
       alert(
         err?.response?.data?.message ||

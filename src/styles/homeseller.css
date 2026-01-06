@@ -1,0 +1,137 @@
+/* WRAPPER */
+.seller-wrapper {
+  max-width: 1280px;
+  margin: auto;
+  padding: 40px 20px;
+}
+
+/* HEADER */
+.seller-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.seller-header h1 {
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.seller-header p {
+  color: #6b7280;
+  margin-top: 4px;
+}
+
+/* BUTTONS */
+.btn-primary {
+  background: #16a34a;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-primary:hover {
+  background: #15803d;
+}
+
+.btn-outline {
+  background: white;
+  border: 1px solid #16a34a;
+  color: #16a34a;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  flex: 1;
+}
+
+.btn-danger {
+  background: #dc2626;
+  color: white;
+  padding: 8px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  flex: 1;
+}
+
+/* GRID */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 28px;
+}
+
+/* CARD */
+.product-card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  transition: transform 0.25s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-6px);
+}
+
+.product-image img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.product-body {
+  padding: 18px;
+}
+
+.product-body h3 {
+  font-size: 18px;
+  margin-bottom: 6px;
+}
+
+.price {
+  font-size: 16px;
+  font-weight: 700;
+  color: #16a34a;
+  margin-bottom: 16px;
+}
+
+/* ACTIONS */
+.product-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* EMPTY STATE */
+.empty-state {
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.empty-state img {
+  width: 180px;
+  margin-bottom: 20px;
+  opacity: 0.8;
+}
+
+.empty-state h3 {
+  font-size: 22px;
+  margin-bottom: 8px;
+}
+
+.empty-state p {
+  color: #6b7280;
+  margin-bottom: 20px;
+}
+
+/* LOADING */
+.loading {
+  text-align: center;
+  font-size: 16px;
+  color: #6b7280;
+}
