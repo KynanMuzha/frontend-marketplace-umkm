@@ -40,38 +40,29 @@ export default function Cart() {
   };
 
   const updateQty = async (cartId, type) => {
-    let finalQty = 0;
+    const cartItem = cart.find(item => item.id === cartId);
+    if (!cartItem) return;
 
-    // 1️⃣ optimistic UI
-    setCart((prev) =>
-      prev.map((item) => {
-        if (item.id !== cartId) return item;
+    let newQty = type === "inc" ? cartItem.quantity + 1 : cartItem.quantity - 1;
+    if (newQty < 1) return;
 
-        finalQty =
-          type === "inc"
-            ? item.quantity + 1
-            : item.quantity - 1;
-
-        if (finalQty < 1) return item;
-
-        return { ...item, quantity: finalQty };
-      })
+    // 1️⃣ Optimistic UI → langsung update state
+    setCart(prev =>
+      prev.map(item =>
+        item.id === cartId ? { ...item, quantity: newQty } : item
+      )
     );
 
-    if (finalQty < 1) return;
-
-    // 2️⃣ backend sync (TransactionController)
+    // 2️⃣ Kirim ke backend (async, tidak blocking UI)
     try {
       await axios.patch(
-        `${API_URL}/api/transactions/${cartId}`,
-        { quantity: finalQty },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+        `${API_URL}/api/cart/update`,
+        { product_id: cartItem.product.id, quantity: newQty },
+        { headers: { Authorization: `Bearer ${token}` } }
       );
     } catch (err) {
-      console.error("Update qty gagal", err);
-      fetchCart(); // rollback
+      console.error("Gagal update qty:", err);
+      fetchCart(); // rollback jika gagal
     }
   };
 
@@ -199,9 +190,9 @@ export default function Cart() {
                           <p>Rp {item.product.price.toLocaleString("id-ID")}</p>
 
                           <div className="qty-control">
-                            <button onClick={() => updateQty(item.id, "dec")}>−</button>
-                            <span>{item.quantity}</span>
-                            <button onClick={() => updateQty(item.id, "inc")}>+</button>
+                              <button onClick={() => updateQty(item.id, "dec")}>−</button>
+                              <span>{item.quantity}</span>
+                              <button onClick={() => updateQty(item.id, "inc")}>+</button>
                           </div>
                         </div>
 

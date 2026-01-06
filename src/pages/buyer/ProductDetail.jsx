@@ -26,24 +26,25 @@ export default function ProductDetail() {
       .finally(() => setLoading(false));
   }, [id]);
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     if (!token) {
       alert("Silakan login dulu untuk menambahkan ke keranjang");
       navigate("/login");
       return;
     }
 
-    axios
-      .post(
-        `${API_URL}/cart/add`,
+    try {
+      await axios.post(
+        `${API_URL}/api/cart/add`, // ✅ endpoint backend yang benar
         { product_id: product.id, quantity: 1 },
         { headers: { Authorization: `Bearer ${token}` } }
-      )
-      .then(() => alert("Produk berhasil ditambahkan ke keranjang"))
-      .catch((err) => {
-        console.error(err);
-        alert("Gagal menambahkan produk ke keranjang");
-      });
+      );
+
+      alert("Produk berhasil ditambahkan ke keranjang");
+    } catch (err) {
+      console.error("Gagal menambahkan ke keranjang", err);
+      alert("Gagal menambahkan produk ke keranjang");
+    }
   };
 
   if (loading) return <p style={{ textAlign: "center" }}>Memuat produk...</p>;
