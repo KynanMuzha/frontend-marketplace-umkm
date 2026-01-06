@@ -29,8 +29,6 @@ export default function Cart() {
 
       const items = res.data ?? [];
       setCart(items);
-
-      // ❌ jangan auto-check semua (lebih aman)
       setSelected([]);
     } catch (err) {
       console.error("Gagal ambil cart", err);
@@ -39,6 +37,7 @@ export default function Cart() {
     }
   };
 
+  // 🌟 Update quantity (optimistic UI)
   const updateQty = async (cartId, type) => {
     const cartItem = cart.find(item => item.id === cartId);
     if (!cartItem) return;
@@ -46,14 +45,14 @@ export default function Cart() {
     let newQty = type === "inc" ? cartItem.quantity + 1 : cartItem.quantity - 1;
     if (newQty < 1) return;
 
-    // 1️⃣ Optimistic UI → langsung update state
+    // 1️⃣ Update state dulu
     setCart(prev =>
       prev.map(item =>
         item.id === cartId ? { ...item, quantity: newQty } : item
       )
     );
 
-    // 2️⃣ Kirim ke backend (async, tidak blocking UI)
+    // 2️⃣ Kirim ke backend
     try {
       await axios.patch(
         `${API_URL}/api/cart/update`,
@@ -66,10 +65,10 @@ export default function Cart() {
     }
   };
 
+  // Hapus produk
   const deleteCartItem = async (cartId) => {
-    // optimistik UI → langsung hilangkan di layar
-    setCart((prev) => prev.filter((item) => item.id !== cartId));
-    setSelected((prev) => prev.filter((id) => id !== cartId));
+    setCart(prev => prev.filter(item => item.id !== cartId));
+    setSelected(prev => prev.filter(id => id !== cartId));
 
     try {
       await axios.delete(`${API_URL}/api/cart/${cartId}`, {
@@ -77,60 +76,46 @@ export default function Cart() {
       });
     } catch (err) {
       console.error("Gagal hapus produk", err);
-      fetchCart(); // rollback kalau gagal
+      fetchCart();
     }
   };
 
-  /* =====================
-     CHECKBOX LOGIC
-  ===================== */
-
+  // Checkbox logic
   const toggleProduct = (id) => {
-    setSelected((prev) =>
-      prev.includes(id)
-        ? prev.filter((x) => x !== id)
-        : [...prev, id]
+    setSelected(prev =>
+      prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
     );
   };
 
   const toggleShop = (items) => {
-    const ids = items.map((item) => item.id);
-    const allChecked = ids.every((id) => selected.includes(id));
+    const ids = items.map(item => item.id);
+    const allChecked = ids.every(id => selected.includes(id));
 
-    setSelected((prev) =>
-      allChecked
-        ? prev.filter((id) => !ids.includes(id))
-        : [...new Set([...prev, ...ids])]
+    setSelected(prev =>
+      allChecked ? prev.filter(id => !ids.includes(id)) : [...new Set([...prev, ...ids])]
     );
   };
 
-  /* =====================
-     GROUP BY TOKO (BENAR)
-  ===================== */
-
+  // Group by toko
   const groupedCart = cart.reduce((acc, item) => {
     if (!item.product || !item.product.user) return acc;
 
     const tokoId = item.product.user.id;
     const tokoName = item.product.user.name;
 
-    if (!acc[tokoId]) {
-      acc[tokoId] = {
-        tokoName,
-        items: [],
-      };
-    }
-
+    if (!acc[tokoId]) acc[tokoId] = { tokoName, items: [] };
     acc[tokoId].items.push(item);
     return acc;
   }, {});
 
   const total = cart
-    .filter((item) => selected.includes(item.id))
-    .reduce(
-      (sum, item) => sum + item.product.price * item.quantity,
-      0
-    );
+    .filter(item => selected.includes(item.id))
+    .reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+
+  // 🌟 Navigasi ke detail produk
+  const goToProductDetail = (productId) => {
+    navigate(`/product/${productId}`);
+  };
 
   return (
     <>
@@ -147,13 +132,13 @@ export default function Cart() {
           <>
             <div className="cart-list">
               {Object.entries(groupedCart).map(([tokoId, toko]) => {
-                const allChecked = toko.items.every((item) =>
+                const allChecked = toko.items.every(item =>
                   selected.includes(item.id)
                 );
 
                 return (
                   <div key={tokoId} className="cart-wrapper">
-                    {/* HEADER TOKO */}
+                    {/* Header Toko */}
                     <div className="cart-shop">
                       <div className="cart-col checkbox">
                         <input
@@ -162,12 +147,11 @@ export default function Cart() {
                           onChange={() => toggleShop(toko.items)}
                         />
                       </div>
-
                       <span className="shop-name">{toko.tokoName}</span>
                     </div>
 
-                    {/* PRODUK */}
-                    {toko.items.map((item) => (
+                    {/* Produk */}
+                    {toko.items.map(item => (
                       <div className="cart-item" key={item.id}>
                         <div className="cart-col checkbox">
                           <input
@@ -177,7 +161,12 @@ export default function Cart() {
                           />
                         </div>
 
-                        <div className="cart-col image">
+                        {/* Gambar */}
+                        <div
+                          className="cart-col image"
+                          onClick={() => goToProductDetail(item.product.id)}
+                          style={{ cursor: "pointer" }}
+                        >
                           <img
                             src={`${API_URL}/storage/${item.product.image}`}
                             alt={item.product.name}
@@ -185,14 +174,22 @@ export default function Cart() {
                           />
                         </div>
 
-                        <div className="cart-col info">
+                        {/* Info */}
+                        <div
+                          className="cart-col info"
+                          onClick={(e) => {
+                            if (e.target.tagName.toLowerCase() === "button") return;
+                            goToProductDetail(item.product.id);
+                          }}
+                          style={{ cursor: "pointer" }}
+                        >
                           <h4>{item.product.name}</h4>
                           <p>Rp {item.product.price.toLocaleString("id-ID")}</p>
 
                           <div className="qty-control">
-                              <button onClick={() => updateQty(item.id, "dec")}>−</button>
-                              <span>{item.quantity}</span>
-                              <button onClick={() => updateQty(item.id, "inc")}>+</button>
+                            <button onClick={() => updateQty(item.id, "dec")}>−</button>
+                            <span>{item.quantity}</span>
+                            <button onClick={() => updateQty(item.id, "inc")}>+</button>
                           </div>
                         </div>
 
@@ -217,10 +214,7 @@ export default function Cart() {
 
             <div className="cart-summary">
               <h3>Total: Rp {total.toLocaleString("id-ID")}</h3>
-              <button
-                className="checkout-btn"
-                disabled={selected.length === 0}
-              >
+              <button className="checkout-btn" disabled={selected.length === 0}>
                 Checkout
               </button>
             </div>
