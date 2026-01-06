@@ -75,6 +75,21 @@ export default function Cart() {
     }
   };
 
+  const deleteCartItem = async (cartId) => {
+    // optimistik UI → langsung hilangkan di layar
+    setCart((prev) => prev.filter((item) => item.id !== cartId));
+    setSelected((prev) => prev.filter((id) => id !== cartId));
+
+    try {
+      await axios.delete(`${API_URL}/api/cart/${cartId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+    } catch (err) {
+      console.error("Gagal hapus produk", err);
+      fetchCart(); // rollback kalau gagal
+    }
+  };
+
   /* =====================
      CHECKBOX LOGIC
   ===================== */
@@ -149,59 +164,58 @@ export default function Cart() {
                   <div key={tokoId} className="cart-wrapper">
                     {/* HEADER TOKO */}
                     <div className="cart-shop">
-                      <input
-                        type="checkbox"
-                        checked={allChecked}
-                        onChange={() => toggleShop(toko.items)}
-                      />
+                      <div className="cart-col checkbox">
+                        <input
+                          type="checkbox"
+                          checked={allChecked}
+                          onChange={() => toggleShop(toko.items)}
+                        />
+                      </div>
+
                       <span className="shop-name">{toko.tokoName}</span>
                     </div>
 
                     {/* PRODUK */}
                     {toko.items.map((item) => (
                       <div className="cart-item" key={item.id}>
-                        <input
-                          type="checkbox"
-                          checked={selected.includes(item.id)}
-                          onChange={() => toggleProduct(item.id)}
-                        />
+                        <div className="cart-col checkbox">
+                          <input
+                            type="checkbox"
+                            checked={selected.includes(item.id)}
+                            onChange={() => toggleProduct(item.id)}
+                          />
+                        </div>
 
-                        <img
-                          src={`${API_URL}/storage/${item.product.image}`}
-                          alt={item.product.name}
-                          className="cart-img"
-                          onError={(e) =>
-                            (e.target.src = "/no-image.png")
-                          }
-                        />
+                        <div className="cart-col image">
+                          <img
+                            src={`${API_URL}/storage/${item.product.image}`}
+                            alt={item.product.name}
+                            className="cart-img"
+                          />
+                        </div>
 
-                        <div className="cart-info">
+                        <div className="cart-col info">
                           <h4>{item.product.name}</h4>
-                          <p>
-                            Rp{" "}
-                            {item.product.price.toLocaleString("id-ID")}
-                          </p>
+                          <p>Rp {item.product.price.toLocaleString("id-ID")}</p>
 
                           <div className="qty-control">
-                            <button onClick={() => updateQty(item.id, "dec")}>
-                              −
-                            </button>
-
-                            <span className="qty">
-                              {item.quantity}
-                            </span>
-
-                            <button onClick={() => updateQty(item.id, "inc")}>
-                              +
-                            </button>
+                            <button onClick={() => updateQty(item.id, "dec")}>−</button>
+                            <span>{item.quantity}</span>
+                            <button onClick={() => updateQty(item.id, "inc")}>+</button>
                           </div>
                         </div>
 
-                        <div className="cart-price">
-                          Rp{" "}
-                          {(
-                            item.product.price * item.quantity
-                          ).toLocaleString("id-ID")}
+                        <div className="cart-col price">
+                          Rp {(item.product.price * item.quantity).toLocaleString("id-ID")}
+                        </div>
+
+                        <div className="cart-col delete">
+                          <button
+                            className="cart-delete"
+                            onClick={() => deleteCartItem(item.id)}
+                          >
+                            Hapus
+                          </button>
                         </div>
                       </div>
                     ))}
