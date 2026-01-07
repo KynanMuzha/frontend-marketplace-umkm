@@ -1,9 +1,10 @@
+import Pemandangan from "../../assets/pemandangan.jpg";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../service/api";
 import "../../styles/home.css";
 
-const API_URL = "http://localhost:8000";
+const BASE_URL = "http://127.0.0.1:8000";
 
 export default function Home() {
   const [products, setProducts] = useState([]);
@@ -12,8 +13,8 @@ export default function Home() {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    axios
-      .get(`${API_URL}/api/products`)
+    api
+      .get("/products")
       .then((res) => setProducts(res.data))
       .catch(() => alert("Gagal memuat produk"))
       .finally(() => setLoading(false));
@@ -26,12 +27,11 @@ export default function Home() {
       return;
     }
 
-    axios
-      .post(
-        `${API_URL}/api/cart/add`,
-        { product_id: productId, quantity: 1 },
-        { headers: { Authorization: `Bearer ${token}` } }
-      )
+    api
+      .post("/cart/add", {
+        product_id: productId,
+        quantity: 1,
+      })
       .then(() => alert("Produk berhasil ditambahkan ke keranjang"))
       .catch(() => alert("Gagal menambahkan produk ke keranjang"));
   };
@@ -39,10 +39,17 @@ export default function Home() {
   return (
     <>
       {/* HERO */}
-      <section className="hero">
-        <div className="container hero-content">
-          <h1>Marketplace UMKM Desa</h1>
-          <p>Temukan produk lokal terbaik langsung dari UMKM desa</p>
+      <section
+        className="hero"
+        style={{
+          backgroundImage: `url(${Pemandangan})`,
+        }}
+      >
+        <div className="hero-overlay">
+          <div className="container hero-content">
+            <h1>Marketplace UMKM Desa</h1>
+            <p>Temukan produk lokal terbaik langsung dari UMKM desa</p>
+          </div>
         </div>
       </section>
 
@@ -81,7 +88,7 @@ export default function Home() {
                       <img
                         src={
                           product.image
-                            ? `${API_URL}/storage/${product.image}`
+                            ? `${BASE_URL}/storage/${product.image}`
                             : "/no-image.png"
                         }
                         alt={product.name}
@@ -108,7 +115,6 @@ export default function Home() {
           )}
         </section>
       </main>
-
     </>
   );
 }

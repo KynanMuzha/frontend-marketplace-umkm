@@ -1,10 +1,8 @@
 import logo from "../assets/logo.jpeg";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../service/api";
 import "../styles/navbar.css";
-
-const API_URL = "http://localhost:8000";
 
 export default function Navbar() {
   const [user, setUser] = useState(null);
@@ -19,12 +17,11 @@ export default function Navbar() {
   ====================== */
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
-    const parsedUser = storedUser ? JSON.parse(storedUser) : null;
-    setUser(parsedUser);
+    setUser(storedUser ? JSON.parse(storedUser) : null);
   }, [location]);
 
   /* ======================
-     LOAD CART COUNT (PEMBELI SAJA)
+     LOAD CART COUNT
   ====================== */
   useEffect(() => {
     if (user && user.role !== "penjual" && token) {
@@ -36,19 +33,15 @@ export default function Navbar() {
 
   const fetchCartCount = async () => {
     try {
-      const res = await axios.get(`${API_URL}/api/cart`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await api.get("/cart");
 
-      // jumlah total quantity
       const totalQty = res.data.reduce(
         (sum, item) => sum + item.quantity,
         0
       );
 
       setCartCount(totalQty);
-    } catch (err) {
-      console.error("Gagal ambil cart", err);
+    } catch {
       setCartCount(0);
     }
   };
@@ -81,18 +74,15 @@ export default function Navbar() {
   return (
     <nav className="navbar">
       <div className="navbar-container">
-        {/* LOGO */}
         <Link to="/" className="logo">
           <img src={logo} alt="Logo" className="logo-img" />
           <span className="logo-text">PasarDesa</span>
         </Link>
 
-        {/* SEARCH */}
         <div className="search-box">
           <input type="text" placeholder="Cari di PasarDesa" />
         </div>
 
-        {/* CART (PEMBELI SAJA) */}
         {user?.role !== "penjual" && (
           <div className="cart" onClick={handleCartClick}>
             🛒
@@ -102,16 +92,11 @@ export default function Navbar() {
           </div>
         )}
 
-        {/* AUTH / PROFILE */}
         <div className="auth">
           {!user ? (
             <>
-              <Link to="/login" className="btn-login">
-                Masuk
-              </Link>
-              <Link to="/register" className="btn-register">
-                Daftar
-              </Link>
+              <Link to="/login" className="btn-login">Masuk</Link>
+              <Link to="/register" className="btn-register">Daftar</Link>
             </>
           ) : (
             <div className="navbar-profile">

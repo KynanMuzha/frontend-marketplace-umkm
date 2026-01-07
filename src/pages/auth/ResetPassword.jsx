@@ -1,8 +1,11 @@
 import { useState } from "react";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import api from "../../service/api";
 import "../../styles/auth.css";
 
 export default function ResetPassword() {
+  const navigate = useNavigate();
+
   const [form, setForm] = useState({
     email: "",
     otp: "",
@@ -23,12 +26,14 @@ export default function ResetPassword() {
     }
 
     try {
-      await axios.post("http://localhost:8000/api/reset-password", form);
-
+      await api.post("/reset-password", form);
       alert("Password berhasil direset");
-      window.location.href = "/login";
+      navigate("/login");
     } catch (err) {
-      alert("OTP salah atau kadaluarsa");
+      alert(
+        err?.response?.data?.message ||
+        "OTP salah atau kadaluarsa"
+      );
     }
   };
 
@@ -36,15 +41,14 @@ export default function ResetPassword() {
     <div className="auth-page">
       <div className="auth-card">
         <h2>Reset Password</h2>
-        <p className="subtitle">
-          Masukkan OTP dan password baru
-        </p>
+        <p className="subtitle">Masukkan OTP dan password baru</p>
 
         <form onSubmit={handleSubmit}>
           <input
             name="email"
             type="email"
             placeholder="Email"
+            value={form.email}
             onChange={handleChange}
             required
           />
@@ -52,6 +56,7 @@ export default function ResetPassword() {
           <input
             name="otp"
             placeholder="Kode OTP"
+            value={form.otp}
             onChange={handleChange}
             required
           />
@@ -60,6 +65,7 @@ export default function ResetPassword() {
             name="password"
             type="password"
             placeholder="Password baru"
+            value={form.password}
             onChange={handleChange}
             required
           />
@@ -68,13 +74,12 @@ export default function ResetPassword() {
             name="password_confirmation"
             type="password"
             placeholder="Konfirmasi password"
+            value={form.password_confirmation}
             onChange={handleChange}
             required
           />
 
-          <button className="btn-primary">
-            Reset Password
-          </button>
+          <button className="btn-primary">Reset Password</button>
         </form>
       </div>
     </div>

@@ -1,9 +1,7 @@
 import { useState } from "react";
-import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
+import api from "../../service/api";
 import "../../styles/auth.css";
-
-const API_URL = "http://localhost:8000";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -27,53 +25,28 @@ export default function Login() {
     setLoading(true);
 
     try {
-      // 1️⃣ LOGIN → DAPAT TOKEN
-      const loginRes = await axios.post(
-        `${API_URL}/api/login`,
-        form,
-        {
-          headers: {
-            Accept: "application/json",
-          },
-        }
-      );
-
+      // 1️⃣ LOGIN → TOKEN
+      const loginRes = await api.post("/login", form);
       const token = loginRes.data.token;
       localStorage.setItem("token", token);
 
-      // 2️⃣ AMBIL PROFILE TERBARU
-      const profileRes = await axios.get(
-        `${API_URL}/api/profile`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            Accept: "application/json",
-          },
-        }
-      );
+      // 2️⃣ AMBIL PROFILE
+      const profileRes = await api.get("/profile");
+      const user = profileRes.data;
 
-      let user = profileRes.data;
+      // 3️⃣ SIMPAN ROLE & USER
       localStorage.setItem("role", user.role);
-
-      // 3️⃣ NORMALISASI AVATAR (PASTI URL VALID)
-      if (user.avatar && !user.avatar.startsWith("http")) {
-        user.avatar = `${API_URL}/storage/${user.avatar}`;
-      }
-
-      // 4️⃣ SIMPAN USER FINAL
       localStorage.setItem("user", JSON.stringify(user));
 
-      // 5️⃣ REDIRECT KE HOME
+      // 4️⃣ REDIRECT BERDASARKAN ROLE
       if (user.role === "seller") {
         navigate("/seller");
       } else {
         navigate("/");
       }
     } catch (err) {
-      alert(
-        err?.response?.data?.message ||
-        "Email atau password salah"
-      );
+      console.error("LOGIN ERROR:", err.response || err);
+      alert(err?.response?.data?.message || "Email atau password salah");
     } finally {
       setLoading(false);
     }
@@ -106,11 +79,7 @@ export default function Login() {
             required
           />
 
-          <button
-            type="submit"
-            className="btn-primary"
-            disabled={loading}
-          >
+          <button type="submit" className="btn-primary" disabled={loading}>
             {loading ? "Memproses..." : "Masuk"}
           </button>
 
