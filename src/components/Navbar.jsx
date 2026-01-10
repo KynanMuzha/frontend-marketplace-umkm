@@ -1,4 +1,4 @@
-import logo from "../assets/logo.jpeg";
+import logo from "../assets/logo.png";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import api from "../service/api";
@@ -12,17 +12,11 @@ export default function Navbar() {
   const location = useLocation();
   const token = localStorage.getItem("token");
 
-  /* ======================
-     LOAD USER
-  ====================== */
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     setUser(storedUser ? JSON.parse(storedUser) : null);
   }, [location]);
 
-  /* ======================
-     LOAD CART COUNT
-  ====================== */
   useEffect(() => {
     if (user && user.role !== "penjual" && token) {
       fetchCartCount();
@@ -34,27 +28,16 @@ export default function Navbar() {
   const fetchCartCount = async () => {
     try {
       const res = await api.get("/cart");
-
-      const totalQty = res.data.reduce(
-        (sum, item) => sum + item.quantity,
-        0
-      );
-
+      const totalQty = res.data.reduce((sum, item) => sum + item.quantity, 0);
       setCartCount(totalQty);
     } catch {
       setCartCount(0);
     }
   };
 
-  /* ======================
-     HELPERS
-  ====================== */
   const getInitial = (name) =>
     name ? name.charAt(0).toUpperCase() : "";
 
-  /* ======================
-     ACTIONS
-  ====================== */
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
@@ -63,14 +46,6 @@ export default function Navbar() {
     navigate("/");
   };
 
-  const handleCartClick = () => {
-    if (!user) navigate("/login");
-    else navigate("/cart");
-  };
-
-  /* ======================
-     RENDER
-  ====================== */
   return (
     <nav className="navbar">
       <div className="navbar-container">
@@ -84,7 +59,7 @@ export default function Navbar() {
         </div>
 
         {user?.role !== "penjual" && (
-          <div className="cart" onClick={handleCartClick}>
+          <div className="cart" onClick={() => navigate("/cart")}>
             🛒
             {cartCount > 0 && (
               <span className="cart-badge">{cartCount}</span>
@@ -99,11 +74,8 @@ export default function Navbar() {
               <Link to="/register" className="btn-register">Daftar</Link>
             </>
           ) : (
-            <div className="navbar-profile">
-              <div
-                className="profile-circle"
-                onClick={() => navigate("/profile")}
-              >
+            <div className="profile-dropdown">
+              <div className="profile-circle">
                 {user.avatar ? (
                   <img
                     src={user.avatar}
@@ -115,13 +87,32 @@ export default function Navbar() {
                 )}
               </div>
 
-              {user.role === "penjual" && (
-                <span className="role-badge">Penjual</span>
-              )}
+              <div className="dropdown-menu">
+                <div className="dropdown-header">
+                  <strong>{user.name}</strong>
+                  <span>{user.email}</span>
+                </div>
 
-              <button onClick={handleLogout} className="logout-btn">
-                Logout
-              </button>
+                <button onClick={() => navigate("/profile")}>
+                  Profil Saya
+                </button>
+
+                {/* Hanya tampilkan "Pesanan Saya" jika bukan penjual */}
+                {user.role !== "penjual" && (
+                  <button onClick={() => navigate("/pesanan")}>
+                    Pesanan Saya
+                  </button>
+                )}
+
+                <div className="dropdown-divider"></div>
+
+                <button
+                  className="logout-item"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </button>
+              </div>
             </div>
           )}
         </div>

@@ -266,6 +266,33 @@ const EyeOffIcon = (
     )}
 
       <h2 className="profile-page-title">Profil Saya</h2>
+
+      <div className="profile-header">
+  <button
+    className="back-button"
+    onClick={() => navigate("/")}
+    aria-label="Kembali ke Home"
+  >
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M15 18L9 12L15 6"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  </button>
+
+  <h2 className="profile-page-title">Profil Saya</h2>
+</div>
+
       <p className="profile-page-desc">
         Kelola informasi profil Anda untuk mengontrol dan mengamankan akun
       </p>

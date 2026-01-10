@@ -1,0 +1,117 @@
+.help-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 16px 80px;
+  position: relative;
+}
+
+.help-header {
+  position: relative;      /* untuk positioning icon */
+  text-align: center;      /* judul tetap center */
+  margin-bottom: 24px;
+}
+
+.help-header-title {
+  font-size: 32px;
+  margin: 0 auto;
+  display: inline-block;
+}
+
+.help-subtitle {
+  font-size: 15px;
+  color: #6b7280;
+  max-width: 650px;
+  margin: 20px auto 0; /* geser sedikit ke bawah */
+  text-align: center;   /* pastikan tetap center */
+}
+
+.help-back-icon {
+  position: absolute;      /* posisikan icon di kiri */
+  left: 0;
+  top: 50%;                /* vertikal center awal */
+  transform: translate(16px, -48%); /* geser kanan sedikit & center vertikal */
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: #111827;
+}
+
+.help-back-icon:hover {
+  color: #22c55e;
+}
+
+/* FAQ ACCORDION */
+.help-faq-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.help-faq-item {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #ffffff;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.help-faq-question {
+  width: 100%;
+  padding: 18px 24px;
+  background: none;
+  border: none;
+  text-align: left;
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.help-faq-question svg {
+  width: 20px;
+  height: 20px;
+  color: #22c55e;
+}
+
+.help-faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.25s ease, padding 0.25s ease;
+  padding: 0 24px;
+}
+
+.help-faq-item.open .help-faq-answer {
+  max-height: 500px;
+  padding: 12px 24px 20px;
+}
+
+.help-faq-answer p {
+  font-size: 14px;
+  color: #374151;
+  margin: 0;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .help-header-title {
+    font-size: 26px;
+  }
+
+  .help-subtitle {
+    font-size: 14px;
+  }
+
+  .help-faq-question {
+    font-size: 15px;
+  }
+
+  .help-faq-answer p {
+    font-size: 13px;
+  }
+}

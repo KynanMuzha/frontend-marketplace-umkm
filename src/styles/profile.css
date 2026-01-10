@@ -6,17 +6,44 @@
   border-radius: 20px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
 }
-
 .profile-page-title {
   font-size: 28px;
   font-weight: 700;
   margin-bottom: 6px;
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.back-button {
+  background: none;
+  border: none;
+  padding: 6px;
+  cursor: pointer;
+  color: #374151; /* abu gelap */
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.back-button:hover {
+  background-color: #f3f4f6;
+  color: #111827;
+}
+
+.back-button svg {
+  display: block;
 }
 
 .profile-page-desc {
   font-size: 14px;
   color: #6b7280;
+  margin-top: 4px;     /* ⬅️ dekat dengan title */
   margin-bottom: 32px;
+  margin-left: 48px;
 }
 
 .profile-container {
@@ -371,4 +398,5 @@
 
 .toggle-password:hover {
   color: #2ecc71;
+}
 }
