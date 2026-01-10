@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "../../service/api";
 import Cropper from "react-easy-crop";
 import "../../styles/profile.css";
@@ -7,6 +8,12 @@ const BASE_URL = "http://127.0.0.1:8000";
 
 export default function Profile({ onUserUpdate }) {
   const [user, setUser] = useState(null);
+  const navigate = useNavigate();
+
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  /* ===== FORM ===== */
   const [profileForm, setProfileForm] = useState({ name: "", email: "" });
   const [passwordForm, setPasswordForm] = useState({
     old_password: "",
@@ -14,8 +21,23 @@ export default function Profile({ onUserUpdate }) {
     password_confirmation: "",
   });
 
+  /* ===== AVATAR ===== */
   const [avatarFile, setAvatarFile] = useState(null);
   const [preview, setPreview] = useState(null);
+
+  /* ===== NOTIFICATION ===== */
+  const [notify, setNotify] = useState({
+    show: false,
+    message: "",
+    type: "success", // success | error
+  });
+
+  const showNotify = (message, type = "success") => {
+    setNotify({ show: true, message, type });
+    setTimeout(() => {
+      setNotify({ show: false, message: "", type });
+    }, 4000);
+  };
 
   /* ===== CROP ===== */
   const [imageSrc, setImageSrc] = useState(null);
@@ -30,12 +52,14 @@ export default function Profile({ onUserUpdate }) {
       .then((res) => {
         setUser(res.data);
         setProfileForm({ name: res.data.name, email: res.data.email });
-        setPreview(res.data.avatar || null);
+        setPreview(
+          res.data.avatar ? `${BASE_URL}/storage/${res.data.avatar}` : null
+        );
         localStorage.setItem("user", JSON.stringify(res.data));
         onUserUpdate?.(res.data);
       })
-      .catch(console.error);
-  }, []);
+      .catch(() => showNotify("Gagal memuat profil", "error"));
+  }, [onUserUpdate]);
 
   const getInitial = (name) => (name ? name.charAt(0).toUpperCase() : "");
 
@@ -47,12 +71,11 @@ export default function Profile({ onUserUpdate }) {
         setUser(updatedUser);
         localStorage.setItem("user", JSON.stringify(updatedUser));
         onUserUpdate?.(updatedUser);
-        alert("Profil berhasil diperbarui");
+        showNotify("Profil berhasil diperbarui");
       })
-      .catch(() => alert("Gagal update profil"));
+      .catch(() => showNotify("Gagal update profil", "error"));
   };
 
-  /* ===== UPDATE PASSWORD ===== */
   const updatePassword = () => {
     api.put("/profile/password", passwordForm)
       .then(() => {
@@ -61,12 +84,13 @@ export default function Profile({ onUserUpdate }) {
           password: "",
           password_confirmation: "",
         });
-        alert("Password berhasil diperbarui");
+        showNotify("Password berhasil diperbarui");
       })
-      .catch(() => alert("Gagal update password"));
+      .catch(() => showNotify("Gagal update password", "error"));
   };
 
-  /* ===== FILE ===== */
+  
+
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -96,7 +120,13 @@ export default function Profile({ onUserUpdate }) {
 
     const ctx = canvas.getContext("2d");
     ctx.beginPath();
-    ctx.arc(canvas.width / 2, canvas.height / 2, canvas.width / 2, 0, Math.PI * 2);
+    ctx.arc(
+      canvas.width / 2,
+      canvas.height / 2,
+      canvas.width / 2,
+      0,
+      Math.PI * 2
+    );
     ctx.clip();
 
     ctx.drawImage(
@@ -127,45 +157,121 @@ export default function Profile({ onUserUpdate }) {
     setShowCrop(false);
   };
 
-  /* ===== AVATAR ===== */
+  /* ===== UPLOAD AVATAR ===== */
   const uploadAvatar = () => {
-    if (!avatarFile) return alert("Pilih & crop foto terlebih dahulu");
+    if (!avatarFile) {
+      showNotify("Pilih & crop foto terlebih dahulu", "error");
+      return;
+    }
 
     const formData = new FormData();
     formData.append("avatar", avatarFile);
 
     api.post("/profile/avatar", formData)
-      .then((res) => {
-        const updatedUser = { ...user, avatar: res.data.avatar };
-        setUser(updatedUser);
-        setPreview(res.data.avatar ? `${BASE_URL}/storage/${res.data.avatar}` : null);
-        localStorage.setItem("user", JSON.stringify(updatedUser));
-        onUserUpdate?.(updatedUser);
-        alert("Foto profil berhasil diupload");
-      })
-      .catch(() => alert("Gagal upload foto"));
+  .then((res) => {
+    const updatedUser = { ...user, avatar: res.data.avatar };
+
+    setUser(updatedUser);
+    setPreview(`${BASE_URL}/storage/${res.data.avatar}`);
+    localStorage.setItem("user", JSON.stringify(updatedUser));
+
+    // 🔥 KIRIM EVENT KE NAVBAR
+    window.dispatchEvent(new Event("userUpdated"));
+
+    onUserUpdate?.(updatedUser);
+    showNotify("Foto profil berhasil diupload");
+  })
+
+      .catch(() => showNotify("Gagal upload foto", "error"));
   };
 
   const deleteAvatar = () => {
-    api.delete("/profile/avatar").then(() => {
-      const updatedUser = { ...user, avatar: null };
-      setUser(updatedUser);
-      setPreview(null);
-      localStorage.setItem("user", JSON.stringify(updatedUser));
-      onUserUpdate?.(updatedUser);
-    });
-  };
+  api.delete("/profile/avatar").then(() => {
+    const updatedUser = { ...user, avatar: null };
+
+    setUser(updatedUser);
+    setPreview(null);
+    localStorage.setItem("user", JSON.stringify(updatedUser));
+
+    window.dispatchEvent(new Event("userUpdated"));
+
+    onUserUpdate?.(updatedUser);
+    showNotify("Foto profil berhasil dihapus");
+  });
+};
+
+const handleLogout = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+
+  window.dispatchEvent(new Event("userUpdated"));
+
+  showNotify("Berhasil logout");
+
+  setTimeout(() => {
+    navigate("/login");
+  }, 800);
+};
+
+
+const EyeIcon = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.8"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    width="20"
+    height="20"
+  >
+    <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" />
+    <circle cx="12" cy="12" r="3" />
+  </svg>
+);
+
+const EyeOffIcon = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a21.8 21.8 0 0 1 5.06-6.94" />
+    <path d="M1 1l22 22" />
+    <path d="M9.53 9.53A3 3 0 0 0 12 15a3 3 0 0 0 2.47-4.47" />
+  </svg>
+);
+
+
+
 
   if (!user) return <div className="profile-loading">Loading...</div>;
 
   return (
     <div className="profile-page">
+      {notify.show && (
+      <div className={`notify-top notify-${notify.type}`}>
+        <span className="notify-icon">
+          {notify.type === "success" ? "✔" : "✖"}
+        </span>
+        <span>{notify.message}</span>
+      </div>
+    )}
+
       <h2 className="profile-page-title">Profil Saya</h2>
       <p className="profile-page-desc">
         Kelola informasi profil Anda untuk mengontrol dan mengamankan akun
       </p>
 
       <div className="profile-container">
+        {/* FORM */}
         <div className="profile-form">
           <h3>Informasi Profil</h3>
 
@@ -205,35 +311,66 @@ export default function Profile({ onUserUpdate }) {
             }
           />
 
-          <input
-            type="password"
-            className="profile-input"
-            placeholder="Password baru"
-            value={passwordForm.password}
-            onChange={(e) =>
-              setPasswordForm({ ...passwordForm, password: e.target.value })
-            }
-          />
+          <div className="password-wrapper">
+  <input
+    type={showNewPassword ? "text" : "password"}
+    className="profile-input"
+    placeholder="Password baru"
+    value={passwordForm.password}
+    onChange={(e) =>
+      setPasswordForm({ ...passwordForm, password: e.target.value })
+    }
+  />
 
-          <input
-            type="password"
-            className="profile-input"
-            placeholder="Konfirmasi password"
-            value={passwordForm.password_confirmation}
-            onChange={(e) =>
-              setPasswordForm({
-                ...passwordForm,
-                password_confirmation: e.target.value,
-              })
-            }
-          />
+  <span
+    className="toggle-password"
+    onClick={() => setShowNewPassword(!showNewPassword)}
+  >
+    {showNewPassword ? EyeOffIcon : EyeIcon}
+  </span>
+</div>
+
+
+          <div className="password-wrapper">
+  <input
+    type={showConfirmPassword ? "text" : "password"}
+    className="profile-input"
+    placeholder="Konfirmasi password"
+    value={passwordForm.password_confirmation}
+    onChange={(e) =>
+      setPasswordForm({
+        ...passwordForm,
+        password_confirmation: e.target.value,
+      })
+    }
+  />
+
+  <span
+    className="toggle-password"
+    onClick={() =>
+      setShowConfirmPassword(!showConfirmPassword)
+    }
+  >
+    {showConfirmPassword ? EyeOffIcon : EyeIcon}
+  </span>
+</div>
 
 
           <button className="btn-primary" onClick={updatePassword}>
             Ganti Password
           </button>
+          <br /><br /><br />
+          <button
+    className="btn-danger btn-block logout-btn-profile"
+    onClick={handleLogout}
+  >
+    Logout
+  </button>
+
+
         </div>
 
+        {/* AVATAR */}
         <div className="profile-avatar-box">
           {preview ? (
             <img src={preview} alt="Avatar" className="avatar-image" />
@@ -269,6 +406,7 @@ export default function Profile({ onUserUpdate }) {
         </div>
       </div>
 
+      {/* CROP MODAL */}
       {showCrop && (
         <div className="crop-modal">
           <div className="crop-box">

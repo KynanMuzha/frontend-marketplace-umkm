@@ -1,22 +1,21 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import Navbar from "../../components/Navbar";
-import Footer from "../../components/Footer";
+import api from "../../service/api";
 import "../../styles/product-form.css";
-
-const API_URL = "http://localhost:8000";
 
 export default function CreateProduct() {
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
 
   const [form, setForm] = useState({
     name: "",
+    category_id: "",
     price: "",
+    stock: "",
     description: "",
     image: null,
   });
+
+  const [successMessage, setSuccessMessage] = useState("");
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -31,32 +30,62 @@ export default function CreateProduct() {
 
     const formData = new FormData();
     formData.append("name", form.name);
+    formData.append("category_id", form.category_id);
     formData.append("price", form.price);
+    formData.append("stock", form.stock);
     formData.append("description", form.description);
     if (form.image) formData.append("image", form.image);
 
     try {
-      await axios.post(`${API_URL}/api/products`, formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      await api.post("/products", formData);
 
-      alert("Produk berhasil ditambahkan");
-      navigate("/seller");
+      // ✅ TAMPILKAN ALERT CUSTOM
+      setSuccessMessage("Produk berhasil ditambahkan");
+
+      // ✅ Redirect setelah 2 detik
+      setTimeout(() => {
+        navigate("/seller");
+      }, 2000);
     } catch (error) {
-      console.error(error);
+      console.error(error.response?.data);
       alert("Gagal menambahkan produk");
     }
   };
 
   return (
     <>
-      <Navbar />
+      {/* ✅ ALERT SUKSES */}
+      {successMessage && (
+        <div className="alert-success">
+          <span className="alert-icon">✔</span>
+          <span>{successMessage}</span>
+        </div>
+      )}
 
       <main className="form-wrapper">
         <div className="form-card">
+          <button
+  type="button"
+  className="back-button"
+  onClick={() => navigate("/seller")}
+  aria-label="Kembali"
+>
+  <svg
+    width="26"
+    height="26"
+    viewBox="0 0 24 24"
+    fill="none"
+  >
+    <path
+      d="M15 18L9 12L15 6"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+</button>
+
           <h1>Tambah Produk</h1>
           <p className="subtitle">Lengkapi informasi produk UMKM Anda</p>
 
@@ -68,9 +97,26 @@ export default function CreateProduct() {
                 name="name"
                 required
                 value={form.name}
-                onChange={handleChange}
-                placeholder="Contoh: Keripik Pisang"
+                onChange={handleChange} placeholder="Contoh: Keripik Pisang"
               />
+            </div>
+
+            <div className="form-group">
+              <label>Kategori</label>
+              <select
+                name="category_id"
+                required
+                value={form.category_id}
+                onChange={handleChange}
+              >
+                <option value="">Pilih Kategori</option>
+                <option value="2">Makanan</option>
+                <option value="3">Minuman</option>
+                <option value="4">Kerajinan</option>
+                <option value="5">Pertanian dan Perkebunan</option>
+                <option value="6">Peternakan dan Perikanan</option>
+                <option value="7">Produk Herbal</option>
+              </select>
             </div>
 
             <div className="form-group">
@@ -80,8 +126,18 @@ export default function CreateProduct() {
                 name="price"
                 required
                 value={form.price}
-                onChange={handleChange}
-                placeholder="Contoh: 15000"
+                onChange={handleChange} placeholder="Contoh: 15000"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Stok</label>
+              <input
+                type="number"
+                name="stock"
+                required
+                value={form.stock}
+                onChange={handleChange} placeholder="Contoh: 15"
               />
             </div>
 
@@ -91,8 +147,7 @@ export default function CreateProduct() {
                 name="description"
                 rows="4"
                 value={form.description}
-                onChange={handleChange}
-                placeholder="Deskripsi singkat produk"
+                onChange={handleChange} placeholder="Deskripsi singkat produk"
               />
             </div>
 
@@ -116,8 +171,6 @@ export default function CreateProduct() {
           </form>
         </div>
       </main>
-
-      <Footer />
     </>
   );
 }

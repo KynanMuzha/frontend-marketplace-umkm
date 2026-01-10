@@ -2,11 +2,18 @@ import { Navigate } from "react-router-dom";
 
 export default function ProtectedSellerRoute({ children }) {
   const token = localStorage.getItem("token");
-  const role = localStorage.getItem("role");
+  const user = JSON.parse(localStorage.getItem("user"));
 
-  if (!token || !["seller", "admin"].includes(role)) {
+  // ⏳ Tunggu sampai user benar-benar ada
+  if (!token || !user) {
     return <Navigate to="/login" replace />;
   }
 
+  // ❌ Bukan penjual
+  if (user.role !== "penjual") {
+    return <Navigate to="/" replace />;
+  }
+
+  // ✅ Penjual
   return children;
 }

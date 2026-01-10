@@ -1,0 +1,43 @@
+.orders-page {
+  padding: 24px;
+}
+
+.orders-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.orders-table th,
+.orders-table td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.status {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+}
+
+.status.pending { background: #ffeaa7; }
+.status.paid { background: #81ecec; }
+.status.processing { background: #74b9ff; }
+.status.shipped { background: #a29bfe; }
+.status.completed { background: #55efc4; }
+.status.cancelled { background: #fab1a0; }
+
+.order-box {
+  background: #f9f9f9;
+  padding: 16px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+}
+
+.order-items {
+  padding-left: 20px;
+}
+
+.order-actions button {
+  margin-right: 10px;
+}

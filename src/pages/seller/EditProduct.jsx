@@ -1,37 +1,35 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
-import Navbar from "../../components/Navbar";
-import Footer from "../../components/Footer";
+import api from "../../service/api";
 import "../../styles/product-form.css";
-
-const API_URL = "http://localhost:8000";
 
 export default function EditProduct() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
 
   const [form, setForm] = useState({
     name: "",
+    category_id: "",
     price: "",
+    stock: "",
     description: "",
     image: null,
   });
 
   useEffect(() => {
     fetchProduct();
+    // eslint-disable-next-line
   }, []);
 
   const fetchProduct = async () => {
     try {
-      const res = await axios.get(`${API_URL}/api/products/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await api.get(`/products/${id}`);
 
       setForm({
         name: res.data.name,
+        category_id: res.data.category_id,
         price: res.data.price,
+        stock: res.data.stock,
         description: res.data.description,
         image: null,
       });
@@ -54,32 +52,49 @@ export default function EditProduct() {
 
     const formData = new FormData();
     formData.append("name", form.name);
+    formData.append("category_id", form.category_id);
     formData.append("price", form.price);
+    formData.append("stock", form.stock);
     formData.append("description", form.description);
     if (form.image) formData.append("image", form.image);
 
     try {
-      await axios.post(`${API_URL}/api/products/${id}?_method=PUT`, formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      await api.post(`/products/${id}?_method=PUT`, formData);
 
       alert("Produk berhasil diperbarui");
       navigate("/seller");
     } catch (error) {
-      console.error(error);
+      console.error(error.response?.data);
       alert("Gagal memperbarui produk");
     }
   };
 
   return (
     <>
-      <Navbar />
 
       <main className="form-wrapper">
         <div className="form-card">
+          <button
+  type="button"
+  className="back-button"
+  onClick={() => navigate("/seller")}
+  aria-label="Kembali"
+>
+  <svg
+    width="26"
+    height="26"
+    viewBox="0 0 24 24"
+    fill="none"
+  >
+    <path
+      d="M15 18L9 12L15 6"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+</button>
           <h1>Edit Produk</h1>
           <p className="subtitle">Perbarui informasi produk Anda</p>
 
@@ -96,12 +111,41 @@ export default function EditProduct() {
             </div>
 
             <div className="form-group">
+              <label>Kategori</label>
+              <select
+                name="category_id"
+                required
+                value={form.category_id}
+                onChange={handleChange}
+              >
+                <option value="">Pilih Kategori</option>
+                <option value="2">Makanan</option>
+                <option value="3">Minuman</option>
+                <option value="4">Kerajinan</option>
+                <option value="5">Pertanian dan Perkebunan</option>
+                <option value="6">Peternakan dan Perikanan</option>
+                <option value="7">Produk Herbal</option>
+              </select>
+            </div>
+
+            <div className="form-group">
               <label>Harga</label>
               <input
                 type="number"
                 name="price"
                 required
                 value={form.price}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Stok</label>
+              <input
+                type="number"
+                name="stock"
+                required
+                value={form.stock}
                 onChange={handleChange}
               />
             </div>
@@ -137,7 +181,6 @@ export default function EditProduct() {
         </div>
       </main>
 
-      <Footer />
     </>
   );
 }

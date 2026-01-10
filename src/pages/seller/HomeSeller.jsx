@@ -1,61 +1,179 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import Navbar from "../../components/Navbar";
-import Footer from "../../components/Footer";
+import api from "../../service/api";
 import "../../styles/homeseller.css";
 
-const API_URL = "http://localhost:8000";
+const PER_PAGE = 4;
+const API_URL = "http://127.0.0.1:8000";
 
 export default function HomeSeller() {
+  const navigate = useNavigate();
+
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
-  const token = localStorage.getItem("token");
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [lastPage, setLastPage] = useState(1);
+
+  // 🔴 MODAL KONFIRMASI
+  const [confirmModal, setConfirmModal] = useState({
+    show: false,
+    action: null, // "delete" | "toggle"
+    productId: null,
+    message: "",
+  });
 
   useEffect(() => {
-    fetchProducts();
-  }, []);
+    fetchProducts(currentPage);
+  }, [currentPage]);
 
-  const fetchProducts = async () => {
-    try {
-      const res = await axios.get(`${API_URL}/api/products`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setProducts(res.data);
-    } catch (error) {
-      console.error(error);
-      alert("Gagal memuat produk");
-    } finally {
-      setLoading(false);
-    }
+  const openConfirmModal = (action, productId, message) => {
+    setConfirmModal({
+      show: true,
+      action,
+      productId,
+      message,
+    });
   };
 
+  const closeConfirmModal = () => {
+    setConfirmModal({
+      show: false,
+      action: null,
+      productId: null,
+      message: "",
+    });
+  };
+
+  const fetchProducts = async (page) => {
+  try {
+    const res = await api.get(
+      `/seller/products?page=${page}&per_page=${PER_PAGE}`
+    );
+
+    setProducts(Array.isArray(res.data.data) ? res.data.data : []);
+    setCurrentPage(res.data.current_page ?? 1);
+    setLastPage(res.data.last_page ?? 1);
+  } catch (error) {
+    console.error("Fetch products error:", error);
+  } finally {
+    setLoading(false); // hanya untuk load awal
+  }
+};
+
+  // ✅ KONFIRMASI HAPUS
   const handleDelete = async (id) => {
-    if (!window.confirm("Yakin ingin menghapus produk ini?")) return;
-
     try {
-      await axios.delete(`${API_URL}/api/products/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      fetchProducts();
+      await api.delete(`/products/${id}`);
+      fetchProducts(currentPage);
+      closeConfirmModal();
     } catch (error) {
       console.error(error);
-      alert("Gagal menghapus produk");
     }
   };
+
+  // ✅ TOGGLE STATUS PRODUK
+  const handleToggleStatus = async (id) => {
+    try {
+      await api.patch(`/products/${id}/toggle-status`);
+      fetchProducts(currentPage);
+      closeConfirmModal();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const renderPagination = () => {
+  if (lastPage <= 1) return null;
 
   return (
-    <>
-      <Navbar />
+    <div className="pagination">
+      {/* PREV */}
+      <button
+        className="page-btn icon-btn"
+        disabled={currentPage === 1}
+        onClick={() => setCurrentPage(currentPage - 1)}
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24">
+          <path d="M15 18l-6-6 6-6" />
+        </svg>
+      </button>
 
-      <main className="seller-wrapper">
-        {/* HEADER */}
-        <section className="seller-header">
-          <div>
-            <h1>Dashboard Penjual</h1>
-            <p>Kelola seluruh produk UMKM Anda</p>
-          </div>
+      {/* NUMBER */}
+      {[...Array(lastPage)].map((_, i) => {
+        const page = i + 1;
+        return (
+          <button
+            key={page}
+            className={`page-btn number-btn ${
+              currentPage === page ? "active" : ""
+            }`}
+            onClick={() => setCurrentPage(page)}
+          >
+            {page}
+          </button>
+        );
+      })}
+
+      {/* NEXT */}
+      <button
+        className="page-btn icon-btn"
+        disabled={currentPage === lastPage}
+        onClick={() => setCurrentPage(currentPage + 1)}
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24">
+          <path d="M9 6l6 6-6 6" />
+        </svg>
+      </button>
+    </div>
+  );
+};
+
+
+  return (
+    <main className="seller-wrapper">
+      {/* HEADER */}
+      <section className="seller-header">
+        <div className="seller-title">
+          <h1>Dashboard Penjual</h1>
+          <p>Kelola seluruh produk UMKM Anda</p>
+        </div>
+
+        <div className="seller-actions">
+          <button
+  className="btn-outline btn-icon"
+  onClick={() => navigate("/seller/orders")}
+>
+  <svg
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+  >
+    <path
+      d="M3 7L12 2L21 7V17L12 22L3 17V7Z"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M3 7L12 12L21 7"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M12 12V22"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinejoin="round"
+    />
+  </svg>
+
+  <span>Pesanan Masuk</span>
+</button>
+
+
 
           <button
             className="btn-primary"
@@ -63,24 +181,24 @@ export default function HomeSeller() {
           >
             + Tambah Produk
           </button>
-        </section>
+        </div>
+      </section>
 
-        {/* CONTENT */}
-        {loading ? (
-          <div className="loading">Memuat produk...</div>
-        ) : products.length === 0 ? (
-          <div className="empty-state">
-            <img src="/empty-box.png" alt="Empty" />
-            <h3>Belum ada produk</h3>
-            <p>Mulai tambahkan produk pertama Anda</p>
-            <button
-              className="btn-primary"
-              onClick={() => navigate("/seller/products/create")}
-            >
-              Tambah Produk
-            </button>
-          </div>
-        ) : (
+      {/* CONTENT */}
+      {!loading && products.length === 0 ? (
+        <div className="empty-state">
+          <img src="/empty-box.png" alt="Empty" />
+          <h3>Belum ada produk</h3>
+          <p>Mulai tambahkan produk pertama Anda</p>
+          <button
+            className="btn-primary"
+            onClick={() => navigate("/seller/products/create")}
+          >
+            Tambah Produk
+          </button>
+        </div>
+      ) : (
+        <>
           <section className="product-grid">
             {products.map((product) => (
               <div className="product-card" key={product.id}>
@@ -97,34 +215,113 @@ export default function HomeSeller() {
 
                 <div className="product-body">
                   <h3>{product.name}</h3>
+
                   <p className="price">
-                    Rp {Number(product.price).toLocaleString("id-ID")}
+                    Rp{" "}
+                    {Number(product.price).toLocaleString("id-ID")}
+                  </p>
+
+                  {/* ✅ STATUS PRODUK */}
+                  <span
+                    className={`status-badge ${product.status}`}
+                  >
+                    {product.status === "active"
+                      ? "Aktif"
+                      : "Nonaktif"}
+                  </span>
+
+                  {/* ✅ STOK PRODUK */}
+                  <p
+                    className={
+                      product.stock === 0
+                        ? "stock-empty"
+                        : "stock"
+                    }
+                  >
+                    Stok:{" "}
+                    {product.stock === 0
+                      ? "Habis"
+                      : product.stock}
                   </p>
 
                   <div className="product-actions">
                     <button
                       className="btn-outline"
                       onClick={() =>
-                        navigate(`/seller/products/edit/${product.id}`)
+                        navigate(
+                          `/seller/products/edit/${product.id}`
+                        )
                       }
                     >
                       Edit
                     </button>
+
                     <button
-                      className="btn-danger"
-                      onClick={() => handleDelete(product.id)}
+                      className="btn-secondary"
+                      onClick={() =>
+                        openConfirmModal(
+                          "toggle",
+                          product.id,
+                          product.status === "active"
+                            ? "Yakin ingin menonaktifkan produk ini?"
+                            : "Yakin ingin mengaktifkan produk ini?"
+                        )
+                      }
                     >
-                      Hapus
+                      {product.status === "active" ? "Nonaktifkan" : "Aktifkan"}
                     </button>
+
+                    <button
+                    className="btn-danger"
+                    onClick={() =>
+                      openConfirmModal(
+                        "delete",
+                        product.id,
+                        "Yakin ingin menghapus produk ini?"
+                      )
+                    }
+                  >
+                    Hapus
+                  </button>
                   </div>
                 </div>
               </div>
             ))}
           </section>
-        )}
-      </main>
 
-      <Footer />
-    </>
+          {renderPagination()}
+        </>
+      )}
+
+      {confirmModal.show && (
+        <div className="confirm-overlay">
+          <div className="confirm-modal">
+            <h3>Konfirmasi</h3>
+            <p>{confirmModal.message}</p>
+
+            <div className="confirm-actions">
+              <button className="btn-outline" onClick={closeConfirmModal}>
+                Batal
+              </button>
+
+              <button
+                className="btn-danger"
+                onClick={() => {
+                  if (confirmModal.action === "delete") {
+                    handleDelete(confirmModal.productId);
+                  }
+
+                  if (confirmModal.action === "toggle") {
+                    handleToggleStatus(confirmModal.productId);
+                  }
+                }}
+              >
+                Ya, Lanjutkan
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </main>
   );
 }

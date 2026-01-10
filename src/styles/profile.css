@@ -1,6 +1,3 @@
-/* ================================
-   PROFILE PAGE
-================================ */
 .profile-page {
   max-width: 1100px;
   margin: 40px auto;
@@ -10,9 +7,6 @@
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
 }
 
-/* ================================
-   TITLE
-================================ */
 .profile-page-title {
   font-size: 28px;
   font-weight: 700;
@@ -25,18 +19,12 @@
   margin-bottom: 32px;
 }
 
-/* ================================
-   LAYOUT
-================================ */
 .profile-container {
   display: grid;
   grid-template-columns: 2fr 1fr;
   gap: 40px;
 }
 
-/* ================================
-   FORM
-================================ */
 .profile-form h3 {
   font-size: 18px;
   font-weight: 700;
@@ -72,9 +60,6 @@
   border-color: #16a34a;
 }
 
-/* ================================
-   BUTTON
-================================ */
 .btn-primary {
   margin-top: 12px;
   background: #16a34a;
@@ -125,9 +110,6 @@
   background: #b91c1c;
 }
 
-/* ================================
-   AVATAR
-================================ */
 .profile-avatar-box {
   display: flex;
   flex-direction: column;
@@ -169,18 +151,12 @@
   text-align: center;
 }
 
-/* ================================
-   LOADING
-================================ */
 .profile-loading {
   padding: 40px;
   text-align: center;
   font-size: 16px;
 }
 
-/* ================================
-   RESPONSIVE
-================================ */
 @media (max-width: 768px) {
   .profile-page {
     margin: 20px;
@@ -228,9 +204,6 @@
   border-radius: 50%;
 }
 
-/* ===============================
-   MODAL CROP AVATAR
-================================ */
 .crop-modal {
   position: fixed;
   inset: 0;
@@ -251,7 +224,6 @@
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
-/* AREA CROP */
 .crop-box > div:first-child {
   position: relative;
   width: 100%;
@@ -261,13 +233,11 @@
   overflow: hidden;
 }
 
-/* ZOOM SLIDER */
 .crop-box .crop-zoom {
   width: 100%;
   margin: 14px 0;
 }
 
-/* BUTTON */
 .crop-actions {
   display: flex;
   gap: 10px;
@@ -289,4 +259,116 @@
 .profile-input:focus {
   outline: none;
   border-color: #16a34a;
+}
+
+.notify-top {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 12px 20px;
+  min-width: 280px;
+  max-width: 420px;
+
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  animation: slideDown 0.35s ease;
+}
+
+.notify-success {
+  background: #e8f9ef;    
+  color: #1f7a4f;
+  border: 1px solid #bde5cd;
+}
+
+.notify-error {
+  background: #fdecea;
+  color: #b42318;
+  border: 1px solid #f5c2c7;
+}
+
+.notify-icon {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #1f7a4f;
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/* Animasi turun */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -20px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+.password-actions {
+  width: 100%;
+  margin-top: 14px;
+}
+
+/* paksa button turun ke bawah */
+.password-actions button {
+  display: block !important;
+  width: 100%;
+}
+
+/* jarak antar tombol */
+.password-actions button + button {
+  margin-top: 12px;
+}
+
+/* tombol logout */
+.logout-btn-profile {
+  background-color: #e74c3c;
+  border: none;
+}
+
+.logout-btn-profile:hover {
+  background-color: #c0392b;
+}
+
+.password-wrapper {
+  position: relative;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 42px;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 12px;
+  top: 40%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #777;
+  display: flex;
+  align-items: center;
+}
+
+.toggle-password:hover {
+  color: #2ecc71;
 }
