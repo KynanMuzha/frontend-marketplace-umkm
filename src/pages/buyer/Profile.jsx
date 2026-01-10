@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "../../service/api";
 import Cropper from "react-easy-crop";
 import "../../styles/profile.css";
@@ -6,6 +7,8 @@ import "../../styles/profile.css";
 const BASE_URL = "http://127.0.0.1:8000";
 
 export default function Profile({ onUserUpdate }) {
+  const navigate = useNavigate();
+
   const [user, setUser] = useState(null);
   const [profileForm, setProfileForm] = useState({ name: "", email: "" });
   const [passwordForm, setPasswordForm] = useState({
@@ -160,7 +163,32 @@ export default function Profile({ onUserUpdate }) {
 
   return (
     <div className="profile-page">
-      <h2 className="profile-page-title">Profil Saya</h2>
+      <div className="profile-header">
+  <button
+    className="back-button"
+    onClick={() => navigate("/")}
+    aria-label="Kembali ke Home"
+  >
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M15 18L9 12L15 6"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  </button>
+
+  <h2 className="profile-page-title">Profil Saya</h2>
+</div>
+
       <p className="profile-page-desc">
         Kelola informasi profil Anda untuk mengontrol dan mengamankan akun
       </p>

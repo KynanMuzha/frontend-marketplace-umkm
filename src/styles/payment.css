@@ -1,0 +1,280 @@
+.payment-page {
+  padding: 40px 16px 80px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* HEADER */
+.payment-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.payment-header-top {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* ⚡ Pusat horizontal */
+  gap: 12px;
+  position: relative;
+}
+
+.payment-back-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #111827;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  position: absolute; /* ⚡ Tetap di kiri */
+  left: 0;
+  transform: translateY(-1px); 
+}
+
+.payment-back-icon:hover {
+  color: #22c55e;
+}
+
+.payment-header-title {
+  font-size: 32px;
+  margin: 0;
+}
+
+.payment-subtitle {
+  color: #6b7280;
+  font-size: 15px;
+  max-width: 620px;
+  margin: 8px auto 0;
+  text-align: center;
+}
+
+/* SECTION */
+.payment-section {
+  margin-bottom: 56px;
+}
+
+.payment-section.light {
+  background: #f9fafb;
+  padding: 40px 24px;
+  border-radius: 16px;
+}
+
+.payment-section h2 {
+  font-size: 24px;
+  margin-bottom: 28px;
+}
+
+/* METODE */
+.payment-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+}
+
+.payment-card {
+  background: white;
+  border-radius: 16px;
+  padding: 28px 20px;
+  text-align: center;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.payment-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.1);
+}
+
+.payment-card svg {
+  color: #22c55e;
+  width: 36px;
+  height: 36px;
+  margin-bottom: 12px;
+}
+
+.payment-card h4 {
+  font-size: 16px;
+  margin-bottom: 6px;
+}
+
+.payment-card p {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+/* ALUR */
+.payment-steps {
+  max-width: 520px;
+  margin-left: 20px;
+}
+
+.payment-steps li {
+  font-size: 15px;
+  margin-bottom: 12px;
+  color: #374151;
+}
+
+/* KEAMANAN */
+.payment-security {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+}
+
+.payment-security div {
+  background: #ecfdf5;
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.payment-security svg {
+  color: #16a34a;
+  margin-bottom: 8px;
+}
+
+.payment-security h4 {
+  margin-bottom: 6px;
+}
+
+/* FAQ */
+.payment-faq {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+}
+
+.payment-faq div {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+}
+
+.payment-faq svg {
+  color: #22c55e;
+  margin-bottom: 6px;
+}
+
+.payment-faq h4 {
+  margin-bottom: 6px;
+}
+
+.payment-header.with-back {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 6px;
+}
+
+.payment-header-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* BACK ICON */
+.payment-back-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #111827;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  transform: translateY(-1px); 
+}
+
+.payment-back-icon:hover {
+  color: #22c55e;
+}
+
+.payment-subtitle {
+  color: #6b7280;
+  font-size: 14px;
+  margin-bottom: 32px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .payment-header h1 {
+    font-size: 26px;
+  }
+
+  .payment-section h2 {
+    font-size: 20px;
+  }
+}
+
+/* ================= MODAL ================= */
+.payment-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.payment-modal {
+  background: white;
+  border-radius: 16px;
+  padding: 32px 24px;
+  max-width: 450px;
+  width: 90%;
+  position: relative;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  animation: modalFade 0.3s ease;
+}
+
+.payment-modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+}
+
+.payment-modal-close:hover {
+  color: #ef4444;
+}
+
+.payment-modal-content h3 {
+  font-size: 22px;
+  margin-bottom: 12px;
+}
+
+.payment-modal-content p {
+  font-size: 15px;
+  color: #374151;
+  line-height: 1.6;
+}
+
+.checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 8px 0 12px 0;
+}
+
+.checklist div {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #374151;
+}
+
+@keyframes modalFade {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

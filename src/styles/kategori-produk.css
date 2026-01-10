@@ -1,0 +1,125 @@
+.product-detail-container {
+  padding: 2rem 0;
+}
+
+/* Card utama */
+.product-card {
+  display: flex;
+  gap: 2rem;
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Gambar produk */
+.product-detail-img {
+  flex: 1;
+  max-width: 350px;
+  height: 300px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.product-detail-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Info produk */
+.product-detail-info {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.product-category {
+  display: inline-block;
+  padding: 3px 10px;
+  background: #f0fdf4;
+  color: #16a34a;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 999px;
+  margin-bottom: 0.5rem;
+}
+
+.product-detail-info h1 {
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.product-detail-info .harga {
+  font-size: 22px;
+  font-weight: 700;
+  color: #16a34a;
+  margin-bottom: 0.5rem;
+}
+
+.product-detail-info p {
+  margin: 0.25rem 0;
+  line-height: 1.6;
+}
+
+/* Tombol +Keranjang */
+.btn-cart {
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  background-color: #16a34a;
+  color: white;
+  border: none;
+  margin-top: 1rem;
+  transition: background-color 0.2s ease;
+}
+
+.btn-cart:hover {
+  background-color: #15803d;
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ecfdf5;
+  color: #065f46;
+  padding: 12px 18px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  z-index: 9999;
+  animation: slideDown 0.3s ease;
+}
+
+.toast-icon {
+  color: #16a34a;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translate(-50%, -10px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+/* Responsif */
+@media (max-width: 768px) {
+  .product-card {
+    flex-direction: column;
+    padding: 1rem;
+  }
+
+  .product-detail-img {
+    width: 100%;
+    max-width: 100%;
+    height: 250px;
+  }
+}

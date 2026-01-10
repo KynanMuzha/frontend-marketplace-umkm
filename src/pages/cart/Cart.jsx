@@ -7,8 +7,8 @@ export default function Cart() {
   const [cart, setCart] = useState([]);
   const [selected, setSelected] = useState([]);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
 
+  const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -32,7 +32,7 @@ export default function Cart() {
     }
   };
 
-  // 🌟 Update quantity (optimistic UI)
+  // Update quantity
   const updateQty = async (cartId, type) => {
     const cartItem = cart.find((item) => item.id === cartId);
     if (!cartItem) return;
@@ -40,14 +40,12 @@ export default function Cart() {
     let newQty = type === "inc" ? cartItem.quantity + 1 : cartItem.quantity - 1;
     if (newQty < 1) return;
 
-    // 1️⃣ Update state dulu
     setCart((prev) =>
       prev.map((item) =>
         item.id === cartId ? { ...item, quantity: newQty } : item
       )
     );
 
-    // 2️⃣ Kirim ke backend
     try {
       await api.patch("/cart/update", {
         product_id: cartItem.product.id,
@@ -110,9 +108,38 @@ export default function Cart() {
     navigate(`/product/${productId}`);
   };
 
+  const handleCheckout = () => {
+    if (selected.length === 0) return;
+
+    const selectedItems = cart.filter((item) => selected.includes(item.id));
+
+    navigate("/checkout", {
+      state: {
+        items: selectedItems,
+        total,
+      },
+    });
+  };
+
   return (
     <div className="cart-page">
-      <h2>Keranjang Belanja</h2>
+       <div className="cart-header">
+  <button className="back-btn" onClick={() => navigate("/")}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M15 18l-6-6 6-6" />
+    </svg>
+  </button>
+
+  <h2 className="cart-title">Keranjang Belanja</h2>
+  </div>
 
       {loading ? (
         <p>Memuat...</p>
@@ -210,7 +237,11 @@ export default function Cart() {
 
           <div className="cart-summary">
             <h3>Total: Rp {total.toLocaleString("id-ID")}</h3>
-            <button className="checkout-btn" disabled={selected.length === 0}>
+            <button
+              className="checkout-btn"
+              disabled={selected.length === 0}
+              onClick={handleCheckout}
+            >
               Checkout
             </button>
           </div>

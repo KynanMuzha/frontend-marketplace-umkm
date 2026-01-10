@@ -1,0 +1,125 @@
+.checkout-success-page {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 0 16px;
+  font-family: 'Inter', sans-serif;
+}
+
+.success-card {
+  background: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  text-align: center;
+}
+
+.success-card h2 {
+  color: #16a34a;
+  margin-bottom: 12px;
+  font-size: 28px;
+}
+
+.success-card p {
+  margin-bottom: 20px;
+  color: #374151;
+  font-size: 14px;
+}
+
+.order-summary {
+  text-align: left;
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  background: #f9fafb;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #111827;
+}
+
+.payment-info {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.payment-code {
+  margin: 12px 0;
+  font-size: 22px;
+  font-weight: bold;
+  color: #16a34a;
+  background: #f0fdf4;
+  padding: 12px;
+  border-radius: 8px;
+  letter-spacing: 2px;
+}
+
+.due-date {
+  color: #dc2626;
+  font-weight: 500;
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+/* QR Code */
+.qris-payment {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.qris-payment p {
+  margin-bottom: 12px;
+  font-size: 14px;
+  color: #374151;
+}
+
+.qris-payment .payment-code {
+  font-size: 20px;
+  padding: 10px 16px;
+}
+
+/* Bank / E-Wallet Payment */
+.bank-payment {
+  margin-top: 12px;
+}
+
+.bank-payment p {
+  font-size: 14px;
+  color: #374151;
+}
+
+/* COD */
+.payment-info h3 {
+  font-size: 18px;
+  margin-bottom: 8px;
+  color: #111827;
+}
+
+.payment-info p {
+  font-size: 14px;
+  color: #374151;
+}
+
+/* Tombol kembali ke beranda */
+.btn-home {
+  display: inline-block;
+  padding: 12px 24px;
+  background: #16a34a;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.2s;
+  text-decoration: none;
+}
+
+.btn-home:hover {
+  background: #15803d;
+}

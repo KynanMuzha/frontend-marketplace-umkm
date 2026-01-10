@@ -56,23 +56,40 @@
     /* KATEGORI */
     .kategori-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 16px; /* jarak antar card kategori */
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 16px;
     }
 
     .kategori-card {
-    padding: 12px; /* padding internal card */
-    border-radius: 10px;
-    background: #f9fafb;
+    background: #fff;
+    border-radius: 12px;
+    padding: 16px 12px;
     text-align: center;
-    font-weight: 600;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
     }
 
     .kategori-card:hover {
-    background: #dcfce7;
+    transform: translateY(-4px);
     }
+
+    .kategori-icon {
+    margin-bottom: 8px;
+    color: #16a34a;
+    }
+
+    .kategori-card span {
+    font-size: 14px;
+    font-weight: 600;
+    }
+
+    .kategori-card:nth-child(1) .kategori-icon { color: #f97316; } /* makanan */
+    .kategori-card:nth-child(2) .kategori-icon { color: #0ea5e9; } /* minuman */
+    .kategori-card:nth-child(3) .kategori-icon { color: #a855f7; } /* kerajinan */
+    .kategori-card:nth-child(4) .kategori-icon { color: #22c55e; } /* pertanian */
+    .kategori-card:nth-child(5) .kategori-icon { color: #ec4899; } /* fashion */
+
 
     /* PRODUK */
     .produk-grid {
@@ -142,3 +159,56 @@
     .btn-cart:hover {
     background-color: #15803d;
     }
+
+    .toast {
+    position: fixed;
+    top: 20px;
+
+    left: 50%;
+    transform: translateX(-50%);
+
+    background: #ecfdf5;
+    color: #065f46;
+    padding: 12px 18px;
+    border-radius: 10px;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+    z-index: 9999;
+    animation: slideDown 0.3s ease;
+    }
+
+
+    .toast-icon {
+    color: #16a34a;  /* hijau sukses */
+    }
+
+    @keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -10px);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+    }
+
+    .category-container {
+    margin-top: 3rem; /* jarak dari navbar */
+    padding-bottom: 2rem; /* opsional agar bawah tidak mepet */
+    }
+
+    .category-container .section-title {
+    margin-top: 1rem; /* jarak di atas judul */
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+    font-weight: 700;
+    }
+
+
+
+
