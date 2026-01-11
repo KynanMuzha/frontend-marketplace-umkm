@@ -55,6 +55,18 @@ export default function Footer() {
             </ul>
           </div>
 
+          {/* 🆕 TENTANG KAMI */}
+          <div className="footer-section">
+            <h4>Tentang Kami</h4>
+            <ul>
+              <li>
+                <Link to="/tentang-kami" className="footer-link">
+                  Tentang PasarDesa
+                </Link>
+              </li>
+            </ul>
+          </div>
+
           {/* BANTUAN */}
           <div className="footer-section">
             <h4>Bantuan</h4>
@@ -74,7 +86,6 @@ export default function Footer() {
                   Kebijakan Privasi
                 </Link>
               </li>
-
             </ul>
           </div>
 

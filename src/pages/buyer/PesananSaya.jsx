@@ -97,7 +97,16 @@ export default function PesananSaya() {
           </div>
         ) : (
           filteredOrders.map((order) => (
-            <div key={order.id} className="order-card">
+            <div
+                key={order.id}
+                className="order-card"
+                style={{ cursor: "pointer" }}
+                onClick={() =>
+                navigate("/checkout-success", {
+                    state: { order },
+                })
+                }
+            >
               <div className="order-top">
                 <span className="order-id">{order.invoice}</span>
                 <span className={`order-status ${order.status.code}`}>

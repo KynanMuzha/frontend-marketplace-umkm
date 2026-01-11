@@ -10,7 +10,7 @@
   margin: auto;
   padding: 48px 32px 32px;
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
   gap: 32px;
 }
 
@@ -93,4 +93,44 @@
   font-size: 20px;
   font-weight: 700;
   color: #16a34a;
+}
+
+/* MICRO SPACING REFINEMENT — TIDAK MENGUBAH DESAIN */
+
+.footer-section ul li {
+  line-height: 1.6;
+}
+
+.footer-section:not(.brand) {
+  padding-top: 4px;
+}
+
+.footer-section h4 {
+  letter-spacing: 0.2px;
+}
+
+.footer-bottom {
+  margin-top: 12px;
+}
+
+.footer-container {
+  align-items: flex-start;
+}
+
+/* FINAL POLISH — SUPER HALUS, TIDAK MERUBAH DESAIN */
+
+.footer-section ul li:hover {
+  transform: translateX(2px);
+}
+
+.footer-section ul li {
+  transition: all 0.18s ease;
+}
+
+.footer-logo img {
+  filter: drop-shadow(0 1px 1px rgba(0,0,0,0.05));
+}
+
+.footer {
+  box-shadow: 0 -1px 0 rgba(0,0,0,0.02);
 }

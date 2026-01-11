@@ -271,3 +271,57 @@
 .logout-item:hover {
   background: rgba(220,38,38,0.08);
 }
+
+.search-box {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+/* INPUT */
+.search-box input {
+  width: 100%;
+  height: 50px;
+  font-size: 16px;
+  padding: 0 110px 0 18px; /* kanan BESAR untuk 2 icon */
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+}
+
+/* ❌ CLEAR */
+/* ❌ CLEAR */
+.btn-clear-search {
+  position: absolute;
+  right: 54px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 20px;
+  font-weight: bold;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 6px;
+}
+
+.btn-clear-search:hover {
+  color: #374151;
+}
+
+/* 🔍 SEARCH */
+.btn-search-action {
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  color: #6b7280;
+}
+
+.btn-search-action:hover {
+  color: #374151;
+}

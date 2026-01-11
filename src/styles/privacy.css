@@ -49,3 +49,31 @@
   border-top: 1px solid #e5e7eb;
   padding-top: 15px;
 }
+
+.privacy-header {
+  position: relative;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.privacy-back-icon {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+
+  background: #f3f4f6;
+  border: none;
+  border-radius: 10px;
+  padding: 6px;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s ease;
+}
+
+.privacy-back-icon:hover {
+  background: #e5e7eb;
+}

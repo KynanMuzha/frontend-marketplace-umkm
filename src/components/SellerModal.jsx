@@ -130,7 +130,7 @@ export default function SellerModal({ onClose }) {
                   <>
                     <input
                       type="text"
-                      placeholder="Nama Lengkap"
+                      placeholder="Nama Toko"
                       value={form.name}
                       onChange={(e) =>
                         setForm({ ...form, name: e.target.value })

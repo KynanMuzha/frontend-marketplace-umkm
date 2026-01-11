@@ -1,7 +1,7 @@
 import UMKM from "../../assets/umkm.jpg";
+import UMKM2 from "../../assets/umkm2.jpg";
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import api from "../../service/api";
 import "../../styles/home.css";
 
@@ -12,25 +12,40 @@ export default function Home() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState({ show: false, message: "" });
+  const [currentHero, setCurrentHero] = useState(0);
 
   const navigate = useNavigate();
   const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const searchQuery = searchParams.get("search");
   const token = localStorage.getItem("token");
+
+  const heroImages = [UMKM, UMKM2];
+
+  // Efek fade hero
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentHero((prev) => (prev + 1) % heroImages.length);
+    }, 7000);
+    return () => clearInterval(interval);
+  }, []);
 
   // Fetch produk
   useEffect(() => {
+    setLoading(true);
+
     api
-      .get("/products")
+      .get(`/products?search=${searchQuery || ""}`)
       .then((res) => setProducts(res.data))
       .catch(() => alert("Gagal memuat produk"))
       .finally(() => setLoading(false));
-  }, []);
+  }, [searchQuery]);
 
-  // Fetch kategori dari backend
+  // Fetch kategori
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await api.get("/categories"); // endpoint backend kategori
+        const res = await api.get("/categories");
         setCategories(res.data);
       } catch (error) {
         console.error("Gagal mengambil kategori:", error);
@@ -39,17 +54,25 @@ export default function Home() {
     fetchCategories();
   }, []);
 
-  // Scroll ke hash jika ada
+  // Scroll ke hash
   useEffect(() => {
     if (location.hash) {
       const element = document.querySelector(location.hash);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
-      }
+      if (element) element.scrollIntoView({ behavior: "smooth" });
     }
   }, [location]);
 
-  // Tambah ke keranjang
+  // Scroll ke produk saat search
+  useEffect(() => {
+    if (searchQuery) {
+      const produkSection = document.getElementById("produk-section");
+      if (produkSection) {
+        produkSection.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, [searchQuery]);
+
+  // Add to cart
   const handleAddToCart = (productId) => {
     if (!token) {
       setToast({ show: true, message: "Silakan login terlebih dahulu" });
@@ -71,6 +94,13 @@ export default function Home() {
 
   return (
     <>
+      {/* PAGE LOADER */}
+      {loading && (
+        <div className="page-loader">
+          <div className="loader"></div>
+        </div>
+      )}
+
       {/* Toast */}
       {toast.show && (
         <div className="toast">
@@ -93,16 +123,26 @@ export default function Home() {
       )}
 
       {/* HERO */}
-      <section
-        className="hero"
-        style={{ backgroundImage: `url(${UMKM})` }}
-      >
-        <div className="hero-overlay">
-          <div className="container hero-content">
-            <h1>Marketplace UMKM Desa</h1>
-            <p>PasarDesa adalah platform jual beli yang dikhususkan untuk UMKM desa. Kami membantu pelaku usaha desa memasarkan produk mereka secara digital, agar hasil karya dan produk lokal desa bisa dikenal, dibeli, dan berkembang di lingkungan desa itu sendiri.</p>
+      <section className="hero">
+        {heroImages.map((img, index) => (
+          <div
+            key={index}
+            className={`hero-slide ${currentHero === index ? "active" : ""}`}
+            style={{ backgroundImage: `url(${img})` }}
+          >
+            <div className="hero-overlay">
+              <div className="container hero-content">
+                <h1>Marketplace UMKM Desa</h1>
+                <p>
+                  PasarDesa adalah platform jual beli yang dikhususkan untuk UMKM desa.
+                  Kami membantu pelaku usaha desa memasarkan produk mereka secara digital,
+                  agar hasil karya dan produk lokal desa bisa dikenal, dibeli, dan berkembang
+                  di lingkungan desa itu sendiri.
+                </p>
+              </div>
+            </div>
           </div>
-        </div>
+        ))}
       </section>
 
       <main className="container">
@@ -115,7 +155,9 @@ export default function Home() {
                 <div
                   key={cat.id}
                   className="kategori-card"
-                  onClick={() => navigate(`/kategori/${cat.name.toLowerCase().replace(/\s+/g, '-')}`)}
+                  onClick={() =>
+                    navigate(`/kategori/${cat.name.toLowerCase().replace(/\s+/g, '-')}`)
+                  }
                 >
                   <div className="kategori-icon-placeholder">{cat.name.charAt(0)}</div>
                   <span>{cat.name}</span>
@@ -129,10 +171,20 @@ export default function Home() {
 
         {/* PRODUK */}
         <section className="section">
-          <h2 className="section-title">Produk UMKM Pilihan</h2>
+          <h2 className="section-title">
+            {searchQuery ? `Hasil pencarian "${searchQuery}"` : "Produk UMKM Pilihan"}
+          </h2>
 
           {loading ? (
-            <p>Memuat produk...</p>
+            <div className="produk-grid">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="produk-card skeleton"
+                  style={{ height: 300 }}
+                />
+              ))}
+            </div>
           ) : products.length === 0 ? (
             <p>Belum ada produk</p>
           ) : (
