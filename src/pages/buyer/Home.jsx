@@ -1,13 +1,23 @@
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import "../../styles/home.css";
 
 export default function Home() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user?.role === "admin") {
+      navigate("/admin/dashboard"); // redirect admin otomatis
+    }
+  }, []);
+
   return (
     <>
       <Navbar />
 
-      {/* HERO */}
       <section className="hero">
         <div className="container hero-content">
           <h1>Marketplace UMKM Desa</h1>
@@ -16,7 +26,6 @@ export default function Home() {
       </section>
 
       <main className="container">
-        {/* KATEGORI */}
         <section className="section">
           <h2 className="section-title">Kategori Produk</h2>
           <div className="kategori-grid">
@@ -30,7 +39,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* PRODUK */}
         <section className="section">
           <h2 className="section-title">Produk UMKM Pilihan</h2>
           <div className="produk-grid">

@@ -62,8 +62,13 @@ export default function Login() {
       // 4️⃣ SIMPAN USER FINAL
       localStorage.setItem("user", JSON.stringify(user));
 
-      // 5️⃣ REDIRECT KE HOME
-      navigate("/");
+      // 5️⃣ REDIRECT BERDASARKAN ROLE
+      if (user.role === "admin") {
+        navigate("/admin/dashboard");
+      } else {
+        navigate("/"); // user biasa
+      }
+
     } catch (err) {
       alert(
         err?.response?.data?.message ||
