@@ -1,0 +1,292 @@
+/* ================================
+   PROFILE PAGE
+================================ */
+.profile-page {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 32px;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* ================================
+   TITLE
+================================ */
+.profile-page-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.profile-page-desc {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 32px;
+}
+
+/* ================================
+   LAYOUT
+================================ */
+.profile-container {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 40px;
+}
+
+/* ================================
+   FORM
+================================ */
+.profile-form h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.section-divider {
+  margin-top: 32px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 14px;
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.form-group input {
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+  transition: border 0.2s ease;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #16a34a;
+}
+
+/* ================================
+   BUTTON
+================================ */
+.btn-primary {
+  margin-top: 12px;
+  background: #16a34a;
+  color: #ffffff;
+  padding: 12px 18px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.btn-primary:hover {
+  background: #15803d;
+}
+
+.btn-outline {
+  background: #ffffff;
+  color: #16a34a;
+  border: 1px solid #16a34a;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-outline:hover {
+  background: #16a34a;
+  color: #ffffff;
+}
+
+.btn-danger {
+  background: #dc2626;
+  color: #ffffff;
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.btn-danger:hover {
+  background: #b91c1c;
+}
+
+/* ================================
+   AVATAR
+================================ */
+.profile-avatar-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding-left: 40px;
+  border-left: 1px solid #e5e7eb;
+}
+
+.avatar-image {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #16a34a;
+}
+
+.avatar-placeholder {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: #16a34a;
+  color: #ffffff;
+  font-size: 48px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.avatar-note {
+  font-size: 12px;
+  color: #6b7280;
+  text-align: center;
+}
+
+/* ================================
+   LOADING
+================================ */
+.profile-loading {
+  padding: 40px;
+  text-align: center;
+  font-size: 16px;
+}
+
+/* ================================
+   RESPONSIVE
+================================ */
+@media (max-width: 768px) {
+  .profile-page {
+    margin: 20px;
+    padding: 24px;
+  }
+
+  .profile-container {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-avatar-box {
+    border-left: none;
+    padding-left: 0;
+    margin-top: 32px;
+  }
+}
+
+.crop-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.crop-box {
+  width: 360px;
+  height: 420px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.crop-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.crop-box .reactEasyCrop_Container {
+  border-radius: 50%;
+}
+
+/* ===============================
+   MODAL CROP AVATAR
+================================ */
+.crop-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.crop-box {
+  background: #ffffff;
+  width: 360px;
+  max-width: 90%;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* AREA CROP */
+.crop-box > div:first-child {
+  position: relative;
+  width: 100%;
+  height: 280px;
+  background: #000;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* ZOOM SLIDER */
+.crop-box .crop-zoom {
+  width: 100%;
+  margin: 14px 0;
+}
+
+/* BUTTON */
+.crop-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.crop-actions button {
+  flex: 1;
+}
+
+.profile-input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+  margin-bottom: 14px;
+}
+
+.profile-input:focus {
+  outline: none;
+  border-color: #16a34a;
+}
