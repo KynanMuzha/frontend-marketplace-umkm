@@ -5,6 +5,7 @@ import api from "../service/api";
 import "../styles/navbar.css";
 
 export default function Navbar() {
+  const [open, setOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [cartCount, setCartCount] = useState(0);
   const [search, setSearch] = useState("");
@@ -164,7 +165,10 @@ export default function Navbar() {
             </>
           ) : (
             <div className="profile-dropdown">
-              <div className="profile-circle">
+              <div
+    className="profile-circle"
+    onClick={() => setOpen(!open)}
+  >
                 {user.avatar ? (
                   <img
                     src={user.avatar}

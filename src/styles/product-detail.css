@@ -106,22 +106,14 @@
   font-weight: 600;
   padding: 4px 10px;
   border-radius: 999px;
-  width: fit-content;     /* 🔥 ikut panjang teks */
-  max-width: max-content; /* 🔥 tidak melar */
+  width: fit-content;     
+  max-width: max-content; 
   white-space: nowrap;
   z-index: 9;
 }
 
 .product-detail-info .product-category {
   display: none;
-}
-
-@media (max-width: 768px) {
-  .product-category-top {
-    top: 14px;
-    left: 60px;
-    font-size: 11px;
-  }
 }
 
 
@@ -188,7 +180,43 @@
   to { opacity: 1; transform: translate(-50%, 0); }
 }
 
-/* Responsif */
+@media (max-width: 768px) {
+  .product-detail-container {
+    padding: 1rem 0.5rem;
+  }
+
+  .product-card.shopee-style {
+    flex-direction: column;
+    gap: 1.2rem;
+    padding: 1rem;
+    border-radius: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .product-detail-img {
+    width: 100%;
+    max-width: 100%;
+    height: 280px;
+    margin-top: 40px; /* aman dari back button */
+  }
+
+  .product-detail-img img {
+    object-fit: contain;
+    background: #fff;
+  }
+}
+
+@media (max-width: 768px) {
+  .product-back-btn {
+    top: 12px;
+    left: 12px;
+    width: 34px;
+    height: 34px;
+  }
+}
+
+
 @media (max-width: 768px) {
   .product-card.shopee-style {
     flex-direction: column;
@@ -203,5 +231,56 @@
 
   .btn-cart-wrapper {
     justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .product-category-top {
+    top: 20px;
+    left: 56px;
+    font-size: 11px;
+    padding: 3px 8px;
+  }
+}
+
+@media (max-width: 768px) {
+  .product-detail-info h1 {
+    font-size: 18px;
+  }
+
+  .product-detail-info .harga {
+    font-size: 18px;
+  }
+
+  .product-detail-info h3 {
+    font-size: 14px;
+    margin-top: 0.6rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .btn-cart-wrapper {
+    position: sticky;
+    bottom: 12px;
+    background: white;
+    padding: 10px;
+    justify-content: center;
+    z-index: 50;
+  }
+
+  .btn-cart {
+    width: 100%;
+    max-width: 360px;
+    font-size: 15px;
+    padding: 0.75rem;
+    border-radius: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .toast {
+    top: 12px;
+    width: calc(100% - 24px);
+    font-size: 13px;
   }
 }
