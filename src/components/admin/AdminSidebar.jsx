@@ -12,7 +12,7 @@ const AdminSidebar = () => {
   return (
     <aside className="admin-sidebar">
       <div>
-        <h2 className="sidebar-title">Admin Panel</h2>
+        <h2 className="sidebar-title">PasarDesa</h2>
 
         <nav className="sidebar-menu">
           <NavLink to="/admin/dashboard">Dashboard</NavLink>

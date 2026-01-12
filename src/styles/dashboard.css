@@ -1,3 +1,6 @@
+/* =======================
+   ROOT VARIABLES
+======================= */
 :root {
   --primary: #16a34a;
   --primary-hover: #15803d;
@@ -46,13 +49,13 @@
   border-radius: 14px;
   padding: 20px;
   border-left: 5px solid var(--primary);
-  box-shadow: 0 6px 15px rgba(0,0,0,0.06);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.06);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .kpi-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
 }
 
 .kpi-title {
@@ -75,7 +78,7 @@
   border-radius: 14px;
   padding: 20px;
   border: 1px solid var(--border-soft);
-  box-shadow: 0 6px 15px rgba(0,0,0,0.06);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.06);
 }
 
 .section-title {
@@ -117,7 +120,7 @@
 }
 
 /* =======================
-   EMPTY STATE
+   EMPTY & LOADING
 ======================= */
 .empty {
   text-align: center;
@@ -126,31 +129,107 @@
   font-style: italic;
 }
 
+.loading {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
 /* =======================
-   STATUS BADGE
+   STATUS BADGE (FINAL)
 ======================= */
 .status-badge {
-  padding: 4px 12px;
+  padding: 6px 12px;
+  border-radius: 999px;
   font-size: 12px;
   font-weight: 600;
-  border-radius: 999px;
   text-transform: capitalize;
+  display: inline-block;
+  min-width: 90px;
+  text-align: center;
 }
 
-/* STATUS */
+/* pending */
 .status-badge.pending {
-  background: #fef3c7;
-  color: #92400e;
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #93c5fd;
 }
 
-.status-badge.success,
-.status-badge.paid {
-  background: var(--primary-soft);
-  color: #166534;
+/* processing */
+.status-badge.processing {
+  background: #fff7ed;
+  color: #c2410c;
+  border: 1px solid #fdba74;
 }
 
-.status-badge.failed,
+/* shipped */
+.status-badge.shipped {
+  background: #f0fdf4;
+  color: #15803d;
+  border: 1px solid #86efac;
+}
+
+/* completed */
+.status-badge.completed {
+  background: #ecfdf5;
+  color: #047857;
+  border: 1px solid #6ee7b7;
+}
+
+/* cancelled */
 .status-badge.cancelled {
-  background: #fee2e2;
-  color: #991b1b;
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fca5a5;
+}
+
+/* =======================
+   SELECT (ORDERS PAGE)
+======================= */
+select {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-soft);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+select:disabled {
+  background: #f3f4f6;
+  cursor: not-allowed;
+}
+
+.filter-card {
+  margin-bottom: 20px;
+}
+
+.filter-group {
+  display: flex;
+  gap: 16px;
+  align-items: flex-end;
+}
+
+.filter-group label {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.filter-group input {
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+}
+
+.btn-primary {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background: #2563eb;
 }
