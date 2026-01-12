@@ -184,9 +184,6 @@ text-align: center;
   background: #15803d;
 }
 
-/* =======================
-   TOAST
-======================= */
 .toast {
   position: fixed;
   top: 20px;
@@ -218,11 +215,6 @@ text-align: center;
     transform: translate(-50%, 0);
   }
 }
-
-/* =======================
-   PRODUK CARD – FINAL POLISH
-   (TIDAK MENGUBAH DESAIN)
-======================= */
 
 .produk-card {
   transition: all 0.25s ease;
@@ -256,11 +248,6 @@ text-align: center;
 .btn-cart:hover {
   transform: translateY(-1px);
 }
-
-/* =======================
-   NAVBAR – MICRO POLISH
-   (TIDAK MENGUBAH DESAIN)
-======================= */
 
 .navbar,
 header,
@@ -297,10 +284,6 @@ header img {
 header img:hover {
   transform: scale(1.03);
 }
-
-/* =======================
-   PAGE LOADING & SKELETON
-======================= */
 
 .page-loader {
   position: fixed;
@@ -342,10 +325,130 @@ header img:hover {
   to { background-position: -400% 0; }
 }
 
-/* =======================
-   KATEGORI PAGE OFFSET
-======================= */
 
 .category-container {
   padding-top: 70px; /* jarak aman dari navbar */
+}
+
+.category-header {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* jarak icon ke teks */
+  margin-bottom: 24px;
+}
+
+.back-button {
+  background: none;
+  border: none;
+  padding: 6px;
+  cursor: pointer;
+  color: #374151;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+.back-button:hover {
+  background-color: #f3f4f6;
+  color: #166d4a;
+}
+
+
+.back-button svg {
+  display: block;
+  width: 26px;
+  height: 26px;
+  transform: translateY(-12px);
+}
+
+.empty-category-text {
+  margin-left: 48px; 
+  font-size: 14px;
+  color: #6b7280; 
+}
+
+/* HERO RESPONSIVE */
+@media (max-width: 768px) {
+  .hero {
+    height: 260px;
+  }
+
+  .hero-content h1 {
+    font-size: 26px;
+  }
+
+  .hero-content p {
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 0 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .kategori-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .kategori-card {
+    padding: 14px 10px;
+  }
+
+  .kategori-card span {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 768px) {
+  .produk-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .produk-img {
+    height: 140px;
+  }
+
+  .produk-body {
+    padding: 10px;
+  }
+
+  .produk-body h3 {
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  .harga {
+    font-size: 13px;
+  }
+
+  .btn-cart {
+    margin: 10px;
+    padding: 6px 10px;
+    font-size: 13px;
+    border-radius: 6px;
+  }
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: 32px 0;
+  }
+
+  .section-title {
+    font-size: 20px;
+    margin-bottom: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .toast {
+    width: calc(100% - 24px);
+    left: 12px;
+    transform: none;
+  }
 }

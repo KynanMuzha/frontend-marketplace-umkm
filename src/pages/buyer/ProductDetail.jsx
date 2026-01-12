@@ -40,7 +40,14 @@ export default function ProductDetail() {
     }
   };
 
-  if (loading) return <p style={{ textAlign: "center" }}>Memuat produk...</p>;
+  if (loading) {
+  return (
+    <div className="page-loader">
+      <div className="loader"></div>
+    </div>
+  );
+}
+
   if (!product) return <p style={{ textAlign: "center" }}>Produk tidak ditemukan</p>;
 
   return (
@@ -67,7 +74,29 @@ export default function ProductDetail() {
       )}
 
       <div className="product-card shopee-style">
-        {/* Foto */}
+        <button
+  className="product-back-btn"
+  onClick={() => navigate("/")}
+  aria-label="Kembali ke Home"
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="22"
+    height="22"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M15 18l-6-6 6-6" />
+  </svg>
+</button>
+<span className="product-category product-category-top">
+    {product.category?.name || "-"}
+  </span>
+
         <div className="product-detail-img">
           <img
             src={product.image ? `${BASE_URL}/storage/${product.image}` : "/no-image.png"}
@@ -77,14 +106,13 @@ export default function ProductDetail() {
 
         {/* Info */}
         <div className="product-detail-info">
-          <span className="product-category">{product.category?.name || "-"}</span>
           <h1>{product.name}</h1>
-          <p className="harga">Rp {Number(product.price).toLocaleString("id-ID")}</p>
-          <p><strong>UMKM:</strong> {product.user?.name || "-"}</p>
-          <p><strong>Stock:</strong> {product.stock}</p>
+          <h3 className="harga">Rp {Number(product.price).toLocaleString("id-ID")}</h3>
+          <h3>UMKM:{product.user?.name || "-"}</h3>
+          <h3>Stock:{product.stock}</h3>
 
-          <h3>Deskripsi Produk</h3>
-          <p>{product.description || "-"}</p>
+          <h1>Deskripsi Produk</h1>
+          <h3>{product.description || "-"}</h3>
 
           {/* Tombol +Keranjang */}
           <div className="btn-cart-wrapper">

@@ -10,14 +10,18 @@ const BASE_URL = "http://127.0.0.1:8000";
 export default function Home() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [pageLoading, setPageLoading] = useState(true);
+  const [productLoading, setProductLoading] = useState(false);
+
   const [toast, setToast] = useState({ show: false, message: "" });
   const [currentHero, setCurrentHero] = useState(0);
 
   const navigate = useNavigate();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const searchQuery = searchParams.get("search");
+  const rawSearch = searchParams.get("search");
+  const searchQuery = rawSearch && rawSearch.trim() !== "" ? rawSearch : null;
+
   const token = localStorage.getItem("token");
 
   const heroImages = [UMKM, UMKM2];
@@ -32,14 +36,18 @@ export default function Home() {
 
   // Fetch produk
   useEffect(() => {
-    setLoading(true);
+  setProductLoading(true);
 
-    api
-      .get(`/products?search=${searchQuery || ""}`)
-      .then((res) => setProducts(res.data))
-      .catch(() => alert("Gagal memuat produk"))
-      .finally(() => setLoading(false));
-  }, [searchQuery]);
+  api
+    .get(`/products?search=${searchQuery || ""}`)
+    .then((res) => setProducts(res.data))
+    .catch(() => alert("Gagal memuat produk"))
+    .finally(() => {
+      setProductLoading(false);
+      setPageLoading(false); // 🔥 hanya sekali
+    });
+}, [searchQuery]);
+
 
   // Fetch kategori
   useEffect(() => {
@@ -72,6 +80,12 @@ export default function Home() {
     }
   }, [searchQuery]);
 
+  const handleClearSearch = () => {
+  setSearch("");
+  navigate("/", { replace: true });
+};
+
+
   // Add to cart
   const handleAddToCart = (productId) => {
     if (!token) {
@@ -95,7 +109,7 @@ export default function Home() {
   return (
     <>
       {/* PAGE LOADER */}
-      {loading && (
+      {pageLoading && (
         <div className="page-loader">
           <div className="loader"></div>
         </div>
@@ -175,7 +189,7 @@ export default function Home() {
             {searchQuery ? `Hasil pencarian "${searchQuery}"` : "Produk UMKM Pilihan"}
           </h2>
 
-          {loading ? (
+          {productLoading ? (
             <div className="produk-grid">
               {Array.from({ length: 8 }).map((_, i) => (
                 <div

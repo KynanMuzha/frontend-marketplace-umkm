@@ -61,10 +61,16 @@
 
 /* CART */
 .cart {
+  display: flex;
+  align-items: center;
   position: relative;
-  font-size: 20px;
-  cursor: pointer;
+  color: #374151;
 }
+
+.cart svg {
+  display: block;
+}
+
 
 /* BADGE JUMLAH PRODUK */
 .cart-badge {
@@ -148,21 +154,6 @@
   transform: scale(0.97);
 }
 
-/* ROLE BADGE */
-.role-badge {
-  background-color: #2563eb; /* biru untuk Penjual */
-  color: white;
-  font-size: 12px;
-  font-weight: 600;
-  padding: 2px 6px;
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 20px;
-  white-space: nowrap;
-}
-
 .profile-avatar-circle {
   width: 42px;
   height: 42px;
@@ -214,6 +205,8 @@
   transform: translateY(8px);
   transition: all 0.2s ease;
   z-index: 200;
+  padding: 6px;
+  backdrop-filter: blur(4px);
 }
 
 /* SHOW ON HOVER */
@@ -239,26 +232,28 @@
   color: #6b7280;
 }
 
-/* ITEMS */
 .dropdown-menu button {
   width: 100%;
   padding: 12px 16px;
-  background: none;
+  background: transparent;
   border: none;
   text-align: left;
   font-size: 14px;
   cursor: pointer;
-  transition: background 0.15s ease;
+  border-radius: 8px;                
+  transition: background 0.15s ease, transform 0.12s ease;
 }
 
 .dropdown-menu button:hover {
-  background: #f9fafb;
+  background: rgba(3, 172, 14, 0.08); 
+  transform: translateX(2px);       
 }
+
 
 /* DIVIDER */
 .dropdown-divider {
   height: 1px;
-  background: #e5e7eb;
+  background: linear-gradient(to right, transparent, #e5e7eb, transparent);
   margin: 6px 0;
 }
 
@@ -268,60 +263,71 @@
   font-weight: 600;
 }
 
-.logout-item:hover {
-  background: rgba(220,38,38,0.08);
-}
-
 .search-box {
+  height: 50px;
   position: relative;
   flex: 1;
   display: flex;
   align-items: center;
 }
 
-/* INPUT */
 .search-box input {
   width: 100%;
   height: 50px;
   font-size: 16px;
-  padding: 0 110px 0 18px; /* kanan BESAR untuk 2 icon */
+  padding: 0 110px 0 18px; 
   border-radius: 10px;
   border: 1px solid #d1d5db;
 }
 
-/* ❌ CLEAR */
-/* ❌ CLEAR */
-.btn-clear-search {
-  position: absolute;
-  right: 54px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  font-size: 20px;
-  font-weight: bold;
-  color: #6b7280;
-  cursor: pointer;
-  padding: 6px;
-}
-
-.btn-clear-search:hover {
-  color: #374151;
-}
-
-/* 🔍 SEARCH */
+.btn-clear-search,
 .btn-search-action {
   position: absolute;
-  right: 18px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
+  top: 7px;           /*  (50px - 36px) / 2 = 7px */
+  transform: none;
+
+  width: 36px;
+  height: 36px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: transparent;
   border: none;
+  padding: 0;
+  margin: 0;
+
   cursor: pointer;
-  padding: 6px;
   color: #6b7280;
+
+  outline: none;
+  box-shadow: none;
+  appearance: none;
+  box-sizing: border-box;
 }
 
+/* 🔒 KUNCI SVG */
+.btn-clear-search svg,
+.btn-search-action svg {
+  width: 18px;
+  height: 18px;
+  display: block;           /* ⬅️ INI KUNCI UTAMA */
+  flex-shrink: 0;
+}
+
+/* 🔒 Matikan pengaruh baseline */
+.btn-clear-search,
+.btn-search-action {
+  line-height: 0;
+}
+
+/* POSISI */
+.btn-clear-search { right: 54px; }
+.btn-search-action { right: 18px; }
+
+/* HOVER hanya warna */
+.btn-clear-search:hover,
 .btn-search-action:hover {
   color: #374151;
 }
