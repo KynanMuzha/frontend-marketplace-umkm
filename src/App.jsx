@@ -17,6 +17,7 @@ import ShippingInfo from "./pages/buyer/ShippingInfo";
 import HelpCenter from "./pages/buyer/HelpCenter";
 import Terms from "./pages/buyer/Terms";
 import Privacy from "./pages/buyer/Privacy";
+import TentangKami from "./pages/buyer/TentangKami";
 
 // AUTH
 import Login from "./pages/auth/Login";
@@ -66,6 +67,7 @@ function AppWrapper() {
         <Route path="/pusat-bantuan" element={<HelpCenter />} />
         <Route path="/syarat-dan-ketentuan" element={<Terms />} />
         <Route path="/privacy" element={<Privacy />} />
+        <Route path="/tentang-kami" element={<TentangKami />} />
 
         {/* PESANAN */}
         <Route path="/pesanan" element={<PesananSaya />} />

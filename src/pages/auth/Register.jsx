@@ -63,9 +63,37 @@ export default function Register() {
         </div>
 
         <form onSubmit={handleSubmit}>
-          <input name="name" placeholder="Nama lengkap" onChange={handleChange} required />
-          <input name="email" type="email" placeholder="Email" onChange={handleChange} required />
-          <input name="password" type="password" placeholder="Password" onChange={handleChange} required />
+          {/* Jika penjual, tampilkan input Nama Toko */}
+          {role === "penjual" ? (
+            <input
+              name="name"
+              placeholder="Nama Toko"
+              onChange={handleChange}
+              required
+            />
+          ) : (
+            <input
+              name="name"
+              placeholder="Nama lengkap"
+              onChange={handleChange}
+              required
+            />
+          )}
+
+          <input
+            name="email"
+            type="email"
+            placeholder="Email"
+            onChange={handleChange}
+            required
+          />
+          <input
+            name="password"
+            type="password"
+            placeholder="Password"
+            onChange={handleChange}
+            required
+          />
 
           <button type="submit" className="btn-primary">
             Daftar

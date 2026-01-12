@@ -252,7 +252,14 @@ const EyeOffIcon = (
 
 
 
-  if (!user) return <div className="profile-loading">Loading...</div>;
+  if (!user) {
+  return (
+    <div className="page-loader">
+      <div className="loader"></div>
+    </div>
+  );
+}
+
 
   return (
     <div className="profile-page">
@@ -269,7 +276,7 @@ const EyeOffIcon = (
 
       <div className="profile-header">
   <button
-    className="back-button"
+    className="back-buttons"
     onClick={() => navigate("/")}
     aria-label="Kembali ke Home"
   >

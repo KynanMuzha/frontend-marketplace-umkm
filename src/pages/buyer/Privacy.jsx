@@ -1,17 +1,43 @@
 import React from "react";
-import "../../styles/privacy.css"; // CSS khusus halaman ini
+import { useNavigate } from "react-router-dom";
+import "../../styles/privacy.css";
 
 export default function Privacy() {
+  const navigate = useNavigate();
+
   return (
     <div className="privacy-container">
-      <h1>Kebijakan Privasi</h1>
+
+      <div className="privacy-header">
+        <button
+          className="privacy-back-icon"
+          onClick={() => navigate(-1)}
+          aria-label="Kembali"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="26"
+            height="26"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M15 18l-6-6 6-6" />
+          </svg>
+        </button>
+
+        <h1>Kebijakan Privasi</h1>
+      </div>
+
       <p className="intro">
         Kami di PasarDesa berkomitmen untuk melindungi data pribadi pengguna
         dan menjelaskan bagaimana informasi Anda dikumpulkan, digunakan,
         dan dilindungi saat menggunakan layanan kami.
       </p>
 
-      {/* 1. Informasi yang Dikumpulkan */}
       <section>
         <h2>1. Informasi yang Dikumpulkan</h2>
         <p>Kami dapat mengumpulkan informasi berikut:</p>
@@ -22,7 +48,6 @@ export default function Privacy() {
         </ul>
       </section>
 
-      {/* 2. Cara Penggunaan Data */}
       <section>
         <h2>2. Cara Data Digunakan</h2>
         <ul>
@@ -32,7 +57,6 @@ export default function Privacy() {
         </ul>
       </section>
 
-      {/* 3. Keamanan Data */}
       <section>
         <h2>3. Keamanan Data</h2>
         <p>
@@ -41,7 +65,6 @@ export default function Privacy() {
         </p>
       </section>
 
-      {/* 4. Hak dan Kewajiban Pengguna */}
       <section>
         <h2>4. Hak dan Kewajiban Pengguna</h2>
         <ul>
@@ -51,7 +74,6 @@ export default function Privacy() {
         </ul>
       </section>
 
-      {/* 5. Perubahan Kebijakan */}
       <section>
         <h2>5. Perubahan Kebijakan</h2>
         <p>
@@ -63,6 +85,7 @@ export default function Privacy() {
       <div className="privacy-footer">
         © {new Date().getFullYear()} PasarDesa. All rights reserved.
       </div>
+
     </div>
   );
 }

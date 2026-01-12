@@ -81,14 +81,47 @@ export default function KategoriProduk() {
       )}
 
       {/* Judul kategori */}
-      <h2 className="section-title">Produk Kategori: {categoryName}</h2>
+      <div className="category-header">
+  <button
+    className="back-button"
+    onClick={() => navigate("/")}
+    aria-label="Kembali ke Home"
+  >
+    <svg
+      width="22"
+      height="22"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M15 18L9 12L15 6"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  </button>
+
+  <h2 className="section-title">
+    Produk Kategori: {categoryName}
+  </h2>
+</div>
+
 
       {/* Produk */}
       {loading ? (
-        <p>Memuat produk...</p>
-      ) : products.length === 0 ? (
-        <p>Belum ada produk di kategori ini</p>
-      ) : (
+  <div className="page-loader">
+    <div className="loader"></div>
+  </div>
+) : products.length === 0 ? (
+  <p className="empty-category-text">
+  Belum ada produk di kategori ini
+</p>
+
+) : (
+
         <div className="produk-grid">
           {products.map((product) => (
             <div className="produk-card" key={product.id}>
