@@ -1,19 +1,13 @@
-/* ===============================
-   WRAPPER
-================================ */
 .seller-wrapper {
   max-width: 1280px;
   margin: auto;
   padding: 40px 20px;
 }
 
-/* ===============================
-   HEADER
-================================ */
 .seller-header {
   display: flex;
   justify-content: space-between;
-  align-items: center; /* ✅ WAJIB */
+  align-items: center; 
   margin-bottom: 40px;
 }
 
@@ -29,9 +23,6 @@
   margin-top: 4px;
 }
 
-/* ===============================
-   BUTTONS
-================================ */
 .btn-primary {
   background: #16a34a;
   color: #ffffff;
@@ -74,28 +65,24 @@
   cursor: pointer;
 }
 
-/* ===============================
-   GRID
-================================ */
 .product-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 28px;
 }
 
-/* ===============================
-   CARD
-================================ */
 .product-card {
   background: #ffffff;
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+  will-change: auto;
   transition: transform 0.25s ease;
+  transform: translateZ(0);
 }
 
 .product-card:hover {
-  transform: translateY(-6px);
+  transform: translateY(-4px);
 }
 
 .product-image img {
@@ -104,9 +91,6 @@
   object-fit: cover;
 }
 
-/* ===============================
-   CARD BODY
-================================ */
 .product-body {
   padding: 18px;
 }
@@ -125,9 +109,6 @@
   margin-bottom: 10px;
 }
 
-/* ===============================
-   STATUS & STOCK
-================================ */
 .status-badge {
   display: inline-block;
   margin-bottom: 6px;
@@ -160,17 +141,11 @@
   margin-bottom: 14px;
 }
 
-/* ===============================
-   ACTIONS
-================================ */
 .product-actions {
   display: flex;
   gap: 10px;
 }
 
-/* ===============================
-   EMPTY STATE
-================================ */
 .empty-state {
   text-align: center;
   padding: 80px 20px;
@@ -207,17 +182,15 @@
   margin-top: 30px;
 }
 
-/* BASE BUTTON */
 .page-btn {
   border: none;
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition: background 0.2s ease, transform 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-/* ICON BUTTON */
 .icon-btn {
   width: 38px;
   height: 38px;
@@ -231,7 +204,6 @@
   fill: none;
 }
 
-/* NUMBER BUTTON */
 .number-btn {
   min-width: 38px;
   height: 38px;
@@ -241,19 +213,16 @@
   font-weight: 600;
 }
 
-/* ACTIVE */
 .number-btn.active {
   background: #1e7f43;
   color: #ffffff;
 }
 
-/* HOVER */
 .page-btn:hover:not(:disabled) {
   background: #c9f0da;
   transform: translateY(-2px);
 }
 
-/* DISABLED */
 .page-btn:disabled {
   opacity: 0.4;
   cursor: not-allowed;
@@ -299,7 +268,7 @@
 }
 
 .product-grid {
-  transition: opacity 0.2s ease;
+  transition: none;
 }
 
 .confirm-overlay {
@@ -361,7 +330,6 @@
   white-space: nowrap;
 }
 
-/* KEMBALIKAN STYLE */
 .seller-actions .btn-primary {
   background: #16a34a;
   color: #fff;
