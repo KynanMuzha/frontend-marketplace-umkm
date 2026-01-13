@@ -10,6 +10,8 @@ import HelpChatbot from "../../components/HelpChatbot";
 const BASE_URL = "http://127.0.0.1:8000";
 
 export default function Home() {
+  const isLoggedIn = !!localStorage.getItem("token");
+
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [pageLoading, setPageLoading] = useState(true);
@@ -148,14 +150,29 @@ export default function Home() {
           >
             <div className="hero-overlay">
               <div className="container hero-content">
-                <h1>Marketplace UMKM Desa</h1>
-                <p>
-                  PasarDesa adalah platform jual beli yang dikhususkan untuk UMKM desa.
-                  Kami membantu pelaku usaha desa memasarkan produk mereka secara digital,
-                  agar hasil karya dan produk lokal desa bisa dikenal, dibeli, dan berkembang
-                  di lingkungan desa itu sendiri.
-                </p>
-              </div>
+  <h1>Marketplace UMKM Desa</h1>
+  <p>
+    PasarDesa adalah platform jual beli yang dikhususkan untuk UMKM desa.
+    Kami membantu pelaku usaha desa memasarkan produk mereka secara digital,
+    agar hasil karya dan produk lokal desa bisa dikenal, dibeli, dan berkembang
+    di lingkungan desa itu sendiri.
+  </p>
+
+  {!isLoggedIn && (
+  <div className="hero-single-action">
+    <Link to="/login" className="hero-link">
+      Masuk
+    </Link>
+
+    <span className="hero-separator">|</span>
+
+    <Link to="/register" className="hero-link highlight">
+      Daftar Sekarang
+    </Link>
+  </div>
+)}
+
+</div>
             </div>
           </div>
         ))}
