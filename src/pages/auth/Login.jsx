@@ -69,6 +69,13 @@ export default function Login() {
       } else {
         navigate("/");
       }
+      // 5️⃣ REDIRECT BERDASARKAN ROLE
+      if (user.role === "admin") {
+        navigate("/admin/dashboard");
+      } else {
+        navigate("/"); // user biasa
+      }
+
     } catch (err) {
       alert(
         err?.response?.data?.message ||

@@ -1,0 +1,48 @@
+.admin-header {
+  height: 64px;
+  background: #ffffff;
+  padding: 0 24px;
+  border-bottom: 1px solid #e5e7eb;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+/* TITLE */
+.admin-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #14532d; /* hijau gelap biar satu tema */
+}
+
+/* ACTIONS */
+.admin-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* NAMA ADMIN */
+.admin-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+}
+
+/* AVATAR */
+.admin-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #dcfce7;
+  color: #16a34a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}

@@ -3,6 +3,8 @@ import UMKM2 from "../../assets/umkm2.jpg";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import api from "../../service/api";
+import Navbar from "../../components/Navbar";
+import Footer from "../../components/Footer";
 import "../../styles/home.css";
 import HelpChatbot from "../../components/HelpChatbot";
 
@@ -20,7 +22,6 @@ export default function Home() {
   const [toast, setToast] = useState({ show: false, message: "" });
   const [currentHero, setCurrentHero] = useState(0);
 
-  const navigate = useNavigate();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const rawSearch = searchParams.get("search");
@@ -110,6 +111,14 @@ export default function Home() {
       });
   };
 
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user?.role === "admin") {
+      navigate("/admin/dashboard"); // redirect admin otomatis
+    }
+  }, []);
   return (
     <>
       {/* PAGE LOADER */}
@@ -140,7 +149,6 @@ export default function Home() {
         </div>
       )}
 
-      {/* HERO */}
       <section className="hero">
         {heroImages.map((img, index) => (
           <div
@@ -181,6 +189,7 @@ export default function Home() {
       <main className="container">
         {/* KATEGORI */}
         <section className="section" id="produk-section">
+        <section className="section">
           <h2 className="section-title">Kategori Produk</h2>
           <div className="kategori-grid">
             {categories.length > 0 ? (
@@ -202,7 +211,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* PRODUK */}
         <section className="section">
           <h2 className="section-title">
             {searchQuery ? `Hasil pencarian "${searchQuery}"` : "Produk UMKM Pilihan"}
