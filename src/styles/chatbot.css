@@ -1,0 +1,173 @@
+.chatbot-container {
+  position: fixed;
+  bottom: 80px;  /* dinaikkan agar tidak terlalu mepet */
+  right: 24px;
+  z-index: 9999;
+}
+
+.chatbot-toggle {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #16a34a;
+  color: white;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.18);
+  transition: all 0.25s ease;
+}
+
+.chatbot-toggle:hover {
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: 0 14px 26px rgba(0,0,0,0.25);
+}
+
+.chatbot-close {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  transition: 0.2s;
+}
+
+.chatbot-close:hover {
+  background: rgba(255,255,255,0.15);
+}
+
+.chatbot-box {
+  width: 320px;
+  height: 420px;
+  background: white;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 12px;
+}
+
+.chatbot-header {
+  background: #16a34a;
+  color: white;
+  padding: 14px;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chatbot-messages {
+  flex: 1;
+  padding: 12px;
+  overflow-y: auto;
+
+  background-color: #f0fdf4;
+
+  background-image: url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='260' height='260' viewBox='0 0 260 260'>\
+<g stroke='%2316a34a' fill='none' stroke-width='1.4' opacity='0.16'>\
+<!-- Store -->\
+<path d='M28 32h56l-6 20H34z'/>\
+<path d='M38 52h8v18h-8z'/>\
+<path d='M56 52h8v18h-8z'/>\
+<!-- Box / Package -->\
+<path d='M130 30l26 12v28l-26 12-26-12V42z'/>\
+<path d='M130 42v40'/>\
+<!-- Cart / Product -->\
+<circle cx='42' cy='124' r='6'/>\
+<circle cx='66' cy='124' r='6'/>\
+<path d='M28 96h50l-6 22H38z'/>\
+<!-- Payment -->\
+<rect x='122' y='110' width='60' height='36' rx='6'/>\
+<path d='M122 122h60'/>\
+<!-- Delivery -->\
+<rect x='32' y='168' width='56' height='26' rx='6'/>\
+<path d='M88 178h22l12 10h-34z'/>\
+<circle cx='48' cy='200' r='6'/>\
+<circle cx='78' cy='200' r='6'/>\
+</g></svg>");
+
+  background-repeat: repeat;
+  background-size: 240px 240px;
+}
+
+
+
+.chat {
+  max-width: 80%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.chat.bot {
+  background: #f3f4f6;
+  align-self: flex-start;
+}
+
+.chat.user {
+  background: #dcfce7;
+  align-self: flex-end;
+}
+
+.chatbot-input {
+  display: flex;
+  border-top: 1px solid #e5e7eb;
+}
+
+.chatbot-input input {
+  flex: 1;
+  border: none;
+  padding: 10px;
+  font-size: 14px;
+}
+
+.chatbot-input button {
+  background: #16a34a;
+  color: white;
+  border: none;
+  padding: 0 16px;
+  cursor: pointer;
+}
+
+.faq-box {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.faq-box button {
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.faq-box button:hover {
+  background: #ecfdf5;
+  border-color: #16a34a;
+  color: #166534;
+}
+
+.send-btn {
+  background: #16a34a;
+  border: none;
+  color: white;
+  padding: 0 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s;
+}
+
+.send-btn:hover {
+  background: #15803d;
+}

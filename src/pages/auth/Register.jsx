@@ -1,10 +1,11 @@
 import { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import api from "../../service/api";
 import "../../styles/auth.css";
 
 export default function Register() {
   const navigate = useNavigate();
+
   const [role, setRole] = useState("");
   const [form, setForm] = useState({
     name: "",
@@ -20,37 +21,27 @@ export default function Register() {
     e.preventDefault();
 
     if (!role) {
-        alert("Pilih role terlebih dahulu");
-        return;
+      alert("Pilih role terlebih dahulu");
+      return;
     }
 
     try {
-        const res = await axios.post(
-        "http://localhost:8000/api/register",
-        {
-            ...form,
-            role,
-        },
-        {
-            headers: {
-            Accept: "application/json",
-            },
-        }
-        );
+      await api.post("/register", {
+        ...form,
+        role,
+      });
 
-        console.log("REGISTER SUCCESS:", res.data);
-
-        alert("Registrasi berhasil");
-        navigate("/login"); // pindah ke login
-
+      alert("Registrasi berhasil");
+      navigate("/login");
     } catch (err) {
-        console.log("REGISTER ERROR:", err.response);
-        alert("Register gagal");
+      console.error("REGISTER ERROR:", err.response || err);
+      alert("Register gagal");
     }
     };
 
     const [showPassword, setShowPassword] = useState(false);
 
+  };
 
   return (
     <div className={`auth-page ${role ? `role-${role}` : ""}`}>
@@ -58,7 +49,6 @@ export default function Register() {
         <h2>Daftar Akun</h2>
         <p className="subtitle">Pilih peran sebelum mendaftar</p>
 
-        {/* ROLE */}
         <div className="role-select">
   <button
     type="button"
@@ -94,12 +84,22 @@ export default function Register() {
 
 
         <form onSubmit={handleSubmit}>
-          <input
-            name="name"
-            placeholder="Nama lengkap"
-            onChange={handleChange}
-            required
-          />
+          {/* Jika penjual, tampilkan input Nama Toko */}
+          {role === "penjual" ? (
+            <input
+              name="name"
+              placeholder="Nama Toko"
+              onChange={handleChange}
+              required
+            />
+          ) : (
+            <input
+              name="name"
+              placeholder="Nama lengkap"
+              onChange={handleChange}
+              required
+            />
+          )}
 
           <input
             name="email"
@@ -141,6 +141,14 @@ export default function Register() {
     )}
   </button>
 </div>
+=======
+          <input
+            name="password"
+            type="password"
+            placeholder="Password"
+            onChange={handleChange}
+            required
+          />
 
           <button type="submit" className="btn-primary">
             Daftar
@@ -153,4 +161,4 @@ export default function Register() {
       </div>
     </div>
   );
-}
+

@@ -1,11 +1,14 @@
 import { useEffect, useState, useCallback } from "react";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import api from "../../service/api";
 import Cropper from "react-easy-crop";
 import "../../styles/profile.css";
 
-const API_URL = "http://localhost:8000";
+const BASE_URL = "http://127.0.0.1:8000";
 
 export default function Profile({ onUserUpdate }) {
+  const navigate = useNavigate();
+
   const [user, setUser] = useState(null);
   const [profileForm, setProfileForm] = useState({ name: "", email: "" });
   const [passwordForm, setPasswordForm] = useState({
@@ -17,23 +20,16 @@ export default function Profile({ onUserUpdate }) {
   const [avatarFile, setAvatarFile] = useState(null);
   const [preview, setPreview] = useState(null);
 
-  /* ===== CROP (LOGIC ONLY) ===== */
+  /* ===== CROP ===== */
   const [imageSrc, setImageSrc] = useState(null);
   const [showCrop, setShowCrop] = useState(false);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
 
-  const token = localStorage.getItem("token");
-
   /* ===== LOAD PROFILE ===== */
   useEffect(() => {
-    if (!token) return;
-
-    axios
-      .get(`${API_URL}/api/profile`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+    api.get("/profile")
       .then((res) => {
         setUser(res.data);
         setProfileForm({ name: res.data.name, email: res.data.email });
@@ -48,10 +44,7 @@ export default function Profile({ onUserUpdate }) {
 
   /* ===== UPDATE PROFILE ===== */
   const updateProfile = () => {
-    axios
-      .put(`${API_URL}/api/profile`, profileForm, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+    api.put("/profile", profileForm)
       .then((res) => {
         const updatedUser = { ...user, ...res.data.user };
         setUser(updatedUser);
@@ -64,10 +57,7 @@ export default function Profile({ onUserUpdate }) {
 
   /* ===== UPDATE PASSWORD ===== */
   const updatePassword = () => {
-    axios
-      .put(`${API_URL}/api/profile/password`, passwordForm, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+    api.put("/profile/password", passwordForm)
       .then(() => {
         setPasswordForm({
           old_password: "",
@@ -79,7 +69,7 @@ export default function Profile({ onUserUpdate }) {
       .catch(() => alert("Gagal update password"));
   };
 
-  /* ===== FILE CHANGE (TIDAK UBAH UI) ===== */
+  /* ===== FILE ===== */
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -92,7 +82,6 @@ export default function Profile({ onUserUpdate }) {
     reader.readAsDataURL(file);
   };
 
-  /* ===== CROP ===== */
   const onCropComplete = useCallback((_, pixels) => {
     setCroppedAreaPixels(pixels);
   }, []);
@@ -110,13 +99,7 @@ export default function Profile({ onUserUpdate }) {
 
     const ctx = canvas.getContext("2d");
     ctx.beginPath();
-    ctx.arc(
-      canvas.width / 2,
-      canvas.height / 2,
-      canvas.width / 2,
-      0,
-      Math.PI * 2
-    );
+    ctx.arc(canvas.width / 2, canvas.height / 2, canvas.width / 2, 0, Math.PI * 2);
     ctx.clip();
 
     ctx.drawImage(
@@ -139,7 +122,6 @@ export default function Profile({ onUserUpdate }) {
   };
 
   const saveCrop = async () => {
-    if (!croppedAreaPixels) return;
     const cropped = await createCroppedImage();
     if (!cropped) return;
 
@@ -148,23 +130,18 @@ export default function Profile({ onUserUpdate }) {
     setShowCrop(false);
   };
 
-  /* ===== UPLOAD AVATAR ===== */
+  /* ===== AVATAR ===== */
   const uploadAvatar = () => {
     if (!avatarFile) return alert("Pilih & crop foto terlebih dahulu");
 
     const formData = new FormData();
     formData.append("avatar", avatarFile);
 
-    axios
-      .post(`${API_URL}/api/profile/avatar`, formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
-        },
-      })
+    api.post("/profile/avatar", formData)
       .then((res) => {
         const updatedUser = { ...user, avatar: res.data.avatar };
         setUser(updatedUser);
+        setPreview(res.data.avatar ? `${BASE_URL}/storage/${res.data.avatar}` : null);
         localStorage.setItem("user", JSON.stringify(updatedUser));
         onUserUpdate?.(updatedUser);
         alert("Foto profil berhasil diupload");
@@ -173,24 +150,52 @@ export default function Profile({ onUserUpdate }) {
   };
 
   const deleteAvatar = () => {
-    axios
-      .delete(`${API_URL}/api/profile/avatar`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then(() => {
-        const updatedUser = { ...user, avatar: null };
-        setUser(updatedUser);
-        setPreview(null);
-        localStorage.setItem("user", JSON.stringify(updatedUser));
-        onUserUpdate?.(updatedUser);
-      });
+    api.delete("/profile/avatar").then(() => {
+      const updatedUser = { ...user, avatar: null };
+      setUser(updatedUser);
+      setPreview(null);
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+      onUserUpdate?.(updatedUser);
+    });
   };
 
-  if (!user) return <div className="profile-loading">Loading...</div>;
+  if (!user) {
+  return (
+    <div className="page-loader">
+      <div className="loader"></div>
+    </div>
+  );
+}
+
 
   return (
     <div className="profile-page">
-      <h2 className="profile-page-title">Profil Saya</h2>
+      <div className="profile-header">
+  <button
+    className="back-buttons"
+    onClick={() => navigate("/")}
+    aria-label="Kembali ke Home"
+  >
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M15 18L9 12L15 6"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  </button>
+
+  <h2 className="profile-page-title">Profil Saya</h2>
+</div>
+
       <p className="profile-page-desc">
         Kelola informasi profil Anda untuk mengontrol dan mengamankan akun
       </p>

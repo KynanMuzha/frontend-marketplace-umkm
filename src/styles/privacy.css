@@ -1,0 +1,79 @@
+.privacy-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  font-family: "Inter", sans-serif;
+  color: #333;
+  line-height: 1.6;
+}
+
+.privacy-container h1 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  color: #1f2937; /* warna profesional */
+}
+
+.privacy-container .intro {
+  font-size: 1.1rem;
+  margin-bottom: 30px;
+  text-align: justify;
+}
+
+.privacy-container section {
+  margin-bottom: 30px;
+}
+
+.privacy-container h2 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color: #111827;
+  border-left: 4px solid #2563eb; /* aksen biru */
+  padding-left: 10px;
+}
+
+.privacy-container ul {
+  list-style-type: disc;
+  margin-left: 20px;
+}
+
+.privacy-container p {
+  margin-bottom: 10px;
+}
+
+.privacy-footer {
+  text-align: center;
+  margin-top: 40px;
+  font-size: 0.9rem;
+  color: #6b7280;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 15px;
+}
+
+.privacy-header {
+  position: relative;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.privacy-back-icon {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+
+  background: #f3f4f6;
+  border: none;
+  border-radius: 10px;
+  padding: 6px;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s ease;
+}
+
+.privacy-back-icon:hover {
+  background: #e5e7eb;
+}

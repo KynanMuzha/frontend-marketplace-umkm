@@ -1,22 +1,24 @@
 import { useState } from "react";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import api from "../../service/api";
 import "../../styles/auth.css";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      await axios.post("http://localhost:8000/api/forgot-password", {
-        email,
-      });
-
+      await api.post("/forgot-password", { email });
       alert("OTP berhasil dikirim ke email");
-      window.location.href = "/reset-password";
+      navigate("/reset-password");
     } catch (err) {
-      alert("Email tidak ditemukan");
+      alert(
+        err?.response?.data?.message ||
+        "Email tidak ditemukan"
+      );
     }
   };
 

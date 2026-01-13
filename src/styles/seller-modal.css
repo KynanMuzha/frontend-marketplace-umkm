@@ -1,0 +1,287 @@
+/* ================= OVERLAY ================= */
+.seller-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+/* ================= MODAL ================= */
+.seller-modal {
+  background: #ffffff;
+  width: 900px;
+  max-width: 95%;
+  border-radius: 12px;
+  position: relative;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  animation: fadeIn 0.3s ease;
+}
+
+/* ================= CLOSE ================= */
+.seller-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #6b7280;
+}
+
+.seller-close:hover {
+  color: #ef4444;
+}
+
+/* ================= HEADER ================= */
+.seller-header {
+  text-align: center;
+  padding: 32px 24px 24px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.seller-header img {
+  width: 64px;
+  margin-bottom: 12px;
+}
+
+.seller-header h2 {
+  font-size: 22px;
+  margin-bottom: 8px;
+}
+
+.seller-header p {
+  font-size: 14px;
+  color: #6b7280;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* ================= CONTENT ================= */
+.seller-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  padding: 32px;
+}
+
+/* ================= INFO ================= */
+.seller-info h4 {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.seller-info ul,
+.seller-info ol {
+  margin-left: 18px;
+  margin-bottom: 20px;
+  color: #374151;
+}
+
+.seller-info li {
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+
+/* ================= FORM ================= */
+.seller-form {
+  background: #f9fafb;
+  padding: 24px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+}
+
+.seller-form h4 {
+  font-size: 18px;
+  margin-bottom: 16px;
+}
+
+.seller-form input {
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+}
+
+.seller-form input:focus {
+  outline: none;
+  border-color: #22c55e;
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.15);
+}
+
+/* ================= PASSWORD FIELD ================= */
+.password-field {
+  position: relative;
+}
+
+.password-field input {
+  padding-right: 42px;
+}
+
+.eye-icon {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #6b7280;
+}
+
+.eye-icon:hover {
+  color: #22c55e;
+}
+
+/* ================= BUTTON ================= */
+.btn-primary {
+  width: 100%;
+  padding: 12px;
+  background: #22c55e;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+.btn-primary:hover {
+  background: #16a34a;
+}
+
+.btn-primary:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+/* ================= OTP ================= */
+.otp-info {
+  font-size: 14px;
+  color: #374151;
+  margin-bottom: 8px;
+}
+
+.otp-timer {
+  font-size: 13px;
+  color: #ef4444;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.success-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+.success-popup {
+  background: #e9f9ef;
+  padding: 30px 26px;
+  border-radius: 14px;
+  text-align: center;
+  width: 90%;
+  max-width: 380px;
+  animation: popFade 0.3s ease;
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.25); /* ✨ */
+  border: 1px solid #bbf7d0;
+}
+
+.success-popup svg {
+  color: #2ecc71;
+  margin-bottom: 12px;
+}
+
+.success-popup p {
+  font-size: 15px; /* dari 14px */
+  color: #14532d;
+  line-height: 1.5;
+}
+
+.btn-success {
+  margin-top: 18px;
+  padding: 10px 24px;
+  background: #2ecc71;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-success:hover {
+  background: #27ae60;
+}
+
+@keyframes popFade {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+
+/* ================= ANIMATION ================= */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 768px) {
+  .seller-content {
+    grid-template-columns: 1fr;
+  }
+
+  .seller-modal {
+    width: 100%;
+    margin: 0 10px;
+  }
+}
+
+/* ================= CONFETTI ================= */
+.confetti-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10001;
+  overflow: hidden;
+}
+
+.confetti {
+  position: absolute;
+  top: -10px;
+  width: 8px;
+  height: 14px;
+  border-radius: 2px;
+  animation: confettiFall 2.5s ease-in-out forwards;
+}
+
+@keyframes confettiFall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(110vh) rotate(360deg);
+    opacity: 0;
+  }
+}
