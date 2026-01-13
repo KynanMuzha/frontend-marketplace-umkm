@@ -150,34 +150,54 @@ export default function SellerModal({ onClose }) {
 
                     {/* PASSWORD */}
                     <div className="password-field">
-                      <input
-                        type={showPassword ? "text" : "password"}
-                        placeholder="Password"
-                        value={form.password}
-                        onChange={(e) =>
-                          setForm({ ...form, password: e.target.value })
-                        }
-                        required
-                      />
+  <input
+    type={showPassword ? "text" : "password"}
+    placeholder="Password"
+    value={form.password}
+    onChange={(e) =>
+      setForm({ ...form, password: e.target.value })
+    }
+    required
+  />
 
-                      <span
-                        className="eye-icon"
-                        onClick={() => setShowPassword(!showPassword)}
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="18"
-                          height="18"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                        >
-                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z" />
-                          <circle cx="12" cy="12" r="3" />
-                        </svg>
-                      </span>
-                    </div>
+  <span
+    className="eye-icon"
+    onClick={() => setShowPassword(!showPassword)}
+    title={showPassword ? "Sembunyikan password" : "Lihat password"}
+  >
+    {showPassword ? (
+      /* ICON EYE OFF */
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+      >
+        <path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a21.6 21.6 0 0 1 5.06-6.94" />
+        <path d="M1 1l22 22" />
+        <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a21.82 21.82 0 0 1-3.17 4.65" />
+      </svg>
+    ) : (
+      /* ICON EYE */
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+      >
+        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z" />
+        <circle cx="12" cy="12" r="3" />
+      </svg>
+    )}
+  </span>
+</div>
+
 
                     <button type="submit" className="btn-primary">
                       Daftar Menjadi Penjual

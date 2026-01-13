@@ -106,21 +106,35 @@ export default function ProductDetail() {
 
         {/* Info */}
         <div className="product-detail-info">
-          <h1>{product.name}</h1>
-          <h3 className="harga">Rp {Number(product.price).toLocaleString("id-ID")}</h3>
-          <h3>UMKM:{product.user?.name || "-"}</h3>
-          <h3>Stock:{product.stock}</h3>
+  <h2 className="product-title">{product.name}</h2>
 
-          <h1>Deskripsi Produk</h1>
-          <h3>{product.description || "-"}</h3>
+  <div className="product-price">
+    Rp {Number(product.price).toLocaleString("id-ID")}
+  </div>
 
-          {/* Tombol +Keranjang */}
-          <div className="btn-cart-wrapper">
-            <button className="btn-cart" onClick={handleAddToCart}>
-              + Keranjang
-            </button>
-          </div>
-        </div>
+  <div className="product-meta">
+    <div>
+      <span>UMKM</span>
+      <strong>{product.user?.name || "-"}</strong>
+    </div>
+    <div>
+      <span>Stok</span>
+      <strong>{product.stock}</strong>
+    </div>
+  </div>
+
+  <div className="product-desc">
+    <h2>Deskripsi Produk</h2>
+    <p>{product.description || "-"}</p>
+  </div>
+
+  <div className="btn-cart-wrapper">
+    <button className="btn-cart" onClick={handleAddToCart}>
+      + Keranjang
+    </button>
+  </div>
+</div>
+
       </div>
     </main>
   );
