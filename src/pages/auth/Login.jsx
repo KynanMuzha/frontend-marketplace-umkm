@@ -74,6 +74,8 @@ export default function Login() {
     }
   };
 
+  const [showPassword, setShowPassword] = useState(false);
+
   return (
     <div className="auth-page">
       <div className="auth-card">
@@ -92,15 +94,39 @@ export default function Login() {
             required
           />
 
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={form.password}
-            onChange={handleChange}
-            required
-          />
+          {/* PASSWORD */}
+<div className="password-field">
+  <input
+    name="password"
+    type={showPassword ? "text" : "password"}
+    placeholder="Password"
+    onChange={handleChange}
+    required
+  />
 
+  <button
+    type="button"
+    className="toggle-password"
+    onClick={() => setShowPassword(!showPassword)}
+    aria-label="Toggle password visibility"
+  >
+    {showPassword ? (
+      /* eye-off */
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path d="M3 3l18 18" strokeWidth="2"/>
+        <path d="M10.6 10.6a2 2 0 002.8 2.8" strokeWidth="2"/>
+        <path d="M1 12s4-7 11-7a10.94 10.94 0 014.3.88" strokeWidth="2"/>
+        <path d="M23 12s-4 7-11 7a10.94 10.94 0 01-4.3-.88" strokeWidth="2"/>
+      </svg>
+    ) : (
+      /* eye */
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" strokeWidth="2"/>
+        <circle cx="12" cy="12" r="3" strokeWidth="2"/>
+      </svg>
+    )}
+  </button>
+</div>
           <button
             type="submit"
             className="btn-primary"
