@@ -14,12 +14,24 @@ export default function Login() {
   });
 
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  // NOTIF STATE
+  const [notif, setNotif] = useState({
+    message: "",
+    type: "", // "success" | "error"
+    visible: false,
+  });
+
+  const showNotification = (message, type = "success") => {
+    setNotif({ message, type, visible: true });
+    setTimeout(() => {
+      setNotif((prev) => ({ ...prev, visible: false }));
+    }, 5000);
+  };
 
   const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
@@ -31,11 +43,7 @@ export default function Login() {
       const loginRes = await axios.post(
         `${API_URL}/api/login`,
         form,
-        {
-          headers: {
-            Accept: "application/json",
-          },
-        }
+        { headers: { Accept: "application/json" } }
       );
 
       const token = loginRes.data.token;
@@ -44,18 +52,13 @@ export default function Login() {
       // 2️⃣ AMBIL PROFILE TERBARU
       const profileRes = await axios.get(
         `${API_URL}/api/profile`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            Accept: "application/json",
-          },
-        }
+        { headers: { Authorization: `Bearer ${token}`, Accept: "application/json" } }
       );
 
       let user = profileRes.data;
       localStorage.setItem("role", user.role);
 
-      // 3️⃣ NORMALISASI AVATAR (PASTI URL VALID)
+      // 3️⃣ NORMALISASI AVATAR
       if (user.avatar && !user.avatar.startsWith("http")) {
         user.avatar = `${API_URL}/storage/${user.avatar}`;
       }
@@ -63,34 +66,35 @@ export default function Login() {
       // 4️⃣ SIMPAN USER FINAL
       localStorage.setItem("user", JSON.stringify(user));
 
-      // 5️⃣ REDIRECT KE HOME
-      if (user.role === "penjual") {
+      // 5️⃣ REDIRECT BERDASARKAN ROLE
+      if (user.role === "admin") {
+        navigate("/admin/dashboard");
+      } else if (user.role === "penjual") {
         navigate("/seller");
       } else {
         navigate("/");
       }
-      // 5️⃣ REDIRECT BERDASARKAN ROLE
-      if (user.role === "admin") {
-        navigate("/admin/dashboard");
-      } else {
-        navigate("/"); // user biasa
-      }
 
     } catch (err) {
-      alert(
-        err?.response?.data?.message ||
-        "Email atau password salah"
+      console.error(err);
+      showNotification(
+        err?.response?.data?.message || "Email atau password salah",
+        "error"
       );
     } finally {
       setLoading(false);
     }
   };
-  
-
-  const [showPassword, setShowPassword] = useState(false);
 
   return (
     <div className="auth-page">
+      {/* NOTIFICATION */}
+      {notif.visible && (
+        <div className={`notif ${notif.type}`}>
+          {notif.message}
+        </div>
+      )}
+
       <div className="auth-card">
         <h2>Masuk</h2>
         <p className="subtitle">
@@ -108,46 +112,39 @@ export default function Login() {
           />
 
           {/* PASSWORD */}
-<div className="password-field">
-  <input
-    name="password"
-    type={showPassword ? "text" : "password"}
-    placeholder="Password"
-    onChange={handleChange}
-    required
-  />
+          <div className="password-field">
+            <input
+              name="password"
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              onChange={handleChange}
+              required
+            />
 
-  <button
-    type="button"
-    className="toggle-password"
-    onClick={() => setShowPassword(!showPassword)}
-    aria-label="Toggle password visibility"
-  >
-    {showPassword ? (
-      /* eye-off */
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-        <path d="M3 3l18 18" strokeWidth="2"/>
-        <path d="M10.6 10.6a2 2 0 002.8 2.8" strokeWidth="2"/>
-        <path d="M1 12s4-7 11-7a10.94 10.94 0 014.3.88" strokeWidth="2"/>
-        <path d="M23 12s-4 7-11 7a10.94 10.94 0 01-4.3-.88" strokeWidth="2"/>
-      </svg>
-    ) : (
-      /* eye */
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-        <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" strokeWidth="2"/>
-        <circle cx="12" cy="12" r="3" strokeWidth="2"/>
-      </svg>
-    )}
-  </button>
-</div>
-          <button
-            type="submit"
-            className="btn-primary"
-            disabled={loading}
-          >
+            <button
+              type="button"
+              className="toggle-password"
+              onClick={() => setShowPassword(!showPassword)}
+              aria-label="Toggle password visibility"
+            >
+              {showPassword ? (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M3 3l18 18" strokeWidth="2"/>
+                  <path d="M10.6 10.6a2 2 0 002.8 2.8" strokeWidth="2"/>
+                  <path d="M1 12s4-7 11-7a10.94 10.94 0 014.3.88" strokeWidth="2"/>
+                  <path d="M23 12s-4 7-11 7a10.94 10.94 0 01-4.3-.88" strokeWidth="2"/>
+                </svg>
+              ) : (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" strokeWidth="2"/>
+                  <circle cx="12" cy="12" r="3" strokeWidth="2"/>
+                </svg>
+              )}
+            </button>
+          </div>
+
+          <button type="submit" className="btn-auth" disabled={loading}>
             {loading ? "Memproses..." : "Masuk"}
-          <button type="submit" className="btn-primary" disabled={loading}>
-            {loading ? "Memproses..." : "Masuk"}</button>
           </button>
 
           <div className="forgot-password">
@@ -160,6 +157,5 @@ export default function Login() {
         </div>
       </div>
     </div>
-
   );
 }

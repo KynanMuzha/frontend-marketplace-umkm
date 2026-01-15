@@ -6,27 +6,23 @@ import "../../styles/home.css"; // pakai CSS home agar card sama
 const BASE_URL = "http://127.0.0.1:8000";
 
 export default function KategoriProduk() {
-  const { slug } = useParams(); // ambil slug dari URL
+  const { id } = useParams();
   const [products, setProducts] = useState([]);
+  const [categoryName, setCategoryName] = useState("");
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState({ show: false, message: "" });
 
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
-  // Konversi slug ke nama kategori sesuai backend
-  const formatCategoryName = (slug) =>
-    slug
-      .split("-")
-      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-      .join(" ");
-  const categoryName = formatCategoryName(slug);
-
   // Fetch produk berdasarkan kategori
   useEffect(() => {
     const fetchProducts = async () => {
+      setLoading(true);
+      setProducts([]);
+
       try {
-        const res = await api.get(`/products?category=${categoryName}`);
+        const res = await api.get(`/products?category_id=${id}`);
         setProducts(res.data);
       } catch (err) {
         console.error("Gagal memuat produk kategori:", err);
@@ -35,7 +31,23 @@ export default function KategoriProduk() {
       }
     };
     fetchProducts();
-  }, [categoryName]);
+  }, [id]);
+
+  // Fetch nama kategori
+useEffect(() => {
+  const fetchCategoryName = async () => {
+    try {
+      const res = await api.get(`/categories/${id}`);
+      setCategoryName(res.data.name);
+    } catch (err) {
+      console.error("Gagal memuat nama kategori:", err);
+      setCategoryName("Kategori");
+    }
+  };
+
+  fetchCategoryName();
+}, [id]);
+
 
   // Tambah ke keranjang
   const handleAddToCart = (productId) => {
@@ -105,7 +117,7 @@ export default function KategoriProduk() {
   </button>
 
   <h2 className="section-title">
-    Produk Kategori: {categoryName}
+  Produk Kategori: {categoryName}
   </h2>
 </div>
 

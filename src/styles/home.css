@@ -210,7 +210,10 @@ body {
   display: flex;
   flex-direction: column;
   transition: 0.25s ease;
+
+  padding-bottom: 12px; /* 🧩 ruang aman untuk tombol */
 }
+
 
 .produk-card:hover {
   box-shadow: 0 10px 25px rgba(0,0,0,0.1);
@@ -229,13 +232,13 @@ body {
 }
 
 .produk-body {
+  width: 100%;
   padding: 12px;
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
   align-items: center;
+  text-align: center;
 }
-
 .produk-body h3 {
   font-size: 15px;
   font-weight: 600;
@@ -249,18 +252,22 @@ body {
 }
 
 .btn-cart {
-  margin: 12px auto;
-  width: calc(100% - 24px);
-  padding: 8px 16px;
+  width: 85%;
+  margin: 10px 0 14px;   /* tidak mepet bawah */
+  padding: 10px 0;
+
   background: #16a34a;
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   font-weight: 600;
   cursor: pointer;
+
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  align-self: center;
+  transform: translateX(20px);
 }
 
 .btn-cart:hover {
@@ -414,32 +421,34 @@ header img:hover {
   align-items: center;
   gap: 10px; /* jarak icon ke teks */
   margin-bottom: 24px;
+  width: 100%;
 }
 
 .back-button {
   background: none;
   border: none;
-  padding: 6px;
+  padding: 2px;
   cursor: pointer;
   color: #374151;
   border-radius: 8px;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.15s ease, background-color 0.15s ease;
+
+  line-height: 0;
 }
+
 
 .back-button:hover {
   background-color: #f3f4f6;
   color: #166d4a;
 }
 
-
 .back-button svg {
   display: block;
   width: 26px;
   height: 26px;
-  transform: translateY(-12px);
 }
 
 .empty-category-text {
@@ -575,7 +584,6 @@ header img:hover {
   .back-button svg {
     width: 22px;
     height: 22px;
-    transform: translateY(0); /* reset */
   }
 
   .section-title {
@@ -623,3 +631,27 @@ header img:hover {
   }
 }
 
+.kategori-icon {
+  font-size: 32px;
+  color: #1f7a4d;
+  margin-bottom: 8px;
+}
+
+.kategori-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 20px 12px;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+  transition: 0.25s ease;
+}
+
+.kategori-card:hover {
+  transform: translateY(-4px);
+}
+
+.kategori-card span {
+  font-size: 14px;
+  font-weight: 500;
+}

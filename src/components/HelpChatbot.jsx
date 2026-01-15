@@ -19,10 +19,6 @@ export default function HelpChatbot() {
     "Kontak layanan pelanggan",
     "Jam operasional PasarDesa"
   ];
-
-  
-
-
   const addMessage = (from, text) => {
     setMessages(prev => [...prev, { from, text }]);
   };

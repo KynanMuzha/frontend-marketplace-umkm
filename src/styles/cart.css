@@ -1,7 +1,3 @@
-/* =========================
-   CART PAGE
-========================= */
-
 .cart-page {
   max-width: 1100px;
   margin: 30px auto;
@@ -12,43 +8,21 @@
   position: relative;
 }
 
-
 .cart-page h2 {
   margin-bottom: 20px;
   font-size: 22px;
   font-weight: 600;
 }
 
-/* =========================
-   CART LIST
-========================= */
-
 .cart-list {
   border-top: 1px solid #eee;
 }
-
-.cart-item {
-  display: grid;
-  grid-template-columns: 30px 90px 1fr 140px;
-  align-items: center;
-  gap: 16px;
-  padding: 18px 0;
-  border-bottom: 1px solid #eee;
-}
-
-/* =========================
-   CHECKBOX
-========================= */
 
 .cart-item input[type="checkbox"] {
   width: 16px;
   height: 16px;
   cursor: pointer;
 }
-
-/* =========================
-   IMAGE
-========================= */
 
 .cart-img {
   width: 80px;
@@ -57,10 +31,6 @@
   border-radius: 6px;
   border: 1px solid #eee;
 }
-
-/* =========================
-   PRODUCT INFO
-========================= */
 
 .cart-info {
   display: flex;
@@ -80,10 +50,6 @@
   color: #555;
   margin: 0;
 }
-
-/* =========================
-   QUANTITY CONTROL
-========================= */
 
 .qty-control {
   display: inline-flex;
@@ -179,9 +145,6 @@
 ========================= */
 
 @media (max-width: 768px) {
-  .cart-item {
-    grid-template-columns: 30px 70px 1fr;
-  }
 
   .cart-price {
     grid-column: span 3;
@@ -238,10 +201,6 @@
    PRODUCT AREA INSIDE SHOP
 ========================= */
 
-.cart-item {
-  padding: 16px;
-  border-bottom: 1px solid #f0f0f0;
-}
 
 .cart-wrapper .cart-item:last-child {
   border-bottom: none;
@@ -297,17 +256,38 @@
   gap: 6px;
 }
 
+.cart-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 0.5fr;
+  align-items: center;
+}
+
 /* harga */
 .cart-col.price {
-  justify-content: flex-end;
+  justify-content: center;
   font-weight: 700;
   color: #16a34a;
   white-space: nowrap;
+  
 }
 
 /* hapus */
 .cart-col.delete {
   justify-content: center;
+  margin-top: -10px;
+}
+
+.cart-col.price,
+.cart-col.delete {
+  display: flex;
+  align-items: center;   /* ⬅️ sejajar vertikal */
+  justify-content: center; /* ⬅️ sejajar horizontal */
+}
+
+.cart-col.delete button,
+.cart-col.delete svg {
+  margin: 0;
+  padding: 0;
 }
 
 .cart-delete {
@@ -387,7 +367,7 @@
     grid-template-rows: auto auto auto;
     gap: 10px;
     padding: 12px;
-    min-height: unset;
+    min-height: auto;
   }
 }
 

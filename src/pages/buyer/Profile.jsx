@@ -48,18 +48,28 @@ export default function Profile({ onUserUpdate }) {
 
   /* ===== LOAD PROFILE ===== */
   useEffect(() => {
-    api.get("/profile")
-      .then((res) => {
-        setUser(res.data);
-        setProfileForm({ name: res.data.name, email: res.data.email });
-        setPreview(
-          res.data.avatar ? `${BASE_URL}/storage/${res.data.avatar}` : null
-        );
-        localStorage.setItem("user", JSON.stringify(res.data));
-        onUserUpdate?.(res.data);
-      })
-      .catch(() => showNotify("Gagal memuat profil", "error"));
-  }, [onUserUpdate]);
+  api.get("/profile")
+    .then((res) => {
+      const userData = res.data;
+
+      setUser(userData);
+      setProfileForm({
+        name: userData.name,
+        email: userData.email,
+      });
+
+      if (userData.avatar) {
+        setPreview(`${BASE_URL}/storage/${userData.avatar}`);
+      } else {
+        setPreview(null);
+      }
+
+      localStorage.setItem("user", JSON.stringify(userData));
+      onUserUpdate?.(userData);
+    })
+    .catch(() => showNotify("Gagal memuat profil", "error"));
+}, [onUserUpdate]);
+
 
   const getInitial = (name) => (name ? name.charAt(0).toUpperCase() : "");
 
@@ -88,8 +98,6 @@ export default function Profile({ onUserUpdate }) {
       })
       .catch(() => showNotify("Gagal update password", "error"));
   };
-
-  
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -149,41 +157,47 @@ export default function Profile({ onUserUpdate }) {
   };
 
   const saveCrop = async () => {
-    const cropped = await createCroppedImage();
-    if (!cropped) return;
+  const cropped = await createCroppedImage();
+  if (!cropped) return;
 
-    setAvatarFile(cropped);
-    setPreview(URL.createObjectURL(cropped));
-    setShowCrop(false);
-  };
+  setAvatarFile(cropped);
+
+  // 🔥 preview PAKAI FILE LOCAL
+  setPreview(URL.createObjectURL(cropped));
+
+  setShowCrop(false);
+};
+
 
   /* ===== UPLOAD AVATAR ===== */
   const uploadAvatar = () => {
-    if (!avatarFile) {
-      showNotify("Pilih & crop foto terlebih dahulu", "error");
-      return;
-    }
+  if (!avatarFile) {
+    showNotify("Pilih & crop foto terlebih dahulu", "error");
+    return;
+  }
 
-    const formData = new FormData();
-    formData.append("avatar", avatarFile);
+  const formData = new FormData();
+  formData.append("avatar", avatarFile);
 
-    api.post("/profile/avatar", formData)
-  .then((res) => {
-    const updatedUser = { ...user, avatar: res.data.avatar };
+  api.post("/profile/avatar", formData)
+    .then((res) => {
+      const updatedUser = {
+        ...user,
+        avatar: res.data.avatar,
+      };
 
-    setUser(updatedUser);
-    setPreview(`${BASE_URL}/storage/${res.data.avatar}`);
-    localStorage.setItem("user", JSON.stringify(updatedUser));
+      setUser(updatedUser);
+      localStorage.setItem("user", JSON.stringify(updatedUser));
 
-    // 🔥 KIRIM EVENT KE NAVBAR
-    window.dispatchEvent(new Event("userUpdated"));
+      window.dispatchEvent(new Event("userUpdated"));
+      onUserUpdate?.(updatedUser);
 
-    onUserUpdate?.(updatedUser);
-    showNotify("Foto profil berhasil diupload");
-  })
+      showNotify("Foto profil berhasil diupload");
+    })
+    .catch(() => showNotify("Gagal upload foto", "error"));
+};
 
-      .catch(() => showNotify("Gagal upload foto", "error"));
-  };
+
 
   const deleteAvatar = () => {
   api.delete("/profile/avatar").then(() => {
@@ -215,38 +229,19 @@ const handleLogout = () => {
 
 
 const EyeIcon = (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.8"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    width="20"
-    height="20"
-  >
-    <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" />
-    <circle cx="12" cy="12" r="3" />
-  </svg>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" strokeWidth="2"/>
+        <circle cx="12" cy="12" r="3" strokeWidth="2"/>
+      </svg>
 );
 
 const EyeOffIcon = (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="20"
-    height="20"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a21.8 21.8 0 0 1 5.06-6.94" />
-    <path d="M1 1l22 22" />
-    <path d="M9.53 9.53A3 3 0 0 0 12 15a3 3 0 0 0 2.47-4.47" />
-  </svg>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path d="M3 3l18 18" strokeWidth="2"/>
+        <path d="M10.6 10.6a2 2 0 002.8 2.8" strokeWidth="2"/>
+        <path d="M1 12s4-7 11-7a10.94 10.94 0 014.3.88" strokeWidth="2"/>
+        <path d="M23 12s-4 7-11 7a10.94 10.94 0 01-4.3-.88" strokeWidth="2"/>
+      </svg>
 );
 
 
@@ -271,8 +266,6 @@ const EyeOffIcon = (
         <span>{notify.message}</span>
       </div>
     )}
-
-      <h2 className="profile-page-title">Profil Saya</h2>
 
       <div className="profile-header">
   <button
@@ -329,7 +322,7 @@ const EyeOffIcon = (
             />
           </div>
 
-          <button className="btn-primary" onClick={updateProfile}>
+          <button className="btn-profile" onClick={updateProfile}>
             Simpan Profil
           </button>
 
@@ -390,24 +383,18 @@ const EyeOffIcon = (
 </div>
 
 
-          <button className="btn-primary" onClick={updatePassword}>
+          <button className="btn-profile" onClick={updatePassword}>
             Ganti Password
           </button>
           <br /><br /><br />
-          <button
-    className="btn-danger btn-block logout-btn-profile"
-    onClick={handleLogout}
-  >
-    Logout
-  </button>
-
+          
 
         </div>
 
         {/* AVATAR */}
         <div className="profile-avatar-box">
           {preview ? (
-            <img src={preview} alt="Avatar" className="avatar-image" />
+            <img src={user.avatar} alt="Avatar" className="avatar-image" />
           ) : (
             <div className="avatar-placeholder">{getInitial(user.name)}</div>
           )}

@@ -16,7 +16,9 @@ const KpiCard = ({ title, value }) => (
 
 /* 🔹 STATUS TRANSLATION */
 const STATUS_LABEL = {
-  pending: "Pending",
+  pending: "Menunggu Pembayaran",
+  pending_verification: "Menunggu Verifikasi",
+  rejected: "Pembayaran Ditolak",
   processing: "Diproses",
   shipped: "Dikirim",
   completed: "Selesai",
@@ -25,7 +27,6 @@ const STATUS_LABEL = {
 
 const StatusBadge = ({ status }) => {
   const normalizedStatus = status?.toLowerCase();
-
   return (
     <span className={`status-badge ${normalizedStatus}`}>
       {STATUS_LABEL[normalizedStatus] || status}
@@ -46,6 +47,20 @@ const Dashboard = () => {
 
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // 🔹 Modal bukti pembayaran
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalImage, setModalImage] = useState(null);
+
+  const openModal = (imageUrl) => {
+    setModalImage(imageUrl);
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+    setModalImage(null);
+  };
 
   useEffect(() => {
     let isMounted = true;
@@ -84,7 +99,6 @@ const Dashboard = () => {
     };
 
     fetchDashboard(); // load awal
-
     const interval = setInterval(fetchDashboard, 10000); // auto refresh 10 detik
 
     return () => {
@@ -122,13 +136,14 @@ const Dashboard = () => {
                   <th>Pembeli</th>
                   <th>Total</th>
                   <th>Status</th>
+                  <th>Bukti Pembayaran</th>
                 </tr>
               </thead>
 
               <tbody>
                 {orders.length === 0 && (
                   <tr>
-                    <td colSpan="4" className="empty">
+                    <td colSpan="5" className="empty">
                       Belum ada pesanan
                     </td>
                   </tr>
@@ -137,12 +152,26 @@ const Dashboard = () => {
                 {orders.map(order => (
                   <tr key={order.id}>
                     <td>#{order.id}</td>
-                    <td>{order.user?.name || "-"}</td>
-                    <td>
-                      Rp {Number(order.total).toLocaleString("id-ID")}
-                    </td>
+                    <td>{order.customer_name || "-"}</td>
+                    <td>Rp {Number(order.total).toLocaleString("id-ID")}</td>
                     <td>
                       <StatusBadge status={order.status} />
+                    </td>
+                    <td>
+                      {order.payment_proof ? (
+                        <button
+                          className="btn-small"
+                          onClick={() =>
+                            openModal(
+                              `http://localhost:8000/storage/${order.payment_proof}`
+                            )
+                          }
+                        >
+                          Lihat Bukti
+                        </button>
+                      ) : (
+                        "-"
+                      )}
                     </td>
                   </tr>
                 ))}
@@ -150,6 +179,16 @@ const Dashboard = () => {
             </table>
           )}
         </div>
+
+        {/* MODAL BUKTI PEMBAYARAN */}
+        {modalOpen && (
+          <div className="modal-overlay" onClick={closeModal}>
+            <div className="modal-content">
+              <img src={modalImage} alt="Bukti Pembayaran" />
+              <button onClick={closeModal}>×</button>
+            </div>
+          </div>
+        )}
       </div>
     </AdminLayout>
   );

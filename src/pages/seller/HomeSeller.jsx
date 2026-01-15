@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import api from "../../service/api";
 import "../../styles/homeseller.css";
+import Navbar from "../../components/Navbar";
+
+
 
 const PER_PAGE = 4;
 const API_URL = "http://127.0.0.1:8000";
@@ -22,6 +25,16 @@ export default function HomeSeller() {
     productId: null,
     message: "",
   });
+
+  const location = useLocation();
+
+const searchQuery =
+  new URLSearchParams(location.search).get("search") || "";
+useEffect(() => {
+  setCurrentPage(1);
+  fetchProducts(1);
+}, [searchQuery]);
+
 
   useEffect(() => {
     fetchProducts(currentPage);
@@ -47,9 +60,14 @@ export default function HomeSeller() {
 
   const fetchProducts = async (page) => {
   try {
-    const res = await api.get(
-      `/seller/products?page=${page}&per_page=${PER_PAGE}`
-    );
+    const res = await api.get("/seller/products", {
+  params: {
+    page,
+    per_page: PER_PAGE,
+    search: searchQuery,
+  },
+});
+
 
     setProducts(Array.isArray(res.data.data) ? res.data.data : []);
     setCurrentPage(res.data.current_page ?? 1);
@@ -133,8 +151,8 @@ export default function HomeSeller() {
   return (
     <main className="seller-wrapper">
       {/* HEADER */}
-      <section className="seller-header">
-        <div className="seller-title">
+      <section className="seller-header-home">
+        <div className="seller-title-home">
           <h1>Dashboard Penjual</h1>
           <p>Kelola seluruh produk UMKM Anda</p>
         </div>

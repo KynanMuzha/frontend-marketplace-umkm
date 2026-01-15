@@ -8,7 +8,12 @@ const UserForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [user, setUser] = useState({ name: "", email: "", role: "buyer" });
+  const [user, setUser] = useState({
+    name: "",
+    email: "",
+    role: "buyer",
+  });
+
   const [loading, setLoading] = useState(false);
 
   // Ambil data user
@@ -26,6 +31,7 @@ const UserForm = () => {
         setLoading(false);
       }
     };
+
     fetchUser();
   }, [id, navigate]);
 
@@ -34,7 +40,10 @@ const UserForm = () => {
 
     try {
       setLoading(true);
-      await api.patch(`/admin/users/${id}`, { role: user.role });
+      await api.patch(`/admin/users/${id}`, {
+        role: user.role,
+      });
+
       alert("Role user berhasil diperbarui");
       navigate("/admin/users");
     } catch (err) {
@@ -66,7 +75,9 @@ const UserForm = () => {
               <label>Role</label>
               <select
                 value={user.role}
-                onChange={(e) => setUser({ ...user, role: e.target.value })}
+                onChange={(e) =>
+                  setUser({ ...user, role: e.target.value })
+                }
               >
                 <option value="buyer">Buyer</option>
                 <option value="penjual">Penjual</option>
@@ -74,18 +85,25 @@ const UserForm = () => {
               </select>
             </div>
 
-            <button type="submit" className="btn-primary" disabled={loading}>
-              {loading ? "Menyimpan..." : "Simpan"}
-            </button>
-            <button
-              type="button"
-              className="btn-outline"
-              style={{ marginLeft: "10px" }}
-              onClick={() => navigate("/admin/users")}
-              disabled={loading}
-            >
-              Batal
-            </button>
+            {/* Tombol — tampilan tetap sama */}
+            <div className="form-action-inline">
+              <button
+                type="submit"
+                className="btn-primary"
+                disabled={loading}
+              >
+                {loading ? "Menyimpan..." : "Simpan"}
+              </button>
+
+              <button
+                type="button"
+                className="btn-outline"
+                onClick={() => navigate("/admin/users")}
+                disabled={loading}
+              >
+                Batal
+              </button>
+            </div>
           </form>
         </div>
       </div>

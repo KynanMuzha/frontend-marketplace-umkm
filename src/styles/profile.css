@@ -113,7 +113,7 @@
   border-color: #16a34a;
 }
 
-.btn-primary {
+.btn-profile {
   margin-top: 12px;
   background: #16a34a;
   color: #ffffff;
@@ -126,7 +126,7 @@
   transition: background 0.2s ease;
 }
 
-.btn-primary:hover {
+.btn-profile:hover {
   background: #15803d;
 }
 
@@ -143,8 +143,8 @@
 }
 
 .btn-outline:hover {
-  background: #16a34a;
-  color: #ffffff;
+  background: #68db92;
+  color: #150606;
 }
 
 .btn-danger {
@@ -414,8 +414,8 @@
 .toggle-password {
   position: absolute;
   right: 12px;
-  top: 40%;
-  transform: translateY(-50%);
+  top: 28%;
+  transform: translateY(-55%);
   cursor: pointer;
   color: #777;
   display: flex;

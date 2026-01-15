@@ -155,6 +155,16 @@
   border: 1px solid #93c5fd;
 }
 
+.pending_verification {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.rejected {
+  background: #f8d7da;
+  color: #842029;
+}
+
 /* processing */
 .status-badge.processing {
   background: #fff7ed;
@@ -222,14 +232,139 @@ select:disabled {
 }
 
 .btn-primary {
-  background: #3b82f6;
+  background: #03ac0e;
   color: white;
-  border: none;
+  border: 1px solid transparent; /* 🔥 PENTING */
   padding: 8px 14px;
   border-radius: 6px;
   cursor: pointer;
 }
 
 .btn-primary:hover {
-  background: #2563eb;
+  background: #01830a;
+}
+
+/* =======================
+   FORM ACTION FIX FINAL
+======================= */
+.form-action-inline {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.form-action-inline button {
+  width: 120px;
+  height: 40px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.btn-outline {
+  background: transparent;
+  color: #374151;
+  border: 1px solid var(--border-soft); /* 🔥 samakan border */
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  opacity: 0;
+  animation: fadeIn 0.2s forwards;
+}
+
+.modal-content {
+  position: relative;
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+  animation: zoomIn 0.2s forwards;
+}
+
+.modal-content img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.modal-content button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 1;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* ANIMATIONS */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes zoomIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* THUMBNAIL BUKTI DI TABEL */
+.table td img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+  cursor: pointer;
+  border: 1px solid #e5e7eb;
+  transition: transform 0.2s ease;
+}
+
+.table td img:hover {
+  transform: scale(1.05);
+}
+
+.btn-small {
+  padding: 4px 8px;
+  font-size: 12px;
+  border-radius: 4px;
+  background: #03ac0e;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.btn-small:hover {
+  background: #01830a;
+}
+
+/* Pastikan tombol export berada di center */
+.filter-group button.btn-outline {
+  display: flex;               /* flex container */
+  align-items: center;         /* center vertikal */
+  justify-content: center;     /* center horizontal */
+  text-align: center;          /* untuk fallback */
+  height: 38px;                /* samakan tinggi tombol */
+  padding: 0 12px;             /* padding horizontal */
+  box-sizing: border-box;      /* supaya height tidak terpengaruh padding */
 }

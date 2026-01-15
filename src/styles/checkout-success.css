@@ -123,3 +123,63 @@
 .btn-home:hover {
   background: #15803d;
 }
+
+/* ===== UPLOAD BUKTI PEMBAYARAN ===== */
+.upload-proof {
+  margin-top: 20px;
+}
+
+.upload-box {
+  display: block;
+  border: 2px dashed #16a34a;
+  border-radius: 10px;
+  padding: 18px;
+  cursor: pointer;
+  background: #f0fdf4;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.upload-box:hover {
+  background: #dcfce7;
+  border-color: #15803d;
+}
+
+.upload-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.upload-icon {
+  font-size: 28px;
+}
+
+.upload-content p {
+  font-size: 14px;
+  color: #166534;
+  margin: 0;
+  word-break: break-all;
+}
+
+.btn-upload {
+  margin-top: 12px;
+  width: 100%;
+  padding: 12px;
+  background: #16a34a;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-upload:hover {
+  background: #15803d;
+}
+
+.btn-upload:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}

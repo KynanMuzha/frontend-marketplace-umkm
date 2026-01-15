@@ -56,30 +56,43 @@ const Reports = () => {
      EXPORT EXCEL
   ======================= */
   const exportExcel = () => {
-    if (!reports.length) return alert("Data kosong, tidak bisa export.");
+  if (!reports.length) return alert("Data kosong, tidak bisa export.");
 
-    const data = reports.map(item => ({
-      Produk: item.product?.name || "-",
-      "Jumlah Terjual": item.total_qty,
-      "Total Penjualan": item.total_sales,
-    }));
+  const data = reports.map(item => ({
+    Produk: item.product?.name || "-",
+    "Jumlah Terjual": item.total_qty,
+    "Total Penjualan": item.total_sales,
+  }));
 
-    const worksheet = XLSX.utils.json_to_sheet(data);
-    const workbook = XLSX.utils.book_new();
+  const worksheet = XLSX.utils.json_to_sheet(data);
+  
+  // Buat semua kolom center
+  const range = XLSX.utils.decode_range(worksheet['!ref']);
+  for(let R = range.s.r; R <= range.e.r; ++R) {
+    for(let C = range.s.c; C <= range.e.c; ++C) {
+      const cell_address = {c:C, r:R};
+      const cell_ref = XLSX.utils.encode_cell(cell_address);
+      if(!worksheet[cell_ref]) continue;
+      worksheet[cell_ref].s = { alignment: { horizontal: "center", vertical: "center" } };
+    }
+  }
 
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Laporan Penjualan");
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Laporan Penjualan");
 
-    const excelBuffer = XLSX.write(workbook, {
-      bookType: "xlsx",
-      type: "array",
-    });
+  const excelBuffer = XLSX.write(workbook, {
+    bookType: "xlsx",
+    type: "array",
+    cellStyles: true,
+  });
 
-    const blob = new Blob([excelBuffer], {
-      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    });
+  const blob = new Blob([excelBuffer], {
+    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  });
 
-    saveAs(blob, "laporan-penjualan.xlsx");
-  };
+  saveAs(blob, "laporan-penjualan.xlsx");
+};
+
 
   /* =======================
      EXPORT PDF

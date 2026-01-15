@@ -4,11 +4,13 @@ import axios from "axios";
 import "../../styles/pesanan.css";
 
 const STATUS_LIST = [
-  "Menunggu Pembayaran",
-  "Diproses",
-  "Dikirim",
-  "Selesai",
-  "Dibatalkan"
+  "Menunggu Pembayaran",      // pending
+  "Menunggu Verifikasi",      // pending_verification
+  "Pembayaran Ditolak",       // rejected
+  "Diproses",                 // processing
+  "Dikirim",                  // shipped
+  "Selesai",                  // completed
+  "Dibatalkan"                // cancelled
 ];
 
 export default function PesananSaya() {

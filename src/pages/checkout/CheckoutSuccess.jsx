@@ -1,5 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import api from "../../service/api";
 import "../../styles/checkout-success.css";
 import { QRCodeCanvas } from "qrcode.react";
 
@@ -27,6 +28,9 @@ export default function CheckoutSuccess() {
   const isPaymentPending = ["QRIS", "TF_BANK", "E_WALLET"].includes(paymentMethod);
 
   const [timeLeft, setTimeLeft] = useState(0);
+
+  const [proof, setProof] = useState(null);
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     if (!paymentDue) return;
@@ -57,6 +61,26 @@ export default function CheckoutSuccess() {
         Number(item.price || 0) * Number(item.quantity || 0),
       0
     ) ?? 0);
+  
+  const handleUploadProof = async () => {
+  if (!proof) return alert("Pilih gambar bukti pembayaran");
+
+  try {
+    setUploading(true);
+
+    const formData = new FormData();
+    formData.append("proof", proof);
+
+    await api.post(`/orders/${order.id}/upload-proof`, formData);
+
+    alert("Bukti pembayaran berhasil dikirim");
+        navigate(0); // refresh halaman
+      } catch (err) {
+        alert("Gagal upload bukti pembayaran");
+      } finally {
+        setUploading(false);
+      }
+    };
 
   return (
     <div className="checkout-success-page">
@@ -64,20 +88,26 @@ export default function CheckoutSuccess() {
         {/* ===== JUDUL DINAMIS ===== */}
         <h2>
           {status === "pending" && "Menunggu Pembayaran"}
+          {status === "pending_verification" && "Menunggu Verifikasi"}
           {status === "processing" && "Pesanan Diproses"}
           {status === "shipped" && "Pesanan Dikirim"}
           {status === "completed" && "Pesanan Selesai"}
           {status === "cancelled" && "Pesanan Dibatalkan"}
+          {status === "rejected" && "Pembayaran Ditolak"}
         </h2>
 
         <p>
           {status === "pending" && "Segera selesaikan pembayaran Anda"}
+          {status === "pending_verification" &&
+            "Bukti pembayaran telah dikirim dan menunggu verifikasi admin"}
           {status === "processing" && "Pesanan sedang disiapkan oleh penjual"}
           {status === "shipped" && "Pesanan sedang dalam perjalanan"}
           {status === "completed" &&
             "Terima kasih telah berbelanja di PasarDesa"}
           {status === "cancelled" &&
             "Pesanan dibatalkan karena melewati batas waktu pembayaran"}
+          {status === "rejected" &&
+            "Bukti pembayaran ditolak. Silakan upload ulang"}
         </p>
 
         {/* ===== RINGKASAN PESANAN ===== */}
@@ -132,50 +162,107 @@ export default function CheckoutSuccess() {
 
         {/* ===== MENUNGGU PEMBAYARAN ===== */}
         {status === "pending" && isPaymentPending && (
-          <div className="payment-info">
-            <h3>Instruksi Pembayaran</h3>
+            <div className="payment-info">
+              <h3>Instruksi Pembayaran</h3>
 
-            {paymentMethod === "QRIS" && paymentCode && (
-              <>
-                <p>Scan QR Code berikut:</p>
-                <QRCodeCanvas value={paymentCode} size={180} />
-                <p className="payment-code">{paymentCode}</p>
-              </>
-            )}
+              {paymentMethod === "QRIS" && paymentCode && (
+                <>
+                  <p>Scan QR Code berikut:</p>
+                  <QRCodeCanvas value={paymentCode} size={180} />
+                  <p className="payment-code">{paymentCode}</p>
+                </>
+              )}
 
-            {paymentMethod === "TF_BANK" && paymentCode && (
-              <>
-                <p>
-                  Transfer ke bank <strong>{paymentDetail}</strong>
+              {paymentMethod === "TF_BANK" && paymentCode && (
+                <>
+                  <p>
+                    Transfer ke bank <strong>{paymentDetail}</strong>
+                  </p>
+                  <div className="payment-code">{paymentCode}</div>
+                </>
+              )}
+
+              {paymentMethod === "E_WALLET" && paymentCode && (
+                <>
+                  <p>
+                    Bayar via <strong>{paymentDetail}</strong>
+                  </p>
+                  <div className="payment-code">{paymentCode}</div>
+                </>
+              )}
+
+              {paymentDue && (
+                <p className="due-date">
+                  Bayar sebelum {paymentDue.toLocaleString("id-ID")}
+                  <br />
+                  Sisa waktu: {formatTimeLeft(timeLeft)}
                 </p>
-                <div className="payment-code">{paymentCode}</div>
-              </>
-            )}
+              )}
 
-            {paymentMethod === "E_WALLET" && paymentCode && (
-              <>
-                <p>
-                  Bayar via <strong>{paymentDetail}</strong>
-                </p>
-                <div className="payment-code">{paymentCode}</div>
-              </>
-            )}
+              {/* UPLOAD BUKTI */}
+              <div className="upload-proof">
+                <label className="upload-box">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => setProof(e.target.files[0])}
+                    hidden
+                  />
 
-            {paymentDue && (
-              <p className="due-date">
-                Bayar sebelum {paymentDue.toLocaleString("id-ID")}
-                <br />
-                Sisa waktu: {formatTimeLeft(timeLeft)}
-              </p>
-            )}
-          </div>
-        )}
+                  <div className="upload-content">
+                    <span className="upload-icon">📤</span>
+                    <p>
+                      {proof ? proof.name : "Klik untuk pilih bukti pembayaran"}
+                    </p>
+                  </div>
+                </label>
+
+                <button
+                  className="btn-upload"
+                  onClick={handleUploadProof}
+                  disabled={uploading}
+                >
+                  {uploading ? "Mengirim..." : "Upload Bukti Pembayaran"}
+                </button>
+              </div>
+            </div>
+          )}
 
         {/* ===== COD ===== */}
         {status === "pending" && !isPaymentPending && (
           <div className="payment-info">
             <h3>Bayar di Tempat (COD)</h3>
             <p>Silakan siapkan pembayaran saat barang datang.</p>
+          </div>
+        )}
+
+        {/* ===== MENUNGGU VERIFIKASI ===== */}
+        {status === "pending_verification" && (
+          <div className="payment-info">
+            <h3>Menunggu Verifikasi</h3>
+            <p>
+              Bukti pembayaran telah dikirim.
+              <br />
+              Admin akan memverifikasi pembayaran Anda.
+            </p>
+          </div>
+        )}
+
+        {/* ===== PEMBAYARAN DITOLAK ===== */}
+        {status === "rejected" && (
+          <div className="payment-info">
+            <h3>Pembayaran Ditolak</h3>
+            <p>Silakan upload ulang bukti pembayaran</p>
+
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setProof(e.target.files[0])}
+            />
+
+            <button onClick={handleUploadProof} disabled={uploading}>
+              {uploading ? "Mengirim..." : "Upload Ulang Bukti"}
+            </button>
           </div>
         )}
 

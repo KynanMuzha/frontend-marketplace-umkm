@@ -26,9 +26,6 @@ export default function Checkout() {
   const grandTotal = total + shippingCost;
 
   const handleCheckout = async () => {
-    console.log("PAYMENT METHOD (FRONTEND):", paymentMethod);
-    console.log("PAYMENT DETAIL (FRONTEND):", paymentDetail);
-
     if (!name || !address || !phone) {
       alert("Isi nama, alamat, dan nomor HP terlebih dahulu!");
       return;
@@ -41,22 +38,7 @@ export default function Checkout() {
 
     setLoading(true);
 
-    console.log("Checkout Payload:", {
-      delivery_type: deliveryType,
-      shipping_cost: shippingCost,
-      payment_method: paymentMethod,
-      payment_detail: paymentDetail,
-      customer_name: name,
-      customer_address: address,
-      customer_phone: phone,
-      items: items.map((item) => ({
-        product_id: item.product.id,
-        quantity: item.quantity,
-      })),
-    });
-
     try {
-      // Kirim data checkout ke backend
       const response = await api.post("/checkout", {
         delivery_type: deliveryType,
         shipping_cost: shippingCost,
@@ -71,13 +53,11 @@ export default function Checkout() {
         })),
       });
 
-      // Navigasi ke halaman sukses dengan mengirim data order via state
       navigate("/checkout-success", {
         state: {
           order: response.data.order,
         },
       });
-
     } catch (err) {
       alert("Checkout gagal");
       console.error(err);
@@ -91,11 +71,16 @@ export default function Checkout() {
       <h2 className="checkout-title">Checkout</h2>
 
       <div className="checkout-grid">
-        {/* LEFT */}
+        {/* LEFT SIDE */}
         <div>
           {/* PRODUK */}
           <div className="card">
-            <h3>🛒 Produk</h3>
+            <h3>
+              <svg className="icon" viewBox="0 0 24 24">
+                <path d="M3 3h18v2H3V3zm2 4h14l-1.5 9H6.5L5 7zm4 11c0 .55.45 1 1 1s1-.45 1-1h-2zm8 0c0 .55.45 1 1 1s1-.45 1-1h-2z" />
+              </svg>
+              Produk
+            </h3>
             {items.map((item) => (
               <div key={item.id} className="product-row">
                 <div>
@@ -113,7 +98,12 @@ export default function Checkout() {
 
           {/* INFORMASI PENGIRIMAN */}
           <div className="card">
-            <h3>📦 Informasi Pengiriman</h3>
+            <h3>
+              <svg className="icon" viewBox="0 0 24 24">
+                <path d="M12 2a2 2 0 0 0-2 2v2H7a2 2 0 0 0-2 2v12h14V8a2 2 0 0 0-2-2h-3V4a2 2 0 0 0-2-2zm0 4h2v2h-2V6zm-6 4h12v10H6V10z" />
+              </svg>
+              Informasi Pengiriman
+            </h3>
 
             <div className="form-group">
               <label>Atas Nama</label>
@@ -145,9 +135,14 @@ export default function Checkout() {
             </div>
           </div>
 
-          {/* PENGIRIMAN */}
+          {/* PILIH PENGIRIMAN */}
           <div className="card">
-            <h3>🚚 Pilih Pengiriman</h3>
+            <h3>
+              <svg className="icon" viewBox="0 0 24 24">
+                <path d="M3 3h13v13H3V3zm16 3h2v7h-2V6zm-3 9c0 1.1-.9 2-2 2s-2-.9-2-2h4zm-10 0c0 1.1-.9 2-2 2s-2-.9-2-2h4z"/>
+              </svg>
+              Pilih Pengiriman
+            </h3>
 
             <label className="radio-card">
               <input
@@ -176,9 +171,14 @@ export default function Checkout() {
             </label>
           </div>
 
-          {/* PEMBAYARAN */}
+          {/* METODE PEMBAYARAN */}
           <div className="card">
-            <h3>💳 Metode Pembayaran</h3>
+            <h3>
+              <svg className="icon" viewBox="0 0 24 24">
+                <path d="M2 4h20v16H2V4zm2 2v2h16V6H4zm0 4v8h16v-8H4z"/>
+              </svg>
+              Metode Pembayaran
+            </h3>
 
             <select
               className="select"
@@ -223,9 +223,14 @@ export default function Checkout() {
           </div>
         </div>
 
-        {/* RIGHT */}
+        {/* RIGHT SIDE - SUMMARY */}
         <div className="card summary">
-          <h3>💰 Ringkasan</h3>
+          <h3>
+            <svg className="icon" viewBox="0 0 24 24">
+              <path d="M12 1C5.92 1 1 5.92 1 12s4.92 11 11 11 11-4.92 11-11S18.08 1 12 1zm1 16h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+            </svg>
+            Ringkasan
+          </h3>
 
           <div className="summary-row">
             <span>Subtotal</span>

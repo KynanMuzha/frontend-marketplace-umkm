@@ -3,11 +3,17 @@ import UMKM2 from "../../assets/umkm2.jpg";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import api from "../../service/api";
-import Navbar from "../../components/Navbar";
-import Footer from "../../components/Footer";
 import "../../styles/home.css";
 import HelpChatbot from "../../components/HelpChatbot";
-
+import {
+  FaUtensils,
+  FaCoffee,
+  FaTools,
+  FaSeedling,
+  FaFish,
+  FaLeaf,
+  FaBoxOpen
+} from "react-icons/fa";
 
 const BASE_URL = "http://127.0.0.1:8000";
 
@@ -21,8 +27,10 @@ export default function Home() {
 
   const [toast, setToast] = useState({ show: false, message: "" });
   const [currentHero, setCurrentHero] = useState(0);
+  const [search, setSearch] = useState("");
 
   const location = useLocation();
+  const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
   const rawSearch = searchParams.get("search");
   const searchQuery = rawSearch && rawSearch.trim() !== "" ? rawSearch : null;
@@ -30,6 +38,15 @@ export default function Home() {
   const token = localStorage.getItem("token");
 
   const heroImages = [UMKM, UMKM2];
+
+  const categoryIconMap = {
+    1: FaUtensils,
+    2: FaCoffee,
+    3: FaTools,        // ✅ Kerajinan
+    4: FaSeedling,
+    5: FaFish,
+    6: FaLeaf
+  };
 
   // Efek fade hero
   useEffect(() => {
@@ -40,18 +57,24 @@ export default function Home() {
   }, []);
 
   // Fetch produk
-  useEffect(() => {
+  // Fetch produk (FIXED)
+useEffect(() => {
   setProductLoading(true);
 
+  const url = searchQuery
+    ? `/products?search=${encodeURIComponent(searchQuery)}`
+    : `/products`;
+
   api
-    .get(`/products?search=${searchQuery || ""}`)
+    .get(url)
     .then((res) => setProducts(res.data))
     .catch(() => alert("Gagal memuat produk"))
     .finally(() => {
       setProductLoading(false);
-      setPageLoading(false); // 🔥 hanya sekali
+      setPageLoading(false);
     });
 }, [searchQuery]);
+
 
 
   // Fetch kategori
@@ -110,15 +133,13 @@ export default function Home() {
         setTimeout(() => setToast({ show: false, message: "" }), 2500);
       });
   };
+useEffect(() => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  if (user?.role === "admin") {
+    navigate("/admin/dashboard");
+  }
+}, [navigate]);
 
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (user?.role === "admin") {
-      navigate("/admin/dashboard"); // redirect admin otomatis
-    }
-  }, []);
   return (
     <>
       {/* PAGE LOADER */}
@@ -189,22 +210,26 @@ export default function Home() {
       <main className="container">
         {/* KATEGORI */}
         <section className="section" id="produk-section">
-        <section className="section">
           <h2 className="section-title">Kategori Produk</h2>
+
           <div className="kategori-grid">
             {categories.length > 0 ? (
-              categories.map((cat) => (
-                <div
-                  key={cat.id}
-                  className="kategori-card"
-                  onClick={() =>
-                    navigate(`/kategori/${cat.name.toLowerCase().replace(/\s+/g, '-')}`)
-                  }
-                >
-                  <div className="kategori-icon-placeholder">{cat.name.charAt(0)}</div>
-                  <span>{cat.name}</span>
-                </div>
-              ))
+              categories.map((cat) => {
+                const Icon = categoryIconMap[cat.id] || FaBoxOpen;
+
+                return (
+                  <div
+                    key={cat.id}
+                    className="kategori-card"
+                    onClick={() => navigate(`/kategori/${cat.id}`)}
+                  >
+                    <div className="kategori-icon">
+                      <Icon />
+                    </div>
+                    <span>{cat.name}</span>
+                  </div>
+                );
+              })
             ) : (
               <p>Memuat kategori...</p>
             )}
