@@ -3,7 +3,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import api from "../../service/api";
 import "../../styles/home.css"; // pakai CSS home agar card sama
 
-const BASE_URL = "http://127.0.0.1:8000";
+const BASE_URL = "https://backend.pasardesa.my.id";
 
 export default function KategoriProduk() {
   const { id } = useParams();

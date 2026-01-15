@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import api from "../../service/api";
 import "../../styles/product-detail.css";
 
-const BASE_URL = "http://127.0.0.1:8000";
+const BASE_URL = "https://backend.pasardesa.my.id";
 
 export default function ProductDetail() {
   const { id } = useParams();

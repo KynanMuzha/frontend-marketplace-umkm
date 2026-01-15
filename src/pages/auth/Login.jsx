@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import "../../styles/auth.css";
 
-const API_URL = "http://localhost:8000";
+const API_URL = "https://backend.pasardesa.my.id";
 
 export default function Login() {
   const navigate = useNavigate();

@@ -184,7 +184,7 @@ export default function Cart() {
                         style={{ cursor: "pointer" }}
                       >
                         <img
-                          src={`http://127.0.0.1:8000/storage/${item.product.image}`}
+                          src={`https://backend.pasardesa.my.id/${item.product.image}`}
                           alt={item.product.name}
                           className="cart-img"
                         />

@@ -7,7 +7,7 @@ import Navbar from "../../components/Navbar";
 
 
 const PER_PAGE = 4;
-const API_URL = "http://127.0.0.1:8000";
+const API_URL = "https://backend.pasardesa.my.id";
 
 export default function HomeSeller() {
   const navigate = useNavigate();

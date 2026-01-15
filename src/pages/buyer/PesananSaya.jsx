@@ -29,7 +29,7 @@ export default function PesananSaya() {
           return;
         }
 
-        const res = await axios.get("http://localhost:8000/api/orders/history", {
+        const res = await axios.get("https://backend.pasardesa.my.id/api/orders/history", {
           headers: {
             Authorization: `Bearer ${token}`,
             Accept: "application/json",

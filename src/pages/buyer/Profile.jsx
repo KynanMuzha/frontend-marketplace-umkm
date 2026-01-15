@@ -4,7 +4,7 @@ import api from "../../service/api";
 import Cropper from "react-easy-crop";
 import "../../styles/profile.css";
 
-const BASE_URL = "http://127.0.0.1:8000";
+const BASE_URL = "https://backend.pasardesa.my.id";
 
 export default function Profile({ onUserUpdate }) {
   const [user, setUser] = useState(null);

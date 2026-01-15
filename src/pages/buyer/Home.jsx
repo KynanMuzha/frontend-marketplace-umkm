@@ -15,7 +15,7 @@ import {
   FaBoxOpen
 } from "react-icons/fa";
 
-const BASE_URL = "http://127.0.0.1:8000";
+const BASE_URL = "https://backend.pasardesa.my.id";
 
 export default function Home() {
   const isLoggedIn = !!localStorage.getItem("token");
