@@ -56,10 +56,15 @@ export default function EditProduct() {
     formData.append("price", form.price);
     formData.append("stock", form.stock);
     formData.append("description", form.description);
-    if (form.image) formData.append("image", form.image);
+
+    if (form.image) {
+      formData.append("image", form.image);
+    }
+
+    formData.append("_method", "PUT"); // 🔥 PENTING
 
     try {
-      await api.put(`/products/${id}`, formData);
+      await api.post(`/products/${id}`, formData);
 
       alert("Produk berhasil diperbarui");
       navigate("/seller");
