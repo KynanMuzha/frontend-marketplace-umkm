@@ -126,9 +126,14 @@ export default function Cart() {
 
   const getImageUrl = (image) => {
     if (!image) return "/no-image.png";
-    return image.startsWith("http")
-      ? image
-      : `https://backend.pasardesa.my.id/${image}`;
+
+    if (image.startsWith("http")) return image;
+
+    if (image.startsWith("products/")) {
+      return `https://backend.pasardesa.my.id/storage/${image}`;
+    }
+
+    return `https://backend.pasardesa.my.id/${image}`;
   };
 
   return (

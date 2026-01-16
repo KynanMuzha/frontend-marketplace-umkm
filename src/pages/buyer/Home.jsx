@@ -40,13 +40,13 @@ export default function Home() {
   const heroImages = [UMKM, UMKM2];
 
   const categoryIconMap = {
-  makanan: FaUtensils,
-  minuman: FaCoffee,
-  kerajinan: FaTools,
-  pertanian: FaSeedling,
-  perikanan: FaFish,
-  herbal: FaLeaf
-};
+    "makanan": FaUtensils,
+    "minuman": FaCoffee,
+    "kerajinan": FaTools,
+    "pertanian dan perkebunan": FaSeedling,
+    "peternakan dan perikanan": FaFish,
+    "produk herbal": FaLeaf
+  };
 
   // Efek fade hero
   useEffect(() => {
