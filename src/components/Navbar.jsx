@@ -36,7 +36,8 @@ export default function Navbar() {
      HOME PATH BERDASARKAN ROLE
   ======================== */
     const getHomePath = () => {
-      if (user?.role === "penjual") {
+      const role = user?.role?.toLowerCase().trim();
+      if (role === "penjual") {
         return "/homeseller";
       }
       return "/";
@@ -219,7 +220,7 @@ export default function Navbar() {
               >
                 {user.avatar ? (
                   <img
-                    src={`https://backend.pasardesa.my.id/storage/${user.avatar}`}
+                    src={user.avatar}
                     alt="Avatar"
                     className="profile-avatar-circle"
                   />

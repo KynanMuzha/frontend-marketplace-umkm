@@ -54,12 +54,14 @@ export default function Profile({ onUserUpdate }) {
 
         const storedUser = JSON.parse(localStorage.getItem("user")) || {};
 
+        // 🔥 ROLE DIAMBIL DARI STORED USER
         const mergedUser = {
-          ...storedUser,
           ...profileData,
+          role: storedUser.role,
         };
 
         setUser(mergedUser);
+
         setProfileForm({
           name: mergedUser.name,
           email: mergedUser.email,
@@ -72,11 +74,11 @@ export default function Profile({ onUserUpdate }) {
         }
 
         localStorage.setItem("user", JSON.stringify(mergedUser));
+        window.dispatchEvent(new Event("userUpdated"));
         onUserUpdate?.(mergedUser);
       })
       .catch(() => showNotify("Gagal memuat profil", "error"));
   }, [onUserUpdate]);
-
 
   const getInitial = (name) => (name ? name.charAt(0).toUpperCase() : "");
 
