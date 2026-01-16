@@ -113,7 +113,7 @@ const Orders = () => {
                           className="btn-small"
                           onClick={() =>
                             setModalProof(
-                              `https://backend.pasardesa.my.id/${order.payment_proof}`
+                              `https://backend.pasardesa.my.id/storage/${order.payment_proof}`
                             )
                           }
                         >

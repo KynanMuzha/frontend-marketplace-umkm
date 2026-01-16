@@ -59,7 +59,7 @@ export default function EditProduct() {
     if (form.image) formData.append("image", form.image);
 
     try {
-      await api.post(`/products/${id}?_method=PUT`, formData);
+      await api.put(`/products/${id}`, formData);
 
       alert("Produk berhasil diperbarui");
       navigate("/seller");

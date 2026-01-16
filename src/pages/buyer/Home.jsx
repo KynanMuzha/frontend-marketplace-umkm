@@ -40,13 +40,13 @@ export default function Home() {
   const heroImages = [UMKM, UMKM2];
 
   const categoryIconMap = {
-    1: FaUtensils,
-    2: FaCoffee,
-    3: FaTools,        // ✅ Kerajinan
-    4: FaSeedling,
-    5: FaFish,
-    6: FaLeaf
-  };
+  makanan: FaUtensils,
+  minuman: FaCoffee,
+  kerajinan: FaTools,
+  pertanian: FaSeedling,
+  perikanan: FaFish,
+  herbal: FaLeaf
+};
 
   // Efek fade hero
   useEffect(() => {
@@ -215,7 +215,10 @@ useEffect(() => {
           <div className="kategori-grid">
             {categories.length > 0 ? (
               categories.map((cat) => {
-                const Icon = categoryIconMap[cat.id] || FaBoxOpen;
+                const Icon =
+                  categoryIconMap[cat.slug] ||
+                  categoryIconMap[cat.name.toLowerCase()] ||
+                  FaBoxOpen;
 
                 return (
                   <div

@@ -121,6 +121,13 @@ export default function Cart() {
     });
   };
 
+  const getImageUrl = (image) => {
+    if (!image) return "/no-image.png";
+    return image.startsWith("http")
+      ? image
+      : `https://backend.pasardesa.my.id/${image}`;
+  };
+
   return (
     <div className="cart-page">
        <div className="cart-header">
@@ -184,7 +191,7 @@ export default function Cart() {
                         style={{ cursor: "pointer" }}
                       >
                         <img
-                          src={`https://backend.pasardesa.my.id/${item.product.image}`}
+                          src={getImageUrl(item.product.image)}
                           alt={item.product.name}
                           className="cart-img"
                         />

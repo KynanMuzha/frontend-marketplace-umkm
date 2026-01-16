@@ -36,12 +36,14 @@ export default function Navbar() {
   const fetchCartCount = async () => {
     try {
       const res = await api.get("/cart");
+
       const totalQty = res.data.reduce(
-        (sum, item) => sum + item.quantity,
+        (sum, item) => sum + Number(item.quantity),
         0
       );
+
       setCartCount(totalQty);
-    } catch {
+    } catch (err) {
       setCartCount(0);
     }
   };

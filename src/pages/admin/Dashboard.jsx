@@ -163,7 +163,7 @@ const Dashboard = () => {
                           className="btn-small"
                           onClick={() =>
                             openModal(
-                              `https://backend.pasardesa.my.id/${order.payment_proof}`
+                              `https://backend.pasardesa.my.id/storage/${order.payment_proof}`
                             )
                           }
                         >
