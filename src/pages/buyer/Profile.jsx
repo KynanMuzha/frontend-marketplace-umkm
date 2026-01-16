@@ -268,11 +268,18 @@ const EyeOffIcon = (
     )}
 
       <div className="profile-header">
-  <button
-    className="back-buttons"
-    onClick={() => navigate("/")}
-    aria-label="Kembali ke Home"
-  >
+        <button
+          className="back-buttons"
+          onClick={() => {
+            if (user.role === "seller") {
+              navigate("/homeseller");
+            } else {
+              navigate("/");
+            }
+          }}
+          aria-label="Kembali"
+        >
+
     <svg
       width="24"
       height="24"

@@ -22,6 +22,17 @@ export default function Navbar() {
     setUser(storedUser ? JSON.parse(storedUser) : null);
   }, [location]);
 
+  
+  /* =======================
+     HOME PATH BERDASARKAN ROLE
+  ======================== */
+    const getHomePath = () => {
+      if (user?.role === "penjual") {
+        return "/homeseller";
+      }
+      return "/";
+    };
+
   /* =======================
      CART KHUSUS BUYER
   ======================== */
@@ -100,7 +111,7 @@ export default function Navbar() {
     <nav className="navbar">
       <div className="navbar-container">
         {/* LOGO */}
-        <Link to="/" className="logo">
+        <Link to={getHomePath()} className="logo">
           <img src={logo} alt="Logo" className="logo-img" />
           <span className="logo-text">PasarDesa</span>
         </Link>

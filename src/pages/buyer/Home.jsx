@@ -216,9 +216,7 @@ useEffect(() => {
             {categories.length > 0 ? (
               categories.map((cat) => {
                 const Icon =
-                  categoryIconMap[cat.slug] ||
-                  categoryIconMap[cat.name.toLowerCase()] ||
-                  FaBoxOpen;
+                  categoryIconMap[cat.name.toLowerCase()] || FaBoxOpen;
 
                 return (
                   <div

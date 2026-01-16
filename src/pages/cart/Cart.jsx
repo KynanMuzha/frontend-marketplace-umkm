@@ -37,23 +37,26 @@ export default function Cart() {
     const cartItem = cart.find((item) => item.id === cartId);
     if (!cartItem) return;
 
-    let newQty = type === "inc" ? cartItem.quantity + 1 : cartItem.quantity - 1;
+    const currentQty = Number(cartItem.quantity);
+    let newQty = type === "inc" ? currentQty + 1 : currentQty - 1;
     if (newQty < 1) return;
 
     setCart((prev) =>
       prev.map((item) =>
-        item.id === cartId ? { ...item, quantity: newQty } : item
+        item.id === cartId
+          ? { ...item, quantity: newQty }
+          : item
       )
     );
 
     try {
       await api.patch("/cart/update", {
         product_id: cartItem.product.id,
-        quantity: newQty,
+        quantity: newQty, // SUDAH NUMBER
       });
     } catch (err) {
       console.error("Gagal update qty:", err);
-      fetchCart(); // rollback jika gagal
+      fetchCart(); // rollback
     }
   };
 
