@@ -18,10 +18,19 @@ export default function Navbar() {
      AMBIL DATA USER
   ======================== */
   useEffect(() => {
+  const loadUser = () => {
     const storedUser = localStorage.getItem("user");
     setUser(storedUser ? JSON.parse(storedUser) : null);
-  }, [location]);
+  };
 
+  loadUser(); // load awal
+
+  window.addEventListener("userUpdated", loadUser);
+
+  return () => {
+    window.removeEventListener("userUpdated", loadUser);
+  };
+}, []);
   
   /* =======================
      HOME PATH BERDASARKAN ROLE
@@ -210,7 +219,7 @@ export default function Navbar() {
               >
                 {user.avatar ? (
                   <img
-                    src={user.avatar}
+                    src={`https://backend.pasardesa.my.id/storage/${user.avatar}`}
                     alt="Avatar"
                     className="profile-avatar-circle"
                   />

@@ -48,27 +48,34 @@ export default function Profile({ onUserUpdate }) {
 
   /* ===== LOAD PROFILE ===== */
   useEffect(() => {
-  api.get("/profile")
-    .then((res) => {
-      const userData = res.data;
+    api.get("/profile")
+      .then((res) => {
+        const profileData = res.data;
 
-      setUser(userData);
-      setProfileForm({
-        name: userData.name,
-        email: userData.email,
-      });
+        const storedUser = JSON.parse(localStorage.getItem("user")) || {};
 
-      if (userData.avatar) {
-        setPreview(`${BASE_URL}/storage/${userData.avatar}`);
-      } else {
-        setPreview(null);
-      }
+        const mergedUser = {
+          ...storedUser,
+          ...profileData,
+        };
 
-      localStorage.setItem("user", JSON.stringify(userData));
-      onUserUpdate?.(userData);
-    })
-    .catch(() => showNotify("Gagal memuat profil", "error"));
-}, [onUserUpdate]);
+        setUser(mergedUser);
+        setProfileForm({
+          name: mergedUser.name,
+          email: mergedUser.email,
+        });
+
+        if (mergedUser.avatar) {
+          setPreview(`${BASE_URL}/storage/${mergedUser.avatar}`);
+        } else {
+          setPreview(null);
+        }
+
+        localStorage.setItem("user", JSON.stringify(mergedUser));
+        onUserUpdate?.(mergedUser);
+      })
+      .catch(() => showNotify("Gagal memuat profil", "error"));
+  }, [onUserUpdate]);
 
 
   const getInitial = (name) => (name ? name.charAt(0).toUpperCase() : "");
