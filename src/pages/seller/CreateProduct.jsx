@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../service/api";
 import "../../styles/product-form.css";
@@ -14,6 +14,13 @@ export default function CreateProduct() {
     description: "",
     image: null,
   });
+
+  const [categories, setCategories] = useState([]);
+  useEffect(() => {
+    api.get("/categories")
+      .then((res) => setCategories(res.data))
+      .catch(() => alert("Gagal mengambil kategori"));
+  }, []);
 
   const [successMessage, setSuccessMessage] = useState("");
 
@@ -110,12 +117,12 @@ export default function CreateProduct() {
                 onChange={handleChange}
               >
                 <option value="">Pilih Kategori</option>
-                <option value="2">Makanan</option>
-                <option value="3">Minuman</option>
-                <option value="4">Kerajinan</option>
-                <option value="5">Pertanian dan Perkebunan</option>
-                <option value="6">Peternakan dan Perikanan</option>
-                <option value="7">Produk Herbal</option>
+
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.name}
+                  </option>
+                ))}
               </select>
             </div>
 

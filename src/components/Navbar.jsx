@@ -111,10 +111,14 @@ export default function Navbar() {
     <nav className="navbar">
       <div className="navbar-container">
         {/* LOGO */}
-        <Link to={getHomePath()} className="logo">
+        <div
+          className="logo"
+          style={{ cursor: "pointer" }}
+          onClick={() => navigate(getHomePath())}
+        >
           <img src={logo} alt="Logo" className="logo-img" />
           <span className="logo-text">PasarDesa</span>
-        </Link>
+        </div>
 
         {/* SEARCH */}
         <div className="search-box">
