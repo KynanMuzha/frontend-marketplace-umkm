@@ -16,6 +16,20 @@ export default function EditProduct() {
     image: null,
   });
 
+   // State untuk kategori
+  const [categories, setCategories] = useState([]);
+
+  // 🔹 TARUH FUNGSI DI SINI
+  const fetchCategories = async () => {
+    try {
+      const res = await api.get("/categories");
+      setCategories(res.data);
+    } catch (error) {
+      console.error(error);
+      alert("Gagal memuat kategori");
+    }
+  };
+
   useEffect(() => {
     fetchProduct();
     // eslint-disable-next-line
@@ -61,10 +75,12 @@ export default function EditProduct() {
       formData.append("image", form.image);
     }
 
-    formData.append("_method", "PUT"); // 🔥 PENTING
-
     try {
-      await api.post(`/products/${id}`, formData);
+      await api.put(`/products/${id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       alert("Produk berhasil diperbarui");
       navigate("/seller");
@@ -124,12 +140,12 @@ export default function EditProduct() {
                 onChange={handleChange}
               >
                 <option value="">Pilih Kategori</option>
-                <option value="2">Makanan</option>
-                <option value="3">Minuman</option>
-                <option value="4">Kerajinan</option>
-                <option value="5">Pertanian dan Perkebunan</option>
-                <option value="6">Peternakan dan Perikanan</option>
-                <option value="7">Produk Herbal</option>
+
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.name}
+                  </option>
+                ))}
               </select>
             </div>
 
