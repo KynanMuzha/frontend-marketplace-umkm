@@ -78,14 +78,13 @@ export default function EditProduct() {
     formData.append("price", form.price);
     formData.append("stock", form.stock);
     formData.append("description", form.description);
-    formData.append("_method", "PUT");
 
     if (form.image) {
       formData.append("image", form.image);
     }
 
     try {
-      await api.post(`/products/${id}`, formData, {
+      await api.put(`/products/${id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
