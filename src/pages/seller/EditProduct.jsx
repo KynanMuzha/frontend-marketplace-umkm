@@ -73,6 +73,7 @@ export default function EditProduct() {
     e.preventDefault();
 
     const formData = new FormData();
+    formData.append("_method", "PUT");
     formData.append("name", form.name);
     formData.append("category_id", form.category_id);
     formData.append("price", form.price);
@@ -84,19 +85,14 @@ export default function EditProduct() {
     }
 
     try {
-      await api.put(`/products/${id}`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-
-      alert("Produk berhasil diperbarui");
-      navigate("/seller");
-    } catch (error) {
-      console.error(error.response?.data);
-      alert("Gagal memperbarui produk");
-    }
-  };
+        await api.post(`/products/${id}`, formData);
+        alert("Produk berhasil diperbarui");
+        navigate("/seller");
+      } catch (error) {
+        console.log(error.response?.data);
+        alert("Gagal memperbarui produk");
+      }
+    };
 
   return (
     <main className="form-wrapper">
