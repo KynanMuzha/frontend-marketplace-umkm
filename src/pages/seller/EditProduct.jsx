@@ -84,16 +84,14 @@ export default function EditProduct() {
     }
 
     try {
-      await api.put(`/products/${id}`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      formData.append("_method", "PUT");
+
+      await api.post(`/products/${id}`, formData);
 
       alert("Produk berhasil diperbarui");
       navigate("/seller");
     } catch (error) {
-      console.log(error.response?.data);
+      console.error(error);
       alert("Gagal memperbarui produk");
     }
   };
