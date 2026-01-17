@@ -120,7 +120,7 @@ function AppWrapper() {
       <Routes>
         {/* HOME */}
         <Route path="/" element={<Home />} />
-
+    
         {/* PRODUCT */}
         <Route path="/product/:id" element={<ProductDetail />} />
 

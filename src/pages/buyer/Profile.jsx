@@ -281,7 +281,7 @@ const EyeOffIcon = (
           className="back-buttons"
           onClick={() => {
             if (user.role === "penjual") {
-              navigate("/homeseller");
+              navigate("/seller");
             } else {
               navigate("/");
             }

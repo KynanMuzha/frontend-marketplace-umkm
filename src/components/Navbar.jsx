@@ -38,7 +38,7 @@ export default function Navbar() {
     const getHomePath = () => {
       const role = user?.role?.toLowerCase().trim();
       if (role === "penjual") {
-        return "/homeseller";
+        return "/seller";
       }
       return "/";
     };
